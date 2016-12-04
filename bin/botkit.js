@@ -24,7 +24,7 @@ const load = (path, file) => {
   }
 };
 
-var path = Path.resolve('.', 'scripts');
+const path = Path.resolve('.', 'scripts');
 
 Fs.readdirSync(path).sort().forEach((file) =>
   load(path, file)
