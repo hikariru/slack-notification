@@ -1,0 +1,26 @@
+{
+  "name": "slack-notification",
+  "version": "1.0.0",
+  "description": "なんかいい感じにアレするやつ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node bin/botkit.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hikariru/slack-notification.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hikariru/slack-notification/issues"
+  },
+  "homepage": "https://github.com/hikariru/slack-notification#readme",
+  "dependencies": {
+    "botkit": "^0.4.2"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "7.x"
+  }
+}
