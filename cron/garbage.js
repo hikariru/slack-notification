@@ -20,7 +20,7 @@ module.exports = bot => {
 
   new CronJob('0 0 7 * * 1-5', () => {
     bot.say({
-      text: 'おはようございます。本日は「'+ garbageType() + '」の収集日です。',
+      text: 'おはようございます。今日は「'+ garbageType() + '」の収集日です。',
       channel: process.env.CHANNEL_ID
     });
   }, null, true, TIME_ZONE);
