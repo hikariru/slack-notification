@@ -1,4 +1,4 @@
-const Botkit = require('./node_modules/botkit/lib/botkit');
+const Botkit = require('./node_modules/botkit/lib/Botkit');
 const Fs = require('fs');
 const Path = require('path');
 const http = require('http');
