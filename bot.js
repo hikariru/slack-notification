@@ -11,8 +11,6 @@ const bot = controller.spawn({
   token: process.env.SLACK_TOKEN
 }).startRTM();
 
-require('cron/garbage')(bot);
-
 const loadCronJob = (path, file) => {
   "use strict";
   const extension = Path.extname(file);
@@ -20,7 +18,7 @@ const loadCronJob = (path, file) => {
   try {
     const cron = require(fullPath);
     if (typeof cron === 'function') {
-      cron(controller);
+      cron(bot);
     }
   } catch(error) {
     bot.botkit.log('Failed to load cron jobs :(', error);
