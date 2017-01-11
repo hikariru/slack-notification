@@ -4,8 +4,6 @@ const TimeDate = require('time').Date;
 const garbageList = require('../data/garbage.json');
 
 const garbageType = () => {
-  "use strict";
-
   const date = new TimeDate();
   date.setTimezone(process.env.TIME_ZONE);
   const day = date.getDay();
@@ -14,8 +12,6 @@ const garbageType = () => {
 };
 
 module.exports = bot => {
-  "use strict";
-
   new CronJob('0 0 7 * * 1-5', () => {
     bot.say({
       text: 'おはようございます。今日は「'+ garbageType() + '」の収集日です。',
