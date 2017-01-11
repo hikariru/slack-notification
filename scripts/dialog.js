@@ -14,7 +14,15 @@ module.exports = controller => {
 
       const payload = {
         utt: message.text,
-        nickname: response.user.name
+        nickname: response.user.name,
+        sex: process.env.DIALOG_GENDER,
+        bloodtype: process.env.DIALOGUE_BLOODTYHPE,
+        birthdateY: process.env.DIALOGUE_BIRTHDATE_Y,
+        birthdateM: process.env.DIALOGUE_BIRTHDATE_M,
+        birthdateD: process.env.DIALOGUE_BIRTHDATE_D,
+        age: process.env.DIALOGUE_AGE,
+        constellations: process.env.DIALOGUE_CONSTELLATIONS,
+        place: process.env.DIALOGUE_PLACE
       };
 
       request.post({
