@@ -7,15 +7,16 @@ const buildPayload = (message, response, userData) => {
   const payload = {
     utt: message.text,
     nickname: response.user.name,
-    place: process.env.DIALOGUE_PLACE,
+    place: process.env.DIALOGUE_PLACE
   };
 
-  if (!userData || !userData.context) {
+  if (!userData) {
       return payload;
   }
 
   if (userData.expiredAt <= new Date().getTime()) {
-    return payload
+    console.log("context expired!!!");
+    return payload;
   }
 
   payload.context = userData.lastContext;
