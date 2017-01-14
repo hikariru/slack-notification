@@ -22,40 +22,26 @@ const bot = controller.spawn({
   token: process.env.SLACK_TOKEN
 }).startRTM();
 
-const loadCronJob = (path, file) => {
-  "use strict";
-  const extension = Path.extname(file);
-  const fullPath = Path.join(path, Path.basename(file, extension));
-  try {
-    const cron = require(fullPath);
-    if (typeof cron === 'function') {
-      cron(bot);
+const loadDirectory = (directoryName, attribute) => {
+  const directoryPath = Path.resolve('.', directoryName);
+
+  Fs.readdirSync(directoryPath).forEach((file) => {
+    const extension = Path.extname(file);
+    const fullPath = Path.join(directoryPath, Path.basename(file, extension));
+    try {
+      const script = require(fullPath);
+      if (typeof script === 'function') {
+        script(attribute);
+      }
+    } catch(error) {
+      bot.botkit.log('Failed to load scripts :(', error);
+      process.exit(1);
     }
-  } catch(error) {
-    bot.botkit.log('Failed to load cron jobs :(', error);
-    process.exit(1);
-  }
+  });
 };
 
-const loadScripts = (path, file) => {
-  const ext = Path.extname(file);
-  const full = Path.join(path, Path.basename(file, ext));
-  try {
-    const script = require(full);
-    if (typeof script === 'function') {
-      script(controller);
-    }
-  } catch(error) {
-    bot.botkit.log('Failed to load scripts :(', error);
-    process.exit(1);
-  }
-};
-
-const cronJobPath = Path.resolve('.', 'cron');
-Fs.readdirSync(cronJobPath).sort().forEach((file) => loadCronJob(cronJobPath, file));
-
-const scriptPath = Path.resolve('.', 'scripts');
-Fs.readdirSync(scriptPath).sort().forEach((file) => loadScripts(scriptPath, file));
+loadDirectory('cron', bot);
+loadDirectory('script', controller);
 
 http.createServer((request, response) => {
   response.writeHead(200, {'Content-Type': 'text/plain'});
