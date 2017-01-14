@@ -15,7 +15,6 @@ const buildPayload = (message, response, userData) => {
   }
 
   if (userData.expiredAt <= new Date().getTime()) {
-    console.log("context expired!!!");
     return payload;
   }
 
@@ -35,6 +34,7 @@ module.exports = controller => {
       }
 
       controller.storage.users.get(message.user, (error, userData) => {
+        console.log(buildPayload());
         request.post({
           url: DIALOG_API_URL,
           qs: {
