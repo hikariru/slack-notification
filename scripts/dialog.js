@@ -2,6 +2,7 @@ const request = require('request');
 
 const DIALOG_API_URL = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue';
 const CONTEXT_TTL = 1 * 60 * 1000;
+const STORAGE_KEY = 'dialog_context';
 
 const buildPayload = (message, response, userData) => {
   const payload = {
@@ -33,7 +34,7 @@ module.exports = controller => {
         return;
       }
 
-      controller.storage.users.get(message.user, (error, userData) => {
+      controller.storage.users.get(STORAGE_KEY, (error, userData) => {
         if (error) {
           bot.botkit.log('Failed to get user data :(', error);
           return;
@@ -52,13 +53,13 @@ module.exports = controller => {
           }
 
           const contextData = {
-            id: message.user,
+            id: STORAGE_KEY,
             lastContext: body.context,
             expiredAt: new Date().getTime() + CONTEXT_TTL
           };
           controller.storage.users.save(contextData, () => {
             bot.reply(message, body.utt);
-          }
+          });
         });
       });
     });
