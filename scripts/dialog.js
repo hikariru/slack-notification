@@ -34,7 +34,7 @@ module.exports = controller => {
       }
 
       controller.storage.users.get(message.user, (error, userData) => {
-        console.log(buildPayload());
+        console.log(buildPayload(message, response, userData));
         request.post({
           url: DIALOG_API_URL,
           qs: {
