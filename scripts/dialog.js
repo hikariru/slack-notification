@@ -34,7 +34,10 @@ module.exports = controller => {
       }
 
       controller.storage.users.get(message.user, (error, userData) => {
-        console.log(userData);
+        if (error) {
+          bot.botkit.log('Failed to get user data :(', error);
+          return;
+        }
         console.log(buildPayload(message, response, userData));
         request.post({
           url: DIALOG_API_URL,
@@ -49,10 +52,13 @@ module.exports = controller => {
           }
 
           const contextData = {
+            id: message.user,
             lastContext: body.context,
             expiredAt: new Date().getTime() + CONTEXT_TTL
           };
-          controller.storage.users.save(contextData, () => bot.reply(message, body.utt));
+          controller.storage.users.save(contextData, () => {
+            bot.reply(message, body.utt);
+          }
         });
       });
     });
