@@ -3,7 +3,7 @@ const request = require('request');
 const DIALOG_API_URL = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue';
 
 module.exports = controller => {
-  controller.hears('.+', ['direct_message', 'direct_mention'], (bot, message) => {
+  controller.hears('.+', ['direct_mention'], (bot, message) => {
     bot.api.users.info({
       user: message.user
     }, (error, response) => {
