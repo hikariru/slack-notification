@@ -41,7 +41,7 @@ const loadDirectory = (directoryName, attribute) => {
 };
 
 loadDirectory('cron', bot);
-loadDirectory('script', controller);
+loadDirectory('scripts', controller);
 
 http.createServer((request, response) => {
   response.writeHead(200, {'Content-Type': 'text/plain'});
