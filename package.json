@@ -18,8 +18,10 @@
   "homepage": "https://github.com/hikariru/slack-notification#readme",
   "dependencies": {
     "botkit": "^0.4.2",
+    "botkit-storage-redis": "^1.1.0",
     "cheerio": "^0.22.0",
     "cron": "^1.1.1",
+    "redis": "^2.6.4",
     "request": "^2.79.0",
     "time": "^0.11.4"
   },

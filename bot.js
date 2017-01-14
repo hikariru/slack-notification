@@ -2,9 +2,20 @@ const Botkit = require('./node_modules/botkit/lib/Botkit');
 const Fs = require('fs');
 const Path = require('path');
 const http = require('http');
+const redis = require('./node_modules/botkit-storage-redis/');
+const url = require('url');
+
+const redisUrl = url.parse(process.env.REDISCLOUD_URL);
+const redisConfig = {
+  namespace: 'slackbot:store',
+  host: redisUrl.hostname,
+  port: redisUrl.port,
+  auth_pass: redisUrl.auth.split(':')[1]
+};
+const redisStorage = redis(redisConfig);
 
 const controller = Botkit.slackbot({
-  debug: false
+  storage: redisStorage
 });
 
 const bot = controller.spawn({
