@@ -33,7 +33,7 @@ module.exports = controller => {
         return;
       }
 
-      controller.storage.user.get(message.user, (error, userData) => {
+      controller.storage.users.get(message.user, (error, userData) => {
         request.post({
           url: DIALOG_API_URL,
           qs: {
@@ -50,7 +50,7 @@ module.exports = controller => {
             lastContext: body.context,
             expiredAt: new Date().getTime() + CONTEXT_TTL
           };
-          controller.storage.user.save(contextData);
+          controller.storage.users.save(contextData);
           bot.reply(message, body.utt);
         });
       });
