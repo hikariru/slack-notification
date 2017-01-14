@@ -1,7 +1,7 @@
 const request = require('request');
 
 const DIALOG_API_URL = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue';
-const CONTEXT_TTL = 30 * 1000;
+const CONTEXT_TTL = 1 * 60 * 1000;
 
 const buildPayload = (message, response, userData) => {
   const payload = {
@@ -34,6 +34,7 @@ module.exports = controller => {
       }
 
       controller.storage.users.get(message.user, (error, userData) => {
+        console.log(userData);
         console.log(buildPayload(message, response, userData));
         request.post({
           url: DIALOG_API_URL,
