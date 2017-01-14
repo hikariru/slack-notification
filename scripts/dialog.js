@@ -50,8 +50,7 @@ module.exports = controller => {
             lastContext: body.context,
             expiredAt: new Date().getTime() + CONTEXT_TTL
           };
-          controller.storage.users.save(contextData);
-          bot.reply(message, body.utt);
+          controller.storage.users.save(contextData, () => bot.reply(message, body.utt));
         });
       });
     });
