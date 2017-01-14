@@ -39,7 +39,7 @@ module.exports = controller => {
           bot.botkit.log('Failed to get user data :(', error);
           return;
         }
-        console.log(buildPayload(message, response, userData));
+
         request.post({
           url: DIALOG_API_URL,
           qs: {
