@@ -38,4 +38,4 @@ jspm_packages
 /slack-notification.iml
 /node_modules/
 /.idea/
-/.env
+.env
