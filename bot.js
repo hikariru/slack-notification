@@ -24,6 +24,17 @@ const bot = controller.spawn({
   token: process.env.SLACK_TOKEN
 }).startRTM();
 
+controller.setupWebserver(process.env.PORT, (error, webserver) => {
+
+  controller.createWebhookEndpoints(controller.webserver);
+
+  // keep dyno waking up
+  webserver.get('/', (request, response) => {
+    response.writeHead(200, {'Content-Type': 'text/plain'});
+    response.end(';)');
+  });
+});
+
 const loadDirectory = (directoryName, attribute) => {
   const directoryPath = Path.resolve('.', directoryName);
 
