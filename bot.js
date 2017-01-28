@@ -3,7 +3,6 @@
 const Botkit = require('./node_modules/botkit/lib/Botkit');
 const Fs = require('fs');
 const Path = require('path');
-const http = require('http');
 const redis = require('./node_modules/botkit-storage-redis/');
 const url = require('url');
 
@@ -24,14 +23,11 @@ const bot = controller.spawn({
   token: process.env.SLACK_TOKEN
 }).startRTM();
 
-controller.setupWebserver(process.env.PORT, (error, webserver) => {
+controller.setupWebserver(3000, function(error, webserver) {
+  controller.createWebhookEndpoints(webserver);
 
-  controller.createWebhookEndpoints(controller.webserver);
-
-  // keep dyno waking up
-  webserver.get('/', (request, response) => {
-    response.writeHead(200, {'Content-Type': 'text/plain'});
-    response.end(';)');
+  webserver.get('/', (request,response) => {
+    response.send(';)');
   });
 });
 
@@ -55,8 +51,3 @@ const loadDirectory = (directoryName, attribute) => {
 
 loadDirectory('cron', bot);
 loadDirectory('scripts', controller);
-
-http.createServer((request, response) => {
-  response.writeHead(200, {'Content-Type': 'text/plain'});
-  response.end('Ok, dyno is awake.');
-}).listen(process.env.PORT || 5000);
