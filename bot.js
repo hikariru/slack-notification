@@ -27,7 +27,8 @@ controller.setupWebserver(3000, (error, webserver) => {
   controller.createWebhookEndpoints(webserver);
 
   webserver.get('/', (request,response) => {
-    response.send(';)');
+    response.writeHead(200, {'Content-Type': 'text/plain'});
+    response.end(';)');
   });
 });
 
