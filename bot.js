@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 
 const Botkit = require('./node_modules/botkit/lib/Botkit');
 const Fs = require('fs');
