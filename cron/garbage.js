@@ -14,7 +14,7 @@ const garbageType = () => {
 module.exports = bot => {
   new CronJob('0 0 7 * * 1-5', () => {
     bot.say({
-      text: `おはようございます。今日は「${garbageType()}」の収集日です。`,
+      text: `おはようございます。今日は「${garbageType()}」の収集日です :wastebasket:`,
       channel: process.env.CHANNEL_ID
     });
   }, null, true, process.env.TIME_ZONE);
