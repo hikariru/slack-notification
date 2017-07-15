@@ -1,11 +1,11 @@
-const PasswordCommand = require('../commands/password');
+const PasswordGenerator = require('../commands/password_generator');
 
-const PASSWORD_COMMAND_NAME = '/p';
+const PASSWORD_GENERATOR_COMMAND = '/pass';
 
 module.exports = controller => {
   controller.on('slash_command', (bot, message) => {
-    if (message.command === PASSWORD_COMMAND_NAME) {
-      PasswordCommand(bot, message);
+    if (message.command === PASSWORD_GENERATOR_COMMAND) {
+      PasswordGenerator(bot, message);
     }
   });
 };
