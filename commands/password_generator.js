@@ -10,5 +10,5 @@ module.exports = (bot, message) => {
     strict: true
   });
 
-  bot.reply(message, `Generated: ${password}`);
+  bot.replyPublic(message, `Generated: ${password}`);
 };
