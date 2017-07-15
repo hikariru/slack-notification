@@ -10,5 +10,5 @@ module.exports = (bot, message) => {
     strict: true,
   });
 
-  bot.replyPublic(message, `Generated: ${password}`);
+  bot.replyPublicDelayed(message, `Generated: ${password}`);
 };
