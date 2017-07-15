@@ -1,7 +1,7 @@
 const request = require('request');
 
 const DIALOG_API_URL = 'https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue';
-const CONTEXT_TTL = 1 * 60 * 1000;
+const CONTEXT_TTL = 60 * 1000;
 const STORAGE_KEY = 'dialog_context';
 
 const buildPayload = (message, response, userData) => {
