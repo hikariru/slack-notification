@@ -7,7 +7,7 @@ const STORAGE_KEY = 'dialog_context';
 const buildPayload = (message, response, userData) => {
   const payload = {
     utt: message.text,
-    nickname: response.user.name
+    nickname: response.user.name,
   };
 
   if (!userData) {

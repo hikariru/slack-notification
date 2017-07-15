@@ -7,7 +7,7 @@ module.exports = (bot, message) => {
     symbols: false,
     uppercase: true,
     excludeSimilarCharacters: true,
-    strict: true
+    strict: true,
   });
 
   bot.replyPublic(message, `Generated: ${password}`);

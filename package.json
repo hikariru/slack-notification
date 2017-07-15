@@ -31,6 +31,7 @@
     "node": "7.x"
   },
   "devDependencies": {
-    "dotenv": "^4.0.0"
+    "dotenv": "^4.0.0",
+    "localtunnel": "^1.8.3"
   }
 }

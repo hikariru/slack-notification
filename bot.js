@@ -11,17 +11,16 @@ const redisConfig = {
   namespace: 'slackbot:store',
   host: redisUrl.hostname,
   port: redisUrl.port,
-  auth_pass: redisUrl.auth.split(':')[1]
+  auth_pass: redisUrl.auth.split(':')[1],
 };
 const redisStorage = redis(redisConfig);
 
 const controller = Botkit.slackbot({
   storage: redisStorage,
-  debug: true,
 });
 
 const bot = controller.spawn({
-  token: process.env.SLACK_TOKEN
+  token: process.env.SLACK_TOKEN,
 }).startRTM();
 
 controller.setupWebserver(process.env.PORT, (error, webserver) => {
