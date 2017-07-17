@@ -26,7 +26,7 @@ const bot = controller.spawn({
 controller.setupWebserver(process.env.PORT, (error, webserver) => {
   controller.createWebhookEndpoints(webserver);
 
-  webserver.get('/', (request,response) => {
+  webserver.get('/', (request, response) => {
     response.writeHead(200, {'Content-Type': 'text/plain'});
     response.end(';)');
   });
