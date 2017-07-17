@@ -1,6 +1,8 @@
 const generator = require('generate-password');
 
 module.exports = (bot, message) => {
+  bot.replyAcknowledge();
+
   const password = generator.generate({
     length: 12,
     numbers: true,
