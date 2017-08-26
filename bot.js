@@ -17,7 +17,7 @@ const redisStorage = redis(redisConfig);
 
 const controller = Botkit.slackbot({
   storage: redisStorage,
-  host: '0.0.0.0',
+  host: process.env.HOST,
 });
 
 const bot = controller.spawn({
