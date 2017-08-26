@@ -24,7 +24,7 @@ const bot = controller.spawn({
   token: process.env.SLACK_TOKEN,
 }).startRTM();
 
-controller.setupWebserver(process.env.PORT, (error, webserver) => {
+controller.setupWebserver(3000, (error, webserver) => {
   controller.createWebhookEndpoints(webserver);
 
   webserver.get('/', (request, response) => {
