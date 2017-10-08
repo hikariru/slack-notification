@@ -53,3 +53,8 @@ const loadDirectory = (directoryName, attribute) => {
 
 loadDirectory('cron', bot);
 loadDirectory('scripts', controller);
+
+bot.say({
+  text: 'やったー、ちょっぴり強くなったぞ！',
+  channel: process.env.CHANNEL_ID,
+});
