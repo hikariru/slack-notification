@@ -27,7 +27,7 @@
     "time": "^0.12.0"
   },
   "engines": {
-    "node": "7.x"
+    "node": "8.x"
   },
   "devDependencies": {
     "dotenv": "^4.0.0",
