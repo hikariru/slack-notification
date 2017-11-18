@@ -27,14 +27,6 @@ const bot = controller.spawn({
 controller.setupWebserver(process.env.PORT, (error, webserver) => {
   controller.createWebhookEndpoints(controller.webserver);
 
-  controller.createOauthEndpoints(controller.webserver, function(error, request, response) {
-    if (error) {
-      response.status(500).send('Error: ' + JSON.stringify(error));
-    } else {
-      response.send('Success! See you on your Slack team.');
-    }
-  });
-
   controller.webserver.get('/', (request, response) => {
     response.writeHead(200, {'Content-Type': 'text/plain'});
     response.end(';)');
