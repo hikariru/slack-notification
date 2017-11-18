@@ -5,10 +5,13 @@ module.exports = controller => {
         return;
       }
 
-      bot.say({
-        text: `新しいチャンネルができたみたいです :tv: #${message.channel.name}`,
-        channel: process.env.CHANNEL_ID,
-      });
+      const payload = {
+        'link_names': 1,
+        'parse': 'full',
+        'text': `新しいチャンネルができたみたいです :tv: #${message.channel.name}`,
+      };
+
+      bot.reply({ 'channel': process.env.CHANNEL_ID, }, payload);
     });
   });
 };
