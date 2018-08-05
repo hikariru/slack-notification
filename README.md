@@ -2,8 +2,11 @@
 
 ## scripts
 
-* 公開チャンネルが増えると #general で通知します
-* 雑談対話APIはけったいなパラメーター送らせようとしてくるので廃止
+* 使わないので消した
+
+## slash commands
+
+* none so far
 
 ## cron jobs
 
