@@ -3,20 +3,20 @@
 const Botkit = require('./node_modules/botkit/lib/Botkit');
 const Fs = require('fs');
 const Path = require('path');
-const redis = require('./node_modules/botkit-storage-redis/');
-const url = require('url');
+// const redis = require('./node_modules/botkit-storage-redis/');
+// const url = require('url');
 
-const redisUrl = url.parse(process.env.REDISCLOUD_URL);
-const redisConfig = {
-  namespace: 'slackbot:store',
-  host: redisUrl.hostname,
-  port: redisUrl.port,
-  auth_pass: redisUrl.auth.split(':')[1],
-};
-const redisStorage = redis(redisConfig);
+// const redisUrl = url.parse(process.env.REDISCLOUD_URL);
+// const redisConfig = {
+//   namespace: 'slackbot:store',
+//   host: redisUrl.hostname,
+//   port: redisUrl.port,
+//   auth_pass: redisUrl.auth.split(':')[1],
+// };
+// const redisStorage = redis(redisConfig);
 
 const controller = Botkit.slackbot({
-  storage: redisStorage,
+  // storage: redisStorage,
   host: process.env.HOST,
 });
 
@@ -25,12 +25,9 @@ const bot = controller.spawn({
 }).startRTM();
 
 controller.setupWebserver(process.env.PORT || 5000, (error, webserver) => {
-  controller.createWebhookEndpoints(controller.webserver);
-
-  controller.webserver.get('/', (request, response) => {
-    response.writeHead(200, {'Content-Type': 'text/plain'});
-    response.end(';)');
-  });
+  controller
+    .createWebhookEndpoints(controller.webserver)
+    .createHomepageEndpoint(controller.webserver);
 });
 
 const loadDirectory = (directoryName, attribute) => {
