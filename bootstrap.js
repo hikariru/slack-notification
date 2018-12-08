@@ -1,8 +1,10 @@
 // require('dotenv').config();
 
-const Botkit = require('./node_modules/botkit/lib/Botkit');
-const Fs = require('fs');
-const Path = require('path');
+const
+  Botkit = require('./node_modules/botkit/lib/Botkit')
+  , Fs = require('fs')
+  , Path = require('path')
+;
 
 const controller = Botkit.slackbot({
   host: process.env.HOST,

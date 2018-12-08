@@ -1,3 +1,4 @@
+// need implementing OAuth to work well
 module.exports = controller => {
   controller.on('slash_command', (bot, message) => {
     bot.botkit.log(`received slash_command: ${message.command} with token ${message.token}`);

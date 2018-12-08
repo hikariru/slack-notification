@@ -4,7 +4,7 @@
   "description": "なんかいい感じにアレするやつ",
   "main": "index.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node bootstrap.js"
   },
   "repository": {
     "type": "git",
@@ -17,9 +17,8 @@
   },
   "homepage": "https://github.com/hikariru/slack-notification#readme",
   "dependencies": {
-    "botkit": "^0.6.19",
-    "cron": "^1.5.0",
-    "npm": "^6.4.1",
+    "botkit": "^0.6.21",
+    "cron": "^1.5.1",
     "time": "^0.12.0"
   },
   "engines": {
