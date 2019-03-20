@@ -1,21 +1,19 @@
 const CronJob = require('cron').CronJob;
-const TimeDate = require('time').Date;
-
-/** @type Array */
-const garbageList = require('../constants/garbage.json');
-
-const garbageType = () => {
-  const date = new TimeDate();
-  date.setTimezone(process.env.TIME_ZONE);
-  const day = date.getDay();
-
-  return garbageList[day];
-};
 
 module.exports = bot => {
-  new CronJob('0 0 7 * * 1-5', () => {
+  // 火・金
+  new CronJob('0 0 7 * * 2,5', () => {
     bot.say({
-      text: `おはようございます :sun_with_face: 今日は *${garbageType()}* の収集日です :wastebasket:`,
+      text: `おはようございます :sun_with_face: 今日は 燃やすごみ の収集日です :wastebasket:`,
+      channel: process.env.CHANNEL_ID,
+    });
+  }, null, true, process.env.TIME_ZONE);
+
+  // 月・水・木
+  new CronJob('0 0 7 * * 1,3,4', () => {
+    bot.say({
+      text: `おはようございます :sun_with_face: 収集カレンダーをチェックしましょう:wastebasket:
+      ${process.env.GC_CALENDAR_PDF_URL}`,
       channel: process.env.CHANNEL_ID,
     });
   }, null, true, process.env.TIME_ZONE);
