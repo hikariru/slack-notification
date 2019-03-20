@@ -23,7 +23,6 @@ controller.setupWebserver(process.env.PORT || 5000, (error, webserver) => {
 /**
  * @param {string} directoryName
  * @param {Object} module
- * @return
  */
 const loadDirectory = (directoryName, module) => {
   const directoryPath = Path.resolve('.', directoryName);
