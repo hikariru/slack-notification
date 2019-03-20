@@ -1,5 +1,6 @@
 const CronJob = require('cron').CronJob;
 
+/**@type {string} */
 const mogNaviURL = 'https://mognavi.jp/do/whats_new/show';
 
 module.exports = bot => {

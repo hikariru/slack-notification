@@ -6,10 +6,12 @@ const
   , Path = require('path')
 ;
 
+/** @type {Botkit.SlackController} */
 const controller = Botkit.slackbot({
   host: process.env.HOST,
 });
 
+/** @type {Botkit.SlackBot} */
 const bot = controller.spawn({
   token: process.env.SLACK_TOKEN,
 }).startRTM();

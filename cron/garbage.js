@@ -1,7 +1,7 @@
 const CronJob = require('cron').CronJob;
 const TimeDate = require('time').Date;
 
-/** @type Array */
+/** @type {Array} */
 const garbageList = require('../constants/garbage.json');
 
 /**
