@@ -6,21 +6,27 @@ const
   , Path = require('path')
 ;
 
+/** @type {Botkit.SlackController} */
 const controller = Botkit.slackbot({
   host: process.env.HOST,
 });
 
+/** @type {Botkit.SlackBot} */
 const bot = controller.spawn({
   token: process.env.SLACK_TOKEN,
 }).startRTM();
 
 controller.setupWebserver(process.env.PORT || 5000, (error, webserver) => {
   controller
-    .createWebhookEndpoints(controller.webserver)
+    .createWebhookEndpoints(controller.webserver, [process.env.SLACK_TOKEN, process.env.VERIFICATION_TOKEN])
     .createHomepageEndpoint(controller.webserver);
 });
 
-const loadDirectory = (directoryName, attribute) => {
+/**
+ * @param {string} directoryName
+ * @param {Object} module
+ */
+const loadDirectory = (directoryName, module) => {
   const directoryPath = Path.resolve('.', directoryName);
 
   Fs.readdirSync(directoryPath).forEach((file) => {
@@ -29,7 +35,7 @@ const loadDirectory = (directoryName, attribute) => {
     try {
       const script = require(fullPath);
       if (typeof script === 'function') {
-        script(attribute);
+        script(module);
       }
     } catch(error) {
       bot.botkit.log('Failed to load scripts :(', error);

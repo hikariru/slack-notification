@@ -12,7 +12,7 @@ module.exports = bot => {
   // 月・水・木
   new CronJob('0 0 7 * * 1,3,4', () => {
     bot.say({
-      text: `おはようございます :sun_with_face: 収集カレンダーをチェックしましょう:wastebasket:
+      text: `おはようございます :sun_with_face: 収集カレンダーをチェックしましょう :wastebasket:
       ${process.env.GC_CALENDAR_PDF_URL}`,
       channel: process.env.CHANNEL_ID,
     });
