@@ -1,25 +1,38 @@
 // require('dotenv').config();
 
 const
-  Botkit = require('./node_modules/botkit/lib/Botkit')
+  {Botkit} = require('./node_modules/botkit/lib/Botkit')
+  , {SlackAdapter} = require('botbuilder-adapter-slack')
+  , Restify = require('restify')
   , Fs = require('fs')
   , Path = require('path')
 ;
 
-/** @type {Botkit.SlackController} */
-const controller = Botkit.slackbot({
-  host: process.env.HOST,
+/** @type {SlackAdapter} */
+const adapter = new SlackAdapter({
+  clientSigningSecret: process.env.SLACK_SECRET
+  , botToken: process.env.SLACK_TOKEN
 });
 
-/** @type {Botkit.SlackBot} */
+
+/** @type {Botkit} */
+const controller = new Botkit({
+  adapter: adapter
+  , host: process.env.HOST
+});
+
+/** @type {Promise<BotWorker>} */
 const bot = controller.spawn({
   token: process.env.SLACK_TOKEN,
-}).startRTM();
+});
 
-controller.setupWebserver(process.env.PORT || 5000, (error, webserver) => {
-  controller
-    .createWebhookEndpoints(controller.webserver, [process.env.SLACK_TOKEN, process.env.VERIFICATION_TOKEN])
-    .createHomepageEndpoint(controller.webserver);
+/** @type {Server} */
+const server = Restify.createServer();
+server.listen(process.env.PORT || 5000);
+
+
+server.get('/', function (req, res) {
+  res.send(200, 'hi :)');
 });
 
 /**
@@ -38,7 +51,6 @@ const loadDirectory = (directoryName, module) => {
         script(module);
       }
     } catch(error) {
-      bot.botkit.log('Failed to load scripts :(', error);
       process.exit(1);
     }
   });
