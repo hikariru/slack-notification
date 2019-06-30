@@ -27,6 +27,7 @@ const bot = controller.spawn({
 
 /** @type {Server} */
 const server = Restify.createServer();
+server.listen();
 
 server.get('/', function (req, res) {
   res.send(200, 'hi :)');
