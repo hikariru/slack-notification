@@ -17,7 +17,6 @@ const adapter = new SlackAdapter({
 /** @type {Botkit} */
 const controller = new Botkit({
   adapter: adapter
-  , host: process.env.HOST
 });
 
 /** @type {Promise<BotWorker>} */
