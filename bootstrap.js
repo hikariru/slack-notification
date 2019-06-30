@@ -1,8 +1,7 @@
 // require('dotenv').config();
 
-const
-  {Botkit} = require('./node_modules/botkit/lib/Botkit')
-  , {SlackAdapter} = require('botbuilder-adapter-slack')
+let {Botkit} = require('botkit');
+const {SlackAdapter} = require('botbuilder-adapter-slack')
   , Restify = require('restify')
   , Fs = require('fs')
   , Path = require('path')
