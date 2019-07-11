@@ -1,28 +1,26 @@
 // require('dotenv').config();
 
-let {Botkit} = require('botkit');
-const {SlackAdapter} = require('botbuilder-adapter-slack')
-  , Restify = require('restify')
-  , Fs = require('fs')
-  , Path = require('path')
-;
+const {Botkit} = require('botkit');
+const {SlackAdapter, SlackMessageTypeMiddleware} = require('botbuilder-adapter-slack');
+const Restify = require('restify');
+const Fs = require('fs');
+const Path = require('path');
 
-/** @type {SlackAdapter} */
-const adapter = new SlackAdapter({
+let adapter = new SlackAdapter({
   clientSigningSecret: process.env.SLACK_SECRET
   , botToken: process.env.SLACK_TOKEN
 });
 
 
 /** @type {Botkit} */
-const controller = new Botkit({
+let controller = new Botkit({
   adapter: adapter
 });
 
+adapter.use(new SlackMessageTypeMiddleware());
+
 /** @type {Promise<BotWorker>} */
-const bot = controller.spawn({
-  token: process.env.SLACK_TOKEN,
-});
+const bot = controller.spawn();
 
 /** @type {Server} */
 const server = Restify.createServer();
@@ -46,7 +44,7 @@ const loadDirectory = (directoryName, module) => {
     try {
       const script = require(fullPath);
       if (typeof script === 'function') {
-        script(module);
+        script(module, adapter);
       }
     } catch(error) {
       process.exit(1);
