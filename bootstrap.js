@@ -4,9 +4,10 @@ const {App} = require('@slack/bolt');
 const Fs = require('fs');
 const Path = require('path');
 
+/**@type {App} */
 const app = new App({
   token: process.env.SLACK_TOKEN,
-  signingSecret: process.env.SLACK_SECRET
+  signingSecret: process.env.SLACK_SECRET,
   ignoreSelf: true,
   logLevel: 'DEBUG'
 });
