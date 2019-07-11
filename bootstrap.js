@@ -1,7 +1,7 @@
 // require('dotenv').config();
 
 const {Botkit} = require('botkit');
-const {SlackAdapter, SlackMessageTypeMiddleware} = require('botbuilder-adapter-slack');
+const {SlackAdapter, SlackMessageTypeMiddleware, SlackBotWorker} = require('botbuilder-adapter-slack');
 const Restify = require('restify');
 const Fs = require('fs');
 const Path = require('path');
@@ -11,16 +11,15 @@ let adapter = new SlackAdapter({
   , botToken: process.env.SLACK_TOKEN
 });
 
+adapter.use(new SlackMessageTypeMiddleware());
 
 /** @type {Botkit} */
 let controller = new Botkit({
   adapter: adapter
 });
 
-adapter.use(new SlackMessageTypeMiddleware());
-
-/** @type {Promise<BotWorker>} */
-const bot = controller.spawn();
+/** @type {SlackBotWorker} */
+const bot = new SlackBotWorker(controller, {});
 
 /** @type {Server} */
 const server = Restify.createServer();
