@@ -1,37 +1,23 @@
 // require('dotenv').config();
 
-let {Botkit} = require('botkit');
-const {SlackAdapter} = require('botbuilder-adapter-slack')
-  , Restify = require('restify')
-  , Fs = require('fs')
-  , Path = require('path')
-;
+const {App} = require('@slack/bolt');
+const Fs = require('fs');
+const Path = require('path');
 
-/** @type {SlackAdapter} */
-const adapter = new SlackAdapter({
-  clientSigningSecret: process.env.SLACK_SECRET
-  , botToken: process.env.SLACK_TOKEN
-});
-
-
-/** @type {Botkit} */
-const controller = new Botkit({
-  adapter: adapter
-});
-
-/** @type {Promise<BotWorker>} */
-const bot = controller.spawn({
+const app = new App({
   token: process.env.SLACK_TOKEN,
+  signingSecret: process.env.SLACK_SECRET
+  ignoreSelf: true,
+  logLevel: 'DEBUG'
 });
 
-/** @type {Server} */
-const server = Restify.createServer();
-server.listen();
+app.error((error) => {
+  console.error(error)
+})
 
-server.get('/', function (req, res, next) {
-  res.send(200, 'hi :)');
-  next();
-});
+(async () => {
+  await app.start(process.env.PORT || 3000);
+})();
 
 /**
  * @param {string} directoryName
@@ -53,6 +39,3 @@ const loadDirectory = (directoryName, module) => {
     }
   });
 };
-
-loadDirectory('cron', bot);
-loadDirectory('scripts', controller);
