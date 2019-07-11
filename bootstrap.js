@@ -1,34 +1,31 @@
 // require('dotenv').config();
 
 const {Botkit} = require('botkit');
-const {SlackAdapter, SlackMessageTypeMiddleware, SlackBotWorker} = require('botbuilder-adapter-slack');
+const {
+  SlackAdapter
+  , SlackMessageTypeMiddleware
+  , SlackBotWorker
+  , SlackEventMiddleware
+} = require('botbuilder-adapter-slack');
 const Restify = require('restify');
 const Fs = require('fs');
 const Path = require('path');
 
-let adapter = new SlackAdapter({
+const adapter = new SlackAdapter({
   clientSigningSecret: process.env.SLACK_SECRET
   , botToken: process.env.SLACK_TOKEN
 });
 
 adapter.use(new SlackMessageTypeMiddleware());
+adapter.use(new SlackEventMiddleware());
 
 /** @type {Botkit} */
-let controller = new Botkit({
+const controller = new Botkit({
   adapter: adapter
 });
 
 /** @type {SlackBotWorker} */
 const bot = new SlackBotWorker(controller, {});
-
-/** @type {Server} */
-const server = Restify.createServer();
-server.listen();
-
-server.get('/', function (req, res, next) {
-  res.send(200, 'hi :)');
-  next();
-});
 
 /**
  * @param {string} directoryName
@@ -51,5 +48,17 @@ const loadDirectory = (directoryName, module) => {
   });
 };
 
-loadDirectory('cron', bot);
-loadDirectory('scripts', controller);
+loadDirectory('jobs', bot);
+loadDirectory('events', controller);
+
+/** @type {Server} */
+const server = Restify.createServer();
+server.listen();
+server.use(Restify.plugins.acceptParser(server.acceptable));
+server.use(Restify.plugins.queryParser());
+server.use(Restify.plugins.bodyParser());
+
+server.get('/', function (req, res, next) {
+  res.send(200, 'hi :)');
+  next();
+});
