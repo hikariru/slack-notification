@@ -1,5 +1,5 @@
-module.exports = controller, adapter => {
-  controller.hears(new RegExp(/.+/), 'direct_mention', async (bot, message) => {
-    await bot.reply(message, '元気ですよー！');
+module.exports = controller => {
+  controller.on('direct_mention', async (bot, message) => {
+    await bot.reply(message, 'はーい');
   });
 };
