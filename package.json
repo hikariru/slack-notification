@@ -20,7 +20,6 @@
     "botbuilder-adapter-slack": "^1.0.3",
     "botkit": "^4.0.2",
     "cron": "^1.7.1",
-    "restify": "^8.3.3",
     "time": "^0.12.0"
   },
   "engines": {
