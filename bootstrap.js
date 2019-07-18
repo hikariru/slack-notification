@@ -27,34 +27,11 @@ const controller = new Botkit({
 
 controller.ready(() => {
   controller.loadModules(__dirname + '/events');
-
-  const bot = new SlackBotWorker(controller, {});
-  loadFunctions('jobs', bot);
+  // cannot run due to bug: https://github.com/howdyai/botkit/issues/1705
+  // controller.loadModules(__dirname + '/events');
 });
 
 controller.webserver.get('/', (req, res) => {
   res.status(200);
   res.send('OK :D');
 });
-
-
-/**
- * @param {string} directoryName
- * @param {Object} attribute
- */
-const loadFunctions = (directoryName, attribute) => {
-  const directoryPath = Path.resolve('.', directoryName);
-
-  Fs.readdirSync(directoryPath).forEach((file) => {
-    const extension = Path.extname(file);
-    const fullPath = Path.join(directoryPath, Path.basename(file, extension));
-    try {
-      const script = require(fullPath);
-      if (typeof script === 'function') {
-        script(attribute);
-      }
-    } catch (error) {
-      process.exit(1);
-    }
-  });
-};
