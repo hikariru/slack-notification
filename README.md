@@ -1,6 +1,6 @@
 # slack-notification
 
-## cron jobs
+## cron jobs(動いてない)
 
 * ゴミの日をおしえてくれる
 * 薬の時間にリマインダがくる
