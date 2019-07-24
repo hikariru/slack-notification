@@ -6,11 +6,8 @@
   "scripts": {
     "start": "node bootstrap.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hikariru/slack-notification.git"
-  },
-  "author": "",
+  "repository": "git+https://github.com/hikariru/slack-notification.git",
+  "author": " ",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hikariru/slack-notification/issues"
