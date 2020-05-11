@@ -4,7 +4,9 @@ const Path = require('path');
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  ignoreSelf: true,
+  logLevel: 'DEBUG',
 });
 
 const loadDirectory = (directoryName) => {
@@ -26,6 +28,7 @@ const loadDirectory = (directoryName) => {
 };
 
 loadDirectory("commands");
+loadDirectory("endpoints");
 loadDirectory("events");
 loadDirectory("messages");
 
