@@ -13,14 +13,11 @@
     "url": "https://github.com/hikariru/slack-notification/issues"
   },
   "homepage": "https://github.com/hikariru/slack-notification#readme",
-  "dependencies": {
-    "botbuilder-adapter-slack": "^1.0.3",
-    "botkit": "^4.0.2",
-    "cron": "^1.7.1",
-    "time": "^0.12.0"
-  },
   "engines": {
-    "node": "10.x"
+    "node": "12.x"
+  },
+  "dependencies": {
+    "@slack/bolt": "^2.0.1"
   },
   "devDependencies": {
     "dotenv": "^8.0.0"
