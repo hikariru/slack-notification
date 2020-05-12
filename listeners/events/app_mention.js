@@ -1,7 +1,5 @@
-const { AppMentionEvent } = require('@slack/bolt')
-
 module.exports = app => {
-  app.event(AppMentionEvent.type, async ({ event, context }) => {
+  app.event('app_mention', async ({ event, context }) => {
     try {
       const result = await app.client.chat.postMessage({
         token: context.botToken,
