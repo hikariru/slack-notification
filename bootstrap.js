@@ -1,37 +1,38 @@
-// require('dotenv').config();
-
-const {Botkit} = require('botkit');
-const {
-  SlackAdapter
-  , SlackMessageTypeMiddleware
-  , SlackBotWorker
-  , SlackEventMiddleware
-} = require('botbuilder-adapter-slack');
-const Path = require('path');
+const {App} = require('@slack/bolt');
 const Fs = require('fs');
+const Path = require('path');
 
-
-const adapter = new SlackAdapter({
-  clientSigningSecret: process.env.SLACK_SIGNING_SECRET
-  , botToken: process.env.SLACK_BOT_TOKEN
+const app = new App({
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  ignoreSelf: true,
+  logLevel: 'DEBUG',
 });
 
-adapter.use(new SlackMessageTypeMiddleware());
-adapter.use(new SlackEventMiddleware());
+const loadDirectory = (directoryName) => {
+  const directoryPath = Path.resolve('.', directoryName);
 
-/** @type {Botkit} */
-const controller = new Botkit({
-  debug: true
-  , adapter: adapter
-});
+  Fs.readdirSync(directoryPath).forEach((file) => {
+    const extension = Path.extname(file);
+    const fullPath = Path.join(directoryPath, Path.basename(file, extension));
+    try {
+      const script = require(fullPath);
+      if (typeof script === 'function') {
+        script(app);
+      }
+    } catch (error) {
+      console.log('Failed to load scripts', error);
+      process.exit(1);
+    }
+  });
+};
 
-controller.ready(() => {
-  controller.loadModules(__dirname + '/events');
-  // cannot run due to bug: https://github.com/howdyai/botkit/issues/1705
-  // controller.loadModules(__dirname + '/events');
-});
+loadDirectory("commands");
+loadDirectory("endpoints");
+loadDirectory("events");
+loadDirectory("messages");
 
-controller.webserver.get('/', (req, res) => {
-  res.status(200);
-  res.send('OK :D');
-});
+(async () => {
+  await app.start(process.env.PORT || 3000);
+  console.log('App is running...');
+})();
