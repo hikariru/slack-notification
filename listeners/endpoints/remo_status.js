@@ -5,7 +5,7 @@ module.exports = app => {
     res.sendStatus(200);
 
     const remoStatus = await getRemoStatus();
-    return app.client.chat.postMessage({
+    return await app.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
       channel: process.env.CHANNEL_ID,
       text: `:thermometer: ${remoStatus.value}℃ (${remoStatus.createdAt})`,
