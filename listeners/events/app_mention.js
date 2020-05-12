@@ -3,6 +3,7 @@ module.exports = app => {
     try {
       const result = await app.client.chat.postMessage({
         token: context.botToken,
+        channel: context.channel,
         text: `<@${event.user.id}> はーい`
       });
       console.log(result);
