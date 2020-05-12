@@ -8,7 +8,7 @@ module.exports = app => {
       return app.client.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
         channel: process.env.CHANNEL_ID,
-        text: `現在の室温 ${remoStatus.value}℃ :thermometer:`,
+        text: `現在の室温は ${remoStatus.value}℃です :thermometer:`,
       });
     } catch (err) {
       console.log(err);
