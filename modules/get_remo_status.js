@@ -20,7 +20,7 @@ module.exports = () => {
       const temperature = res.data[0].newest_events.te;
       const createdAt = moment(temperature.created_at).tz(process.env.TIME_ZONE).format('YYYY-MM-DD HH:mm');
       return {
-        value: temperature.value,
+        value: temperature.val,
         createdAt: createdAt,
       };
     })
