@@ -1,6 +1,6 @@
 const {App} = require('@slack/bolt');
-const Fs = require('fs');
-const Path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -9,30 +9,25 @@ const app = new App({
   logLevel: 'DEBUG',
 });
 
-const loadDirectory = (directoryName) => {
-  const directoryPath = Path.resolve('.', directoryName);
-
-  Fs.readdirSync(directoryPath).forEach((file) => {
-    const extension = Path.extname(file);
-    const fullPath = Path.join(directoryPath, Path.basename(file, extension));
+const listenersRoot = path.resolve('.', 'listeners');
+fs.readdirSync(listenersRoot).forEach((directoryPath) => {
+  fs.readdirSync(directoryPath).forEach((file) => {
+    const extension = path.extname(file);
+    const fullPath = path.join(listenersRoot, directoryPath, path.basename(file, extension));
     try {
       const script = require(fullPath);
       if (typeof script === 'function') {
         script(app);
+        console.log(`Script has been loaded: ${fullPath}`)
       }
-    } catch (error) {
-      console.log('Failed to load scripts', error);
+    } catch (err) {
+      console.log(`Failed to load script: ${fullPath}`, err);
       process.exit(1);
     }
   });
-};
-
-loadDirectory("commands");
-loadDirectory("endpoints");
-loadDirectory("events");
-loadDirectory("messages");
+});
 
 (async () => {
   await app.start(process.env.PORT || 3000);
-  console.log('App is running...');
+  console.log('App is running!');
 })();

@@ -17,7 +17,9 @@
     "node": "12.x"
   },
   "dependencies": {
-    "@slack/bolt": "^2.0.1"
+    "@slack/bolt": "^2.0.1",
+    "axios": "^0.19.2",
+    "moment-timezone": "^0.5.28"
   },
   "devDependencies": {
     "dotenv": "^8.0.0"
