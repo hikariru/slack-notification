@@ -5,7 +5,6 @@ module.exports = app => {
     res.sendStatus(200);
     try {
       const remoStatus = await getRemoStatus();
-      console.log(remoStatus);
       return app.client.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
         channel: process.env.CHANNEL_ID,
