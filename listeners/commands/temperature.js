@@ -1,7 +1,7 @@
 const getRemoStatus = require('../../modules/get_remo_status');
 
 module.exports = app => {
-  app.command(`/remo`, async ({command, ack, say}) => {
+  app.command(`/te`, async ({command, ack, say}) => {
     await ack();
 
     try {
