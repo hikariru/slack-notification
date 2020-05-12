@@ -10,10 +10,11 @@ const app = new App({
 });
 
 const listenersRoot = path.resolve('.', 'listeners');
-fs.readdirSync(listenersRoot).forEach((directoryPath) => {
-  fs.readdirSync(directoryPath).forEach((file) => {
+fs.readdirSync(listenersRoot).forEach((directory) => {
+  const directoryRoot = path.join(listenersRoot, directory);
+  fs.readdirSync(directoryRoot).forEach((file) => {
     const extension = path.extname(file);
-    const fullPath = path.join(listenersRoot, directoryPath, path.basename(file, extension));
+    const fullPath = path.join(directoryRoot, path.basename(file, extension));
     try {
       const script = require(fullPath);
       if (typeof script === 'function') {
