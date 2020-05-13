@@ -5,7 +5,7 @@ module.exports = app => {
   app.receiver.app.get(`/slack/remo_status`, async(req, res) => {
     res.sendStatus(200);
 
-    const currentHour = moment().tz(process.env.TIME_ZONE).getHours();
+    const currentHour = Number(moment().tz(process.env.TIME_ZONE).hour());
 
     // うるさいので3時間ごとにしかPOSTさせない
     if (currentHour % 3 !== 0) {
