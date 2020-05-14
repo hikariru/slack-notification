@@ -13,7 +13,7 @@ module.exports = app => {
     // }
 
     try {
-      const reports = getWeatherReports();
+      const reports = await getWeatherReports();
       const attachments = buildForecastMessages(reports);
 
       return app.client.chat.postMessage({

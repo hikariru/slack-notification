@@ -1,7 +1,6 @@
 const moment = require('moment-timezone');
 
 module.exports = (reports) => {
-  console.log(reports);
   const currentHour = Number(moment().tz(process.env.TIMEZONE).hour());
   let forecast = {};
   if (currentHour <= 12) {
