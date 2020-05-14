@@ -30,7 +30,7 @@ module.exports = (reports) => {
 
   attachments[0].fields.push({
     title: '気温',
-    value: `${max} / ${min}`,
+    value: `${max} / ${min} (℃)`,
     short: false,
   });
 

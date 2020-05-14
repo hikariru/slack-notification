@@ -7,10 +7,10 @@ module.exports = app => {
   app.receiver.app.get(`/slack/weather`, async (req, res) => {
     res.status(200).send('OK');
 
-    // const currentHour = Number(moment().tz(process.env.TIMEZONE).hour());
-    // if (currentHour !== 7 || currentHour !== 19) {
-    //   return;
-    // }
+    const currentHour = Number(moment().tz(process.env.TIMEZONE).hour());
+    if (currentHour !== 7 || currentHour !== 19) {
+      return;
+    }
 
     try {
       const reports = await getWeatherReports();
@@ -19,7 +19,7 @@ module.exports = app => {
       return app.client.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
         channel: process.env.CHANNEL_ID,
-        text: `${reports.title}`,
+        text: `${reports.title} をお知らせします！`,
         attachments: attachments
       });
     } catch (err) {
