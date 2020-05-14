@@ -12,11 +12,11 @@ module.exports = (reports) => {
 
   const attachments = [
     {
-      title: `${forecast.dateLabel} (${forcast.date})`,
+      title: `${forecast.dateLabel} (${forecast.date})`,
       fields: [
         {
           title: '天気',
-          value: forcast.telop,
+          value: forecast.telop,
           short: false,
         },
       ],
