@@ -18,7 +18,7 @@ module.exports = async() => {
   try {
     const res = await axios.get('/1/devices');
     const temperature = res.data[0].newest_events.te;
-    const createdAt = moment(temperature.created_at).tz(process.env.TIME_ZONE).format('YYYY-MM-DD HH:mm');
+    const createdAt = moment(temperature.created_at).tz(process.env.TIMEZONE).format('YYYY-MM-DD HH:mm');
     return {
       value: temperature.val,
       createdAt: createdAt,
