@@ -9,5 +9,4 @@ module.exports = async () => {
   } catch (err) {
     console.log('Weather Hack API returned a error', err);
   }
-
 };
