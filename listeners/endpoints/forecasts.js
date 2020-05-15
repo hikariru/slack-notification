@@ -8,7 +8,7 @@ module.exports = app => {
     res.status(200).send('OK');
 
     const currentHour = Number(moment().tz(process.env.TIMEZONE).hour());
-    if (currentHour !== 15 || currentHour !== 19) {
+    if (currentHour !== 15 && currentHour !== 19) {
       return;
     }
 
