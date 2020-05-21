@@ -20,8 +20,10 @@ module.exports = (reports) => {
           short: false,
         },
       ],
+      image_url: forecast.image.url,
       footer: reports.copyright.provider[0].name,
-      ts: moment(reports.puplicTime).unix()
+      footer_icon: 'https://platform.slack-edge.com/img/default_application_icon.png',
+      ts: moment(reports.puplicTime).unix(),
     },
   ];
 
