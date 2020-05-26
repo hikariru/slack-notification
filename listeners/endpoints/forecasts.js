@@ -18,7 +18,7 @@ module.exports = app => {
 
       return app.client.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
-        channel: process.env.CHANNEL_ID,
+        channel: process.env.WEATHER_CHANNEL_ID,
         text: `${reports.title} をお知らせします！`,
         attachments: attachments
       });

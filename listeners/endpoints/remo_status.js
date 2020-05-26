@@ -16,7 +16,7 @@ module.exports = app => {
       const remoStatus = await getRemoStatus();
       return app.client.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
-        channel: process.env.CHANNEL_ID,
+        channel: process.env.WEATHER_CHANNEL_ID,
         text: `室温は ${remoStatus.value}℃です :thermometer: (${remoStatus.createdAt})`,
       });
     } catch (err) {
