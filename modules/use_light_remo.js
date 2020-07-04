@@ -11,15 +11,16 @@ module.exports = async (buttonName) => {
       'Accept': 'application/json',
       'Authorization': `Bearer ${remoToken}`,
       'Cache-Control': 'no-cache',
+      'Content-Type': 'application/x-www-form-urlencoded',
       'X-Requested-With': 'XMLHttpRequest',
     },
     responseType: 'json'
   });
 
   try {
-    await axios.post(`/1/appliances/${lightRemoId}/light`, {
-      button: buttonName,
-    });
+    let params = new URLSearchParams();
+    params.append('button', buttonName);
+    await axios.post(`/1/appliances/${lightRemoId}/light`, params);
   } catch (err) {
     throw err;
   }
