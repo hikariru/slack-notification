@@ -13,7 +13,7 @@ module.exports = app => {
         return;
       }
 
-      await useLightRemo(button);
+      await useLightRemo(buttonName);
       await say(`ええと、${buttonName}ボタンは… ポチッとな！`);
     } catch (err) {
       console.log(err);
