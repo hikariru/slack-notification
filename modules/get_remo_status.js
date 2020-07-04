@@ -8,9 +8,10 @@ module.exports = async() => {
   const axios = axiosBase.create({
     baseURL: apiBase,
     headers: {
-      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${remoToken}`,
+      'Cache-Control': 'no-cache',
       'X-Requested-With': 'XMLHttpRequest',
-      'Authorization': `Bearer ${remoToken}`
     },
     responseType: 'json'
   });
