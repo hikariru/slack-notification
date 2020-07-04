@@ -7,14 +7,14 @@ module.exports = app => {
     await ack();
 
     try {
-      const button = command.text;
-      if (!buttons.includes(button)) {
+      const buttonName = command.text;
+      if (!buttons.includes(buttonName)) {
         await say('ポチッと…そんなボタンないですね');
         return;
       }
 
       await useLightRemo(button);
-      await say('ポチッとな！');
+      await say(`ええと、${buttonName}ボタンは… ポチッとな！`);
     } catch (err) {
       console.log(err);
       await say('ポチッと…あれ？ダメみたいです');
