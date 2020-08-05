@@ -1,4 +1,5 @@
 const {App} = require('@slack/bolt');
+const {LogLevel} = require("@slack/logger");
 const fs = require('fs');
 const path = require('path');
 
@@ -6,7 +7,7 @@ const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   ignoreSelf: true,
-  logLevel: 'DEBUG',
+  logLevel: LogLevel.DEBUG,
 });
 
 const listenersRoot = path.resolve('.', 'listeners');
