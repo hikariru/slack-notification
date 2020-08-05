@@ -6,6 +6,6 @@ running on Heroku
 
 * Heroku Scheduler経由で1時間ごとにcurlで叩く。Slackの特定チャンネルにNature Remoの気温を投稿する
 
-## command: `/te`
+## command: `/light`
 
-* Nature Remoの気温を返す
+* 電気をつけたり消したりする
