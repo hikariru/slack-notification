@@ -7,20 +7,21 @@ module.exports = app => {
 
     const currentHour = Number(moment().tz(process.env.TIMEZONE).hour());
 
-    // うるさいので3時間ごとにしかPOSTさせない
     if (currentHour % 3 !== 0) {
       return;
     }
 
     try {
       const remoStatus = await getRemoStatus();
+      const temperature = Math.round(remoStatus.value);
+
       return app.client.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
         channel: process.env.WEATHER_CHANNEL_ID,
-        text: `室温は ${remoStatus.value}℃です :thermometer: (${remoStatus.createdAt})`,
+        text: `室温は ${temperature}℃です :thermometer: (${remoStatus.createdAt})`,
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   });
 };

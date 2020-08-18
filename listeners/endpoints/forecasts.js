@@ -23,7 +23,7 @@ module.exports = app => {
         attachments: attachments
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   });
 };
