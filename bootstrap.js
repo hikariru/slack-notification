@@ -23,7 +23,7 @@ fs.readdirSync(listenersRoot).forEach((directory) => {
         console.log(`Script has been loaded: ${fullPath}`)
       }
     } catch (err) {
-      console.log(`Failed to load script: ${fullPath}`, err);
+      console.error(`Failed to load script: ${fullPath}`, err);
       process.exit(1);
     }
   });
