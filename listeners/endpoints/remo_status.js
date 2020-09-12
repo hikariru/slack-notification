@@ -2,6 +2,8 @@ const moment = require('moment-timezone');
 const getRemoStatus = require('../../modules/get_remo_status');
 const maxTemperature = 28;
 const minTemperature = 17;
+const maxHumidity = 70;
+const minHumidity = 40;
 
 module.exports = app => {
   app.receiver.app.get(`/slack/remo_status`, async(req, res) => {
@@ -15,11 +17,11 @@ module.exports = app => {
 
     try {
       const remoStatus = await getRemoStatus();
-      const temperature = Math.round(remoStatus.value);
-      let text = `室温は ${temperature}℃です :thermometer: (${remoStatus.createdAt})`;
+      let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`;
 
       // 事務所衛生基準規則5条3項
-      if (temperature > maxTemperature || temperature < minTemperature) {
+      if (remoStatus.temperature > maxTemperature || remoStatus.temperature < minTemperature
+        || remoStatus.humidity > maxHumidity || remoStatus.humidity < minHumidity) {
         text = '<!channel> ' + text;
       }
 
