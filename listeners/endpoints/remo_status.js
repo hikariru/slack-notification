@@ -1,4 +1,4 @@
-const moment = require('moment-timezone');
+const dayjs = require('dayjs');
 const getRemoStatus = require('../../modules/get_remo_status');
 const maxTemperature = 28;
 const minTemperature = 17;
@@ -9,7 +9,7 @@ module.exports = app => {
   app.receiver.app.get(`/slack/remo_status`, async(req, res) => {
     res.sendStatus(200);
 
-    const currentHour = Number(moment().tz(process.env.TIMEZONE).hour());
+    const currentHour = Number(dayjs().tz(process.env.TIMEZONE).hour());
 
     if (currentHour % 3 !== 0) {
       return;
