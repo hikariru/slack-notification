@@ -9,7 +9,7 @@ module.exports = app => {
   app.receiver.app.get(`/slack/remo_status`, async(req, res) => {
     res.sendStatus(200);
 
-    const currentHour = Number(dayjs().tz(process.env.TIMEZONE).hour());
+    const currentHour = Number(dayjs().locale(process.env.TIMEZONE).hour());
 
     if (currentHour % 3 !== 0) {
       return;
