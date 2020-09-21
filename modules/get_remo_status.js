@@ -1,5 +1,7 @@
 const axiosBase= require('axios');
 const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/timezone');
+const timezone = require('dayjs/plugin/timezone');
 
 const remoToken = process.env.NATURE_REMO_TOKEN;
 const apiBase = 'https://api.nature.global:443';
@@ -20,7 +22,10 @@ module.exports = async() => {
     const res = await axios.get('/1/devices');
     const temperature = res.data[0].newest_events.te;
     const humidity = res.data[0].newest_events.hu;
-    const createdAt = dayjs(temperature.created_at).locale(process.env.TIMEZONE).format('YYYY-MM-DD HH:mm');
+
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+    const createdAt = dayjs(temperature.created_at).tz(process.env.TIMEZONE).format('YYYY-MM-DD HH:mm');
     return {
       temperature: Math.round(temperature.val),
       humidity: humidity.val,
