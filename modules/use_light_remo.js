@@ -17,12 +17,7 @@ module.exports = async (buttonName) => {
     responseType: 'json'
   });
 
-  try {
-    let params = new URLSearchParams();
-    params.append('button', buttonName);
-    await axios.post(`/1/appliances/${lightRemoId}/light`, params);
-  } catch (err) {
-    throw err;
-  }
-
+  let params = new URLSearchParams();
+  params.append('button', buttonName);
+  await axios.post(`/1/appliances/${lightRemoId}/light`, params);
 };

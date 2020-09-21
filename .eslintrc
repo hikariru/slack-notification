@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:node/recommended"
+  ],
+  "env": {
+    "es6": true
+  },
+  "plugins": [
+    "node"
+  ],
+  "rules": {
+    "node/no-extraneous-require": "off"
+  }
+}

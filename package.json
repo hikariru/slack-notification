@@ -4,7 +4,8 @@
   "description": "notification sender for my private slack ;)",
   "main": "bootstrap.js",
   "scripts": {
-    "start": "node bootstrap.js"
+    "start": "node bootstrap.js",
+    "lint": "eslint \"./**/*.js\""
   },
   "repository": "git+https://github.com/hikariru/slack-notification.git",
   "author": " ",
@@ -21,5 +22,8 @@
     "axios": "^0.19.2",
     "dayjs": "^1.8.35"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-plugin-node": "^11.1.0"
+  }
 }
