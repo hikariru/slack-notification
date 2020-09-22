@@ -18,21 +18,18 @@ module.exports = async() => {
     responseType: 'json'
   });
 
-  try {
-    const res = await axios.get('/1/devices');
-    const temperature = res.data[0].newest_events.te;
-    const humidity = res.data[0].newest_events.hu;
+  const res = await axios.get('/1/devices');
+  const temperature = res.data[0].newest_events.te;
+  const humidity = res.data[0].newest_events.hu;
 
-    dayjs.extend(utc);
-    dayjs.extend(timezone);
-    const createdAt = dayjs(temperature.created_at).tz(process.env.TIMEZONE).format('YYYY-MM-DD HH:mm');
-    return {
-      temperature: Math.round(temperature.val),
-      humidity: humidity.val,
-      createdAt: createdAt,
-    };
-  } catch(err) {
-    console.log('Nature Remo Cloud API returned a error', err);
-  }
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  const createdAt = dayjs(temperature.created_at).tz(process.env.TIMEZONE).format('YYYY-MM-DD HH:mm');
+
+  return {
+    temperature: Math.round(temperature.val),
+    humidity: humidity.val,
+    createdAt: createdAt,
+  };
 
 };
