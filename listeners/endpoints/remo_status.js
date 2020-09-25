@@ -1,6 +1,5 @@
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/timezone');
-const timezone = require('dayjs/plugin/timezone');
 
 const getRemoStatus = require('../../modules/get_remo_status');
 const maxTemperature = 28;
@@ -13,8 +12,7 @@ module.exports = app => {
     res.sendStatus(200);
 
     dayjs.extend(utc);
-    dayjs.extend(timezone);
-    const currentHour = Number(dayjs().tz(process.env.TIMEZONE).hour());
+    const currentHour = Number(dayjs().utcOffset(Number(process.env.UTC_OFFSET)).hour());
 
     if (currentHour % 3 !== 0) {
       return;

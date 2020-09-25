@@ -23,8 +23,7 @@ module.exports = async() => {
   const humidity = res.data[0].newest_events.hu;
 
   dayjs.extend(utc);
-  dayjs.extend(timezone);
-  const createdAt = dayjs(temperature.created_at).tz(process.env.TIMEZONE).format('YYYY-MM-DD HH:mm');
+  const createdAt = dayjs(temperature.created_at).utcOffset(Number(process.env.UTC_OFFSET)).format('YYYY-MM-DD HH:mm');
 
   return {
     temperature: Math.round(temperature.val),
