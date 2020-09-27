@@ -1,7 +1,5 @@
 const axiosBase= require('axios');
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/timezone');
-const timezone = require('dayjs/plugin/timezone');
+const moment = require('moment-timezone');
 
 const remoToken = process.env.NATURE_REMO_TOKEN;
 const apiBase = 'https://api.nature.global:443';
@@ -18,17 +16,18 @@ module.exports = async() => {
     responseType: 'json'
   });
 
-  const res = await axios.get('/1/devices');
-  const temperature = res.data[0].newest_events.te;
-  const humidity = res.data[0].newest_events.hu;
-
-  dayjs.extend(utc);
-  const createdAt = dayjs.utc(temperature.created_at).utcOffset(Number(process.env.UTC_OFFSET)).format("YYYY-MM-DD HH:mm")
-
-  return {
-    temperature: Math.round(temperature.val),
-    humidity: humidity.val,
-    createdAt: createdAt,
-  };
+  try {
+    const res = await axios.get('/1/devices');
+    const temperature = res.data[0].newest_events.te;
+    const humidity = res.data[0].newest_events.hu;
+    const createdAt = moment(temperature.created_at).tz(process.env.TIMEZONE).format('YYYY-MM-DD HH:mm');
+    return {
+      temperature: Math.round(temperature.val),
+      humidity: humidity.val,
+      createdAt: createdAt,
+    };
+  } catch(err) {
+    console.log('Nature Remo Cloud API returned a error', err);
+  }
 
 };
