@@ -12,7 +12,7 @@ module.exports = app => {
     res.sendStatus(200);
 
     dayjs.extend(utc);
-    // const currentHour = Number(dayjs().hour() - Number(process.env.UTC_OFFSET));
+    // const currentHour = Number(dayjs.utc().hour() - Number(process.env.UTC_OFFSET));
     //
     // if (currentHour % 3 !== 0) {
     //   return;
