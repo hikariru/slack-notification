@@ -11,7 +11,7 @@ module.exports = app => {
 
     const currentHour = Number(moment().tz(process.env.TIMEZONE).hour());
 
-    if (currentHour % 3 !== 0) {
+    if (currentHour % 4 !== 0) {
       return;
     }
 
