@@ -1,9 +1,0 @@
-logs
-*.log
-npm-debug.log*
-node_modules
-jspm_packages
-.npm
-.node_repl_history
-/node_modules/
-.env
