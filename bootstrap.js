@@ -1,5 +1,4 @@
-const {App} = require('@slack/bolt');
-const {LogLevel} = require("@slack/logger");
+const {App, LogLevel} = require('@slack/bolt');
 const fs = require('fs');
 const path = require('path');
 

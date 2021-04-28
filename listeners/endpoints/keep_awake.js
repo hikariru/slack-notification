@@ -1,5 +1,5 @@
 module.exports = app => {
-  app.receiver.app.get(`/`, (req, res) => {
+  app.receiver.router.get(`/`, (req, res) => {
     res.status(200).send('OK');
   });
 };

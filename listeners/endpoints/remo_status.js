@@ -6,7 +6,7 @@ const maxHumidity = 70;
 const minHumidity = 40;
 
 module.exports = app => {
-  app.receiver.app.get(`/slack/remo_status`, async(req, res) => {
+  app.receiver.router.get(`/slack/remo_status`, async(req, res) => {
     res.sendStatus(200);
 
     const currentHour = Number(moment().tz(process.env.TIMEZONE).hour());
