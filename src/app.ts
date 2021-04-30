@@ -20,6 +20,9 @@ fs.readdirSync(listenersRoot).forEach((directory) => {
   const directoryRoot = path.join(listenersRoot, directory);
   fs.readdirSync(directoryRoot).forEach((file) => {
     const extension = path.extname(file);
+    if (extension !== ".js") {
+      return;
+    }
     const fullPath = path.join(directoryRoot, path.basename(file, extension));
     try {
       const script = require(fullPath);
