@@ -16,9 +16,9 @@ const app = new App({
 });
 
 const listenersRoot = path.resolve('dist/', 'listeners') ;
-fs.readdirSync(listenersRoot).forEach((directory) => {
+fs.readdirSync(listenersRoot).forEach((directory :string) => {
   const directoryRoot = path.join(listenersRoot, directory);
-  fs.readdirSync(directoryRoot).forEach((file) => {
+  fs.readdirSync(directoryRoot).forEach((file :string) => {
     const extension = path.extname(file);
     if (extension !== ".js") {
       return;
