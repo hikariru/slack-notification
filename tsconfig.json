@@ -9,7 +9,7 @@
     "strict": true,
     "allowJs": true,
     "noImplicitAny": false,
-    "sourceMap": true,
+    "sourceMap": false,
     "rootDir": "src",
     "outDir": "dist"
   },
