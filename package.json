@@ -2,10 +2,11 @@
   "name": "slack-notification",
   "version": "1.0.0",
   "description": "notification sender for my private slack ;)",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node app.js",
-    "lint": "eslint \"./**/*.js\""
+    "build": "tsc -p .",
+    "build:watch": "tsc -w -p ./src",
+    "start": "npm run build && node dist/app.js"
   },
   "repository": "git+https://github.com/hikariru/slack-notification.git",
   "author": " ",
@@ -20,10 +21,9 @@
   "dependencies": {
     "@slack/bolt": "^3.3.0",
     "axios": "^0.21.1",
-    "moment-timezone": "^0.5.31"
-  },
-  "devDependencies": {
-    "eslint": "^7.10.0",
-    "eslint-plugin-node": "^11.1.0"
+    "moment-timezone": "^0.5.31",
+    "@types/node": "^15.0.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
   }
 }
