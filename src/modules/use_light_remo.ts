@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const useLightRemo = async (buttonName: string) => {
-  const remoToken = process.env.NATURE_REMO_TOKEN;
-  const lightRemoId = process.env.LIGHT_REMO_ID;
+export const useLightRemo = async (buttonName: string): Promise<void> => {
+  const remoToken = process.env.NATURE_REMO_TOKEN ?? '';
+  const lightRemoId = process.env.LIGHT_REMO_ID ?? '';
   const apiBase = 'https://api.nature.global:443';
 
   const axiosClient = axios.create({
@@ -17,7 +17,7 @@ export const useLightRemo = async (buttonName: string) => {
     responseType: 'json'
   });
 
-  let params = new URLSearchParams();
+  const params = new URLSearchParams();
   params.append('button', buttonName);
   await axiosClient.post(`/1/appliances/${lightRemoId}/light`, params);
 };
