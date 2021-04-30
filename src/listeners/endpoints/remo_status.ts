@@ -18,11 +18,11 @@ module.exports = app => {
 
     try {
       const remoStatus = await getRemoStatus();
-      let text = `${remoStatus?.temperature}℃ / ${remoStatus?.humidity}% :thermometer: (${remoStatus?.createdAt})`;
+      let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`;
 
       // 事務所衛生基準規則5条3項
-      if (remoStatus?.temperature > maxTemperature || remoStatus?.temperature < minTemperature
-        || remoStatus?.humidity > maxHumidity || remoStatus?.humidity < minHumidity) {
+      if (remoStatus.temperature > maxTemperature || remoStatus.temperature < minTemperature
+        || remoStatus.humidity > maxHumidity || remoStatus.humidity < minHumidity) {
         text = '<!channel> ' + text;
       }
 

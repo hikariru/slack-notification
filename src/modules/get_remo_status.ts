@@ -38,5 +38,4 @@ export const getRemoStatus = async() :Promise<RemoStatus> => {
     console.log('Nature Remo Cloud API returned a error', err);
     return new RemoStatus();
   }
-
 };
