@@ -1,8 +1,7 @@
-const useLightRemo = require('../../modules/use_light_remo');
-
-const buttons = ['on', 'off', 'night']
+import {useLightRemo} from '../../modules/use_light_remo';
 
 module.exports = app => {
+  const buttons = ['on', 'off', 'night']
   app.command(`/light`, async ({command, ack, say}) => {
     await ack();
 

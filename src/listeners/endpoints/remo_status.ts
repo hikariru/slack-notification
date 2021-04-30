@@ -1,11 +1,11 @@
-const moment = require('moment-timezone');
-const getRemoStatus = require('../../modules/get_remo_status');
-const maxTemperature = 28;
-const minTemperature = 17;
-const maxHumidity = 70;
-const minHumidity = 40;
+import moment from "moment-timezone";
+import {getRemoStatus} from '../../modules/get_remo_status';
 
 module.exports = app => {
+  const maxTemperature = 28;
+  const minTemperature = 17;
+  const maxHumidity = 70;
+  const minHumidity = 40;
   app.receiver.router.get(`/slack/remo_status`, async(req, res) => {
     res.sendStatus(200);
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-module.exports = async (buttonName) => {
+export const useLightRemo = async (buttonName: string) => {
   const remoToken = process.env.NATURE_REMO_TOKEN;
   const lightRemoId = process.env.LIGHT_REMO_ID;
   const apiBase = 'https://api.nature.global:443';
