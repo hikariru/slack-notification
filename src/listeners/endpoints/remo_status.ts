@@ -9,7 +9,8 @@ module.exports = app => {
   app.receiver.router.get(`/slack/remo_status`, async(req, res) => {
     res.sendStatus(200);
 
-    const currentHour = Number(moment().tz(process.env.TIMEZONE).hour());
+    const timezone = process.env.TIMEZONE ?? '';
+    const currentHour = Number(moment().tz(timezone).hour());
 
     if (currentHour % 4 !== 0) {
       return;
@@ -17,11 +18,11 @@ module.exports = app => {
 
     try {
       const remoStatus = await getRemoStatus();
-      let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`;
+      let text = `${remoStatus?.temperature}℃ / ${remoStatus?.humidity}% :thermometer: (${remoStatus?.createdAt})`;
 
       // 事務所衛生基準規則5条3項
-      if (remoStatus.temperature > maxTemperature || remoStatus.temperature < minTemperature
-        || remoStatus.humidity > maxHumidity || remoStatus.humidity < minHumidity) {
+      if (remoStatus?.temperature > maxTemperature || remoStatus?.temperature < minTemperature
+        || remoStatus?.humidity > maxHumidity || remoStatus?.humidity < minHumidity) {
         text = '<!channel> ' + text;
       }
 

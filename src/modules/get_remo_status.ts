@@ -1,7 +1,19 @@
 import axios from "axios";
 import moment from "moment-timezone";
 
-export const getRemoStatus = async() => {
+export class RemoStatus {
+  temperature: number;
+  humidity: number;
+  createdAt: string;
+
+  constructor(temperature: number, humidity: number, createdAt: string) {
+    this.temperature = temperature;
+    this.humidity = humidity;
+    this.createdAt = createdAt;
+  }
+}
+
+export const getRemoStatus = async() :Promise<RemoStatus> => {
   const remoToken = process.env.NATURE_REMO_TOKEN;
   const apiBase = 'https://api.nature.global:443';
   const axiosClient = axios.create({
@@ -21,13 +33,10 @@ export const getRemoStatus = async() => {
     const humidity = res.data[0].newest_events.hu;
     const timezone = process.env.TIMEZONE ?? '';
     const createdAt = moment(temperature.created_at).tz(timezone).format('YYYY-MM-DD HH:mm');
-    return {
-      temperature: Math.round(temperature.val),
-      humidity: humidity.val,
-      createdAt: createdAt,
-    };
+    return new RemoStatus(Math.round(temperature.val), Number(humidity.val), createdAt);
   } catch(err) {
     console.log('Nature Remo Cloud API returned a error', err);
+    return new RemoStatus(0, 0, '');
   }
 
 };
