@@ -3,7 +3,7 @@ import express from 'express';
 import moment from "moment-timezone";
 import {getRemoStatus} from '../../modules/get_remo_status';
 
-module.exports = (app :App, receiver: ExpressReceiver) => {
+module.exports = (app: App, receiver: ExpressReceiver) => {
   const maxTemperature = 28;
   const minTemperature = 17;
   const maxHumidity = 70;

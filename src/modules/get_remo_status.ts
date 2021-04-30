@@ -13,7 +13,7 @@ export class RemoStatus {
   }
 }
 
-export const getRemoStatus = async() :Promise<RemoStatus> => {
+export const getRemoStatus = async(): Promise<RemoStatus> => {
   const remoToken = process.env.NATURE_REMO_TOKEN;
   const apiBase = 'https://api.nature.global:443';
   const axiosClient = axios.create({

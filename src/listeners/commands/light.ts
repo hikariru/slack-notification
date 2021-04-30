@@ -1,7 +1,7 @@
 import {useLightRemo} from '../../modules/use_light_remo';
 import {App, ExpressReceiver} from '@slack/bolt';
 
-module.exports = (app :App, receiver: ExpressReceiver) => {
+module.exports = (app: App, receiver: ExpressReceiver) => {
   const buttons = ['on', 'off', 'night']
   app.command(`/light`, async ({command, ack, say}) => {
     await ack();
