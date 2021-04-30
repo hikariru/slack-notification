@@ -6,10 +6,10 @@ export class RemoStatus {
   humidity: number;
   createdAt: string;
 
-  constructor(temperature: number, humidity: number, createdAt: string) {
-    this.temperature = temperature;
-    this.humidity = humidity;
-    this.createdAt = createdAt;
+  constructor(temperature?: number, humidity?: number, createdAt?: string) {
+    this.temperature = temperature ?? 0;
+    this.humidity = humidity ?? 0;
+    this.createdAt = createdAt ?? '';
   }
 }
 
@@ -36,7 +36,7 @@ export const getRemoStatus = async() :Promise<RemoStatus> => {
     return new RemoStatus(Math.round(temperature.val), Number(humidity.val), createdAt);
   } catch(err) {
     console.log('Nature Remo Cloud API returned a error', err);
-    return new RemoStatus(0, 0, '');
+    return new RemoStatus();
   }
 
 };
