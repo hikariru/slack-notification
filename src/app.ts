@@ -27,7 +27,7 @@ fs.readdirSync(listenersRoot).forEach((directory :string) => {
     try {
       const script = require(fullPath);
       if (typeof script === 'function') {
-        script(app);
+        script(app, receiver);
         console.log(`Script has been loaded: ${fullPath}`)
       }
     } catch (err) {

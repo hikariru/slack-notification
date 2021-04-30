@@ -8,7 +8,6 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "allowJs": true,
-    "noImplicitAny": false,
     "sourceMap": false,
     "rootDir": "src",
     "outDir": "dist"

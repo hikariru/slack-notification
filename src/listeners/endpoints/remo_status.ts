@@ -1,12 +1,14 @@
+import {App, ExpressReceiver} from '@slack/bolt';
+import express from 'express';
 import moment from "moment-timezone";
 import {getRemoStatus} from '../../modules/get_remo_status';
 
-module.exports = app => {
+module.exports = (app :App, receiver: ExpressReceiver) => {
   const maxTemperature = 28;
   const minTemperature = 17;
   const maxHumidity = 70;
   const minHumidity = 40;
-  app.receiver.router.get(`/slack/remo_status`, async(req, res) => {
+  receiver.router.get(`/slack/remo_status`, async (req: express.Request, res: express.Response) => {
     res.sendStatus(200);
 
     const timezone = process.env.TIMEZONE ?? '';
@@ -26,9 +28,10 @@ module.exports = app => {
         text = '<!channel> ' + text;
       }
 
+      const weatherChannelId = process.env.WEATHER_CHANNEL_ID ?? '';
       return app.client.chat.postMessage({
         token: process.env.SLACK_BOT_TOKEN,
-        channel: process.env.WEATHER_CHANNEL_ID,
+        channel: weatherChannelId,
         text: text,
       });
     } catch (err) {
