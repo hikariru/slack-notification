@@ -1,11 +1,10 @@
-const axiosBase= require('axios');
-const moment = require('moment-timezone');
-
-const remoToken = process.env.NATURE_REMO_TOKEN;
-const apiBase = 'https://api.nature.global:443';
+import axios from "axios";
+import moment from "moment-timezone";
 
 module.exports = async() => {
-  const axios = axiosBase.create({
+  const remoToken = process.env.NATURE_REMO_TOKEN;
+  const apiBase = 'https://api.nature.global:443';
+  const axiosClient = axios.create({
     baseURL: apiBase,
     headers: {
       'Accept': 'application/json',
@@ -17,10 +16,11 @@ module.exports = async() => {
   });
 
   try {
-    const res = await axios.get('/1/devices');
+    const res = await axiosClient.get('/1/devices');
     const temperature = res.data[0].newest_events.te;
     const humidity = res.data[0].newest_events.hu;
-    const createdAt = moment(temperature.created_at).tz(process.env.TIMEZONE).format('YYYY-MM-DD HH:mm');
+    const timezone = process.env.TIMEZONE ?? '';
+    const createdAt = moment(temperature.created_at).tz(timezone).format('YYYY-MM-DD HH:mm');
     return {
       temperature: Math.round(temperature.val),
       humidity: humidity.val,

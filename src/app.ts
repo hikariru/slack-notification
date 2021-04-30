@@ -1,15 +1,21 @@
-const {App, LogLevel} = require('@slack/bolt');
-const fs = require('fs');
-const path = require('path');
+import fs from "fs";
+import path from "path";
+import {ExpressReceiver, LogLevel, App} from "@slack/bolt";
+
+const receiver = new ExpressReceiver({
+  signingSecret: process.env.SLACK_SIGNING_SECRET ?? '',
+  logLevel: LogLevel.DEBUG,
+});
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   ignoreSelf: true,
   logLevel: LogLevel.DEBUG,
+  receiver: receiver,
 });
 
-const listenersRoot = path.resolve('.', 'listeners');
+const listenersRoot = path.resolve('dist/', 'listeners') ;
 fs.readdirSync(listenersRoot).forEach((directory) => {
   const directoryRoot = path.join(listenersRoot, directory);
   fs.readdirSync(directoryRoot).forEach((file) => {
@@ -29,6 +35,6 @@ fs.readdirSync(listenersRoot).forEach((directory) => {
 });
 
 (async () => {
-  await app.start(process.env.PORT || 3000);
+  await app.start(Number(process.env.PORT) ?? 3000);
   console.log('App is running!');
 })();

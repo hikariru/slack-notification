@@ -1,11 +1,11 @@
-const axiosBase = require('axios');
-
-const remoToken = process.env.NATURE_REMO_TOKEN;
-const lightRemoId = process.env.LIGHT_REMO_ID;
-const apiBase = 'https://api.nature.global:443';
+import axios from "axios";
 
 module.exports = async (buttonName) => {
-  const axios = axiosBase.create({
+  const remoToken = process.env.NATURE_REMO_TOKEN;
+  const lightRemoId = process.env.LIGHT_REMO_ID;
+  const apiBase = 'https://api.nature.global:443';
+
+  const axiosClient = axios.create({
     baseURL: apiBase,
     headers: {
       'Accept': 'application/json',
@@ -19,5 +19,5 @@ module.exports = async (buttonName) => {
 
   let params = new URLSearchParams();
   params.append('button', buttonName);
-  await axios.post(`/1/appliances/${lightRemoId}/light`, params);
+  await axiosClient.post(`/1/appliances/${lightRemoId}/light`, params);
 };
