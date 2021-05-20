@@ -4,12 +4,8 @@ import moment from "moment-timezone";
 import {getRemoStatus} from '../../modules/get_remo_status';
 
 module.exports = (app: App, receiver: ExpressReceiver) => {
-  const maxTemperature = 28;
-  const minTemperature = 17;
-  const maxHumidity = 70;
-  const minHumidity = 40;
-  receiver.router.get(`/slack/remo_status`, async (req: express.Request, res: express.Response) => {
-    res.sendStatus(200);
+  receiver.router.get('/slack/remo_status', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.sendStatus(202);
 
     const timezone = process.env.TIMEZONE ?? '';
     const currentHour = Number(moment().tz(timezone).hour());
@@ -18,6 +14,14 @@ module.exports = (app: App, receiver: ExpressReceiver) => {
       return;
     }
 
+    await next();
+  });
+
+  const maxTemperature = 28;
+  const minTemperature = 17;
+  const maxHumidity = 70;
+  const minHumidity = 40;
+  receiver.router.get(`/slack/remo_status`, async (req: express.Request, res: express.Request) => {
     try {
       const remoStatus = await getRemoStatus();
       let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`;
