@@ -26,12 +26,12 @@
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "moment-timezone": "^0.5.31",
-    "ts-node": "^9.1.1"
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.25.0",
-    "typescript": "^4.2.4"
   }
 }
