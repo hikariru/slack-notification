@@ -38,6 +38,6 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
 });
 
 (async () => {
-  await app.start(8080);
-  console.log('app is running');
+  await app.start(process.env.PORT || 3000);
+  console.log('⚡️ Bolt app is running!');
 })();
