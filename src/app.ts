@@ -38,6 +38,6 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
 });
 
 (async () => {
-  await app.start();
-  console.log('App is running!');
+  await app.start(8080);
+  console.log('app is running');
 })();
