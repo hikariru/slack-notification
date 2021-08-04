@@ -35,8 +35,8 @@ export const getRemoStatus = async(): Promise<RemoStatus> => {
 
   const json = await res.json();
   console.dirxml(json);
-  const temperature = json.data[0].newest_events.te;
-  const humidity = json.data[0].newest_events.hu;
+  const temperature = json[0].newest_events.te;
+  const humidity = json[0].newest_events.hu;
   const timezone = process.env.TIMEZONE ?? '';
   const createdAt = moment(temperature.created_at).tz(timezone).format('YYYY-MM-DD HH:mm');
   return new RemoStatus(Math.round(temperature.val), Number(humidity.val), createdAt);
