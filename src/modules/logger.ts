@@ -1,6 +1,6 @@
 import {ConsoleLogger, LogLevel} from '@slack/logger'
 
-const Logger = new ConsoleLogger();
-Logger.setLevel(LogLevel.WARN);
+const logger = new ConsoleLogger();
+logger.setLevel(LogLevel.WARN);
 
-export default Logger;
+export default logger;

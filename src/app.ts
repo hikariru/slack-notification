@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { bolt } from "./modules/bolt"
-import Logger from "./modules/logger";
+import logger from "./modules/logger";
 
 const listenersRoot = path.resolve('dist/', 'listeners') ;
 fs.readdirSync(listenersRoot).forEach((directory: string) => {
@@ -16,10 +16,10 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
       const script = require(fullPath);
       if (typeof script === 'function') {
         script();
-        Logger.info(`Script has been loaded: ${fullPath}`)
+        logger.info(`Script has been loaded: ${fullPath}`)
       }
     } catch (err) {
-      Logger.error(`Failed to load script: ${fullPath}`, err);
+      logger.error(`Failed to load script: ${fullPath}`, err);
       throw err;
     }
   });
@@ -27,5 +27,5 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
 
 (async () => {
   await bolt.start(Number(process.env.PORT) || 3000);
-  Logger.info('App is running!');
+  logger.info('App is running!');
 })();
