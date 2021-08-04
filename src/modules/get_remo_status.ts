@@ -29,7 +29,7 @@ export const getRemoStatus = async(): Promise<RemoStatus> => {
   const res = await fetch(apiBase+ '/1/devices', fetchOptions);
 
   if (!res.ok) {
-    console.error(`Nature Remo Cloud API returned a error: ${res.status}`);
+    console.error(`[ERROR] Nature Remo Cloud API returned a error: ${res.status}(${res.statusText})`);
     return new RemoStatus();
   }
 

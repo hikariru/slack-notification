@@ -22,24 +22,20 @@ module.exports = (app: App, receiver: ExpressReceiver) => {
   const maxHumidity = 70;
   const minHumidity = 40;
   receiver.router.get(`/slack/remo_status`, async (req: express.Request, res: express.Request) => {
-    try {
-      const remoStatus = await getRemoStatus();
-      let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`;
+    const remoStatus = await getRemoStatus();
+    let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`;
 
-      // 事務所衛生基準規則5条3項
-      if (remoStatus.temperature > maxTemperature || remoStatus.temperature < minTemperature
-        || remoStatus.humidity > maxHumidity || remoStatus.humidity < minHumidity) {
-        text = '<!channel> ' + text;
-      }
-
-      const weatherChannelId = process.env.WEATHER_CHANNEL_ID ?? '';
-      return app.client.chat.postMessage({
-        token: process.env.SLACK_BOT_TOKEN,
-        channel: weatherChannelId,
-        text: text,
-      });
-    } catch (err) {
-      console.error(err);
+    // 事務所衛生基準規則5条3項
+    if (remoStatus.temperature > maxTemperature || remoStatus.temperature < minTemperature
+      || remoStatus.humidity > maxHumidity || remoStatus.humidity < minHumidity) {
+      text = '<!channel> ' + text;
     }
+
+    const weatherChannelId = process.env.WEATHER_CHANNEL_ID ?? '';
+    return app.client.chat.postMessage({
+      token: process.env.SLACK_BOT_TOKEN,
+      channel: weatherChannelId,
+      text: text,
+  });
   });
 };

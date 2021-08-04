@@ -28,10 +28,10 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
       const script = require(fullPath);
       if (typeof script === 'function') {
         script(app, receiver);
-        console.info(`Script has been loaded: ${fullPath}`)
+        console.info(`[INFO] Script has been loaded: ${fullPath}`)
       }
     } catch (err) {
-      console.error(`Failed to load script: ${fullPath}`, err);
+      console.error(`[ERROR] Failed to load script: ${fullPath}`, err);
       throw err;
     }
   });
@@ -39,5 +39,5 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
 
 (async () => {
   await app.start(Number(process.env.PORT) || 3000);
-  console.info('App is running!');
+  console.info('[INFO] App is running!');
 })();
