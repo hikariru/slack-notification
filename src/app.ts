@@ -1,19 +1,7 @@
 import fs from "fs";
 import path from "path";
-import {ExpressReceiver, LogLevel, App} from "@slack/bolt";
-
-const receiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET ?? '',
-  logLevel: LogLevel.INFO,
-});
-
-const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  ignoreSelf: true,
-  logLevel: LogLevel.DEBUG,
-  receiver: receiver,
-});
+import { bolt } from "./modules/bolt"
+import logger from "./modules/logger";
 
 const listenersRoot = path.resolve('dist/', 'listeners') ;
 fs.readdirSync(listenersRoot).forEach((directory: string) => {
@@ -27,17 +15,17 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
     try {
       const script = require(fullPath);
       if (typeof script === 'function') {
-        script(app, receiver);
-        console.info(`[INFO] Script has been loaded: ${fullPath}`)
+        script();
+        logger.info(`Script has been loaded: ${fullPath}`)
       }
     } catch (err) {
-      console.error(`[ERROR] Failed to load script: ${fullPath}`, err);
+      logger.error(`Failed to load script: ${fullPath}`, err);
       throw err;
     }
   });
 });
 
 (async () => {
-  await app.start(Number(process.env.PORT) || 3000);
-  console.info('[INFO] App is running!');
+  await bolt.start(Number(process.env.PORT) || 3000);
+  logger.info('App is running!');
 })();

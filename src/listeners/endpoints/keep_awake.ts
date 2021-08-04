@@ -1,7 +1,7 @@
-import {App, ExpressReceiver} from '@slack/bolt';
 import express from "express";
+import { receiver } from "../../modules/receiver";
 
-module.exports = (app: App, receiver: ExpressReceiver) => {
+module.exports = () => {
   receiver.router.get('/', (req: express.Request, res: express.Response) => {
     res.status(200).send('OK');
   });

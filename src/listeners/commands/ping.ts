@@ -1,7 +1,7 @@
-import {App, ExpressReceiver} from '@slack/bolt';
+import { bolt } from "../../modules/bolt";
 
-module.exports = (app: App, receiver: ExpressReceiver) => {
-  app.command('/ping', async ({command, ack, say}) => {
+module.exports = () => {
+  bolt.command('/ping', async ({ack, say}) => {
     await ack();
     await say(`pong!`);
   })

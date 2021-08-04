@@ -1,9 +1,9 @@
-import {App, ExpressReceiver} from '@slack/bolt';
+import { bolt } from "../../modules/bolt";
 
-module.exports = (app: App, receiver: ExpressReceiver) => {
-  app.event('app_mention', async ({ event, context }) => {
+module.exports = () => {
+  bolt.event('app_mention', async ({ event, context }) => {
     const user = event.user ?? '';
-    await app.client.chat.postMessage({
+    await bolt.client.chat.postMessage({
         token: context.botToken,
         channel: event.channel,
         text: `<@${user}> はーい`
