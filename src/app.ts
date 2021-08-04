@@ -4,7 +4,7 @@ import {ExpressReceiver, LogLevel, App} from "@slack/bolt";
 
 const receiver = new ExpressReceiver({
   signingSecret: process.env.SLACK_SIGNING_SECRET ?? '',
-  logLevel: LogLevel.DEBUG,
+  logLevel: LogLevel.INFO,
 });
 
 const app = new App({
