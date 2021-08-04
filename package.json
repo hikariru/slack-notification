@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/hikariru/slack-notification#readme",
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "dependencies": {
     "@slack/bolt": "^3.5.0",
