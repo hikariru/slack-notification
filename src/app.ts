@@ -16,7 +16,7 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
       const script = require(fullPath);
       if (typeof script === 'function') {
         script();
-        logger.info(`Script has been loaded: ${fullPath}`)
+        logger.debug(`Script has been loaded: ${fullPath}`)
       }
     } catch (err) {
       logger.error(`Failed to load script: ${fullPath}`, err);
