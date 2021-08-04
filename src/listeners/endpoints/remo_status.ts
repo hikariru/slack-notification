@@ -1,11 +1,11 @@
 import express from 'express';
 import moment from "moment-timezone";
 import {getRemoStatus} from '../../modules/get_remo_status';
-import { App } from "../../modules/bolt";
-import {Receiver} from "../../modules/receiver";
+import { bolt } from "../../modules/bolt";
+import { receiver } from "../../modules/receiver";
 
 module.exports = () => {
-  Receiver.router.get('/slack/remo_status', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  receiver.router.get('/slack/remo_status', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.sendStatus(202);
 
     const timezone = process.env.TIMEZONE ?? '';
@@ -22,7 +22,7 @@ module.exports = () => {
   const minTemperature = 17;
   const maxHumidity = 70;
   const minHumidity = 40;
-  Receiver.router.get(`/slack/remo_status`, async () => {
+  receiver.router.get(`/slack/remo_status`, async () => {
     const remoStatus = await getRemoStatus();
     let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`;
 
@@ -33,7 +33,7 @@ module.exports = () => {
     }
 
     const weatherChannelId = process.env.WEATHER_CHANNEL_ID ?? '';
-    return App.client.chat.postMessage({
+    return bolt.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
       channel: weatherChannelId,
       text: text,

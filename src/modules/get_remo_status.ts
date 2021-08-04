@@ -1,8 +1,8 @@
 import fetch from "node-fetch";
 import moment from "moment-timezone";
-import { Logger } from "./logger";
+import Logger from "./logger";
 
-export class RemoStatus {
+class RemoStatus {
   temperature: number;
   humidity: number;
   createdAt: string;

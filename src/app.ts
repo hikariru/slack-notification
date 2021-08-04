@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { App } from "./modules/bolt"
-import { Logger } from "./modules/logger";
+import { bolt } from "./modules/bolt"
+import Logger from "./modules/logger";
 
 const listenersRoot = path.resolve('dist/', 'listeners') ;
 fs.readdirSync(listenersRoot).forEach((directory: string) => {
@@ -26,6 +26,6 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
 });
 
 (async () => {
-  await App.start(Number(process.env.PORT) || 3000);
+  await bolt.start(Number(process.env.PORT) || 3000);
   Logger.info('App is running!');
 })();

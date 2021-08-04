@@ -1,11 +1,11 @@
-import { App as Bolt } from "@slack/bolt";
-import { Logger } from "./logger";
-import { Receiver } from "./receiver";
+import { App } from "@slack/bolt";
+import Logger from "./logger";
+import { receiver } from "./receiver";
 
-export const App = new Bolt({
+export const bolt = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   ignoreSelf: true,
   logger: Logger,
-  receiver: Receiver,
+  receiver: receiver,
 });
