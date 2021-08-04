@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import moment from "moment-timezone";
+import { Logger } from "./logger";
 
 export class RemoStatus {
   temperature: number;
@@ -29,7 +30,7 @@ export const getRemoStatus = async(): Promise<RemoStatus> => {
   const res = await fetch(apiBase+ '/1/devices', fetchOptions);
 
   if (!res.ok) {
-    console.error(`[ERROR] Nature Remo Cloud API returned a error: ${res.status}(${res.statusText})`);
+    Logger.warn(`Nature Remo Cloud API returned a error: ${res.status}(${res.statusText})`);
     return new RemoStatus();
   }
 
