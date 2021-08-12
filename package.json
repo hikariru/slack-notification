@@ -4,9 +4,10 @@
   "description": "notification sender for my private slack ;)",
   "main": "src/app.js",
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "tsc -p .",
     "build:watch": "tsc -w -p .",
-    "start": "npm run build && node dist/app.js",
+    "start": "node dist/app.js",
     "eslint": "eslint src/**/*.ts",
     "eslint:fix": "eslint src/**/*.ts --fix"
   },
