@@ -7,9 +7,8 @@
     "prebuild": "rimraf dist",
     "build": "tsc -p .",
     "build:watch": "tsc -w -p .",
-    "start": "node dist/app.js",
-    "eslint": "eslint src/**/*.ts",
-    "eslint:fix": "eslint src/**/*.ts --fix"
+    "format": "prettier --write \"src/**/*.ts\"",
+    "start": "node dist/app.js"
   },
   "repository": "git+https://github.com/hikariru/slack-notification.git",
   "author": " ",
@@ -30,12 +29,11 @@
     "dotenv": "^10.0.0",
     "moment-timezone": "^0.5.33",
     "node-fetch": "^2.6.1",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.29.0",
-    "@typescript-eslint/parser": "^4.29.0",
-    "eslint": "^7.32.0"
+    "prettier": "^2.3.2"
   }
 }
