@@ -1,5 +1,5 @@
 import express from 'express'
-import moment from 'moment-timezone'
+import { DateTime } from "luxon"
 import { getRemoStatus } from '../../modules/get_remo_status'
 import { bolt } from '../../modules/bolt'
 import { receiver } from '../../modules/receiver'
@@ -15,7 +15,7 @@ module.exports = () => {
       res.sendStatus(202)
 
       const timezone = process.env.TIMEZONE ?? ''
-      const currentHour = Number(moment().tz(timezone).hour())
+      const currentHour = Number(DateTime.now().setZone(timezone).hour)
 
       if (currentHour % 4 !== 0) {
         return

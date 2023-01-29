@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import moment from 'moment-timezone'
+import { DateTime } from 'luxon'
 import logger from './logger'
 
 class RemoStatus {
@@ -40,9 +40,9 @@ export const getRemoStatus = async (): Promise<RemoStatus> => {
   const temperature = json[0].newest_events.te
   const humidity = json[0].newest_events.hu
   const timezone = process.env.TIMEZONE ?? ''
-  const createdAt = moment(temperature.created_at)
-    .tz(timezone)
-    .format('YYYY-MM-DD HH:mm')
+  const createdAt = DateTime.fromISO(temperature.created_at)
+    .setZone(timezone)
+    .toFormat('YYYY-MM-DD HH:mm')
   return new RemoStatus(
     Math.round(temperature.val),
     Number(humidity.val),
