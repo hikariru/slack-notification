@@ -42,7 +42,7 @@ export const getRemoStatus = async (): Promise<RemoStatus> => {
   const timezone = process.env.TIMEZONE ?? ''
   const createdAt = DateTime.fromISO(temperature.created_at)
     .setZone(timezone)
-    .toFormat('YYYY-MM-DD HH:mm')
+    .toFormat('yyyy-MM-dd HH:mm')
   return new RemoStatus(
     Math.round(temperature.val),
     Number(humidity.val),
