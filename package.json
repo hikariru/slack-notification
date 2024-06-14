@@ -26,7 +26,6 @@
     "@types/express-serve-static-core": "^4.19.3",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.14.2",
-    "dotenv": "^16.4.5",
     "luxon": "^3.4.4",
     "rimraf": "^5.0.7",
     "ts-node": "^10.9.2",
