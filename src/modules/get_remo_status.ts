@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import { DateTime } from 'luxon'
 import logger from './logger'
 
