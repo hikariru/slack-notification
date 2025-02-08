@@ -29,7 +29,8 @@ module.exports = () => {
   const minTemperature = 17
   const maxHumidity = 70
   const minHumidity = 40
-  receiver.router.get(`/slack/remo_status`, async () => {
+  // @ts-ignore
+  receiver.router.get(`/slack/remo_status`, async (req, res, next) => {
     const remoStatus = await getRemoStatus()
     let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`
 
