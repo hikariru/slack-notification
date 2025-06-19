@@ -1,8 +1,8 @@
-import express from 'express'
-import { DateTime } from "luxon"
-import { getRemoStatus } from '../../modules/get_remo_status'
-import { bolt } from '../../modules/bolt'
-import { receiver } from '../../modules/receiver'
+import express from 'express';
+import { DateTime } from 'luxon';
+import { getRemoStatus } from '../../modules/get_remo_status';
+import { bolt } from '../../modules/bolt';
+import { receiver } from '../../modules/receiver';
 
 module.exports = () => {
   receiver.router.get(
@@ -12,27 +12,27 @@ module.exports = () => {
       res: express.Response,
       next: express.NextFunction,
     ) => {
-      res.sendStatus(202)
+      res.sendStatus(202);
 
-      const timezone = process.env.TIMEZONE ?? ''
-      const currentHour = Number(DateTime.now().setZone(timezone).hour)
+      const timezone = process.env.TIMEZONE ?? '';
+      const currentHour = Number(DateTime.now().setZone(timezone).hour);
 
       if (currentHour % 4 !== 0) {
-        return
+        return;
       }
 
-      await next()
+      await next();
     },
-  )
+  );
 
-  const maxTemperature = 28
-  const minTemperature = 17
-  const maxHumidity = 70
-  const minHumidity = 40
+  const maxTemperature = 28;
+  const minTemperature = 17;
+  const maxHumidity = 70;
+  const minHumidity = 40;
   // @ts-ignore
   receiver.router.get(`/slack/remo_status`, async (req, res, next) => {
-    const remoStatus = await getRemoStatus()
-    let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`
+    const remoStatus = await getRemoStatus();
+    let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`;
 
     // 事務所衛生基準規則5条3項
     if (
@@ -41,14 +41,14 @@ module.exports = () => {
       remoStatus.humidity > maxHumidity ||
       remoStatus.humidity < minHumidity
     ) {
-      text = '<!channel> ' + text
+      text = '<!channel> ' + text;
     }
 
-    const weatherChannelId = process.env.WEATHER_CHANNEL_ID ?? ''
+    const weatherChannelId = process.env.WEATHER_CHANNEL_ID ?? '';
     return bolt.client.chat.postMessage({
       token: process.env.SLACK_BOT_TOKEN,
       channel: weatherChannelId,
       text: text,
-    })
-  })
-}
+    });
+  });
+};
