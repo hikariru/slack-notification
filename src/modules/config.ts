@@ -1,4 +1,49 @@
-export const config = {
+interface Config {
+  app: {
+    port: number;
+    nodeEnv: string;
+    isProduction: boolean;
+  };
+  weather: {
+    defaultAreaId: string;
+    notificationHour: number;
+    apiEndpoint: string;
+    naturesRemoApiEndpoint: string;
+    naturesRemoToken: string;
+    forecast: {
+      pressureLevelThreshold: number;
+      hourInterval: number;
+    };
+  };
+  slack: {
+    botToken: string;
+    signingSecret: string;
+    generalChannelId: string;
+    weatherChannelId: string;
+  };
+  notification: {
+    timezone: string;
+    utcOffset: number;
+    remoStatus: {
+      hourInterval: number;
+    };
+  };
+  remo: {
+    token: string;
+    thresholds: {
+      temperature: {
+        max: number;
+        min: number;
+      };
+      humidity: {
+        max: number;
+        min: number;
+      };
+    };
+  };
+}
+
+export const config: Config = {
   app: {
     port: Number(process.env.PORT) || 3000,
     nodeEnv: process.env.NODE_ENV ?? 'development',
@@ -12,7 +57,7 @@ export const config = {
     naturesRemoToken: process.env.NATURE_REMO_TOKEN ?? '',
     forecast: {
       pressureLevelThreshold: 2,
-      hourInterval: 6,
+      hourInterval: 4,
     },
   },
   slack: {
@@ -30,7 +75,7 @@ export const config = {
   },
   remo: {
     token: process.env.NATURE_REMO_TOKEN ?? '',
-    thresholds: {
+    thresholds: { // 事務所衛生基準規則
       temperature: {
         max: 28,
         min: 17,
