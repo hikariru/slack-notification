@@ -32,7 +32,7 @@ const WEATHER_ICONS: Record<WeatherType, string> = {
 };
 
 const getApiEndpoint = (): string => {
-  return `${config.weather.apiEndpoint}/${config.weather.defaultAreaId}`;
+  return `${config.weather.zutoolApiEndpoint}/${config.weather.defaultAreaId}`;
 };
 
 interface WeatherApiResponse {

@@ -7,7 +7,7 @@ interface Config {
   weather: {
     defaultAreaId: string;
     notificationHour: number;
-    apiEndpoint: string;
+    zutoolApiEndpoint: string;
     naturesRemoApiEndpoint: string;
     naturesRemoToken: string;
     forecast: {
@@ -52,7 +52,7 @@ export const config: Config = {
   weather: {
     defaultAreaId: process.env.FORECAST_AREA_ID ?? '13101',
     notificationHour: 6,
-    apiEndpoint: 'https://zutool.jp/api/getweatherstatus',
+    zutoolApiEndpoint: 'https://zutool.jp/api/getweatherstatus',
     naturesRemoApiEndpoint: 'https://api.nature.global/1/devices',
     naturesRemoToken: process.env.NATURE_REMO_TOKEN ?? '',
     forecast: {
