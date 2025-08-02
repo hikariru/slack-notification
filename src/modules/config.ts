@@ -51,13 +51,13 @@ export const config: Config = {
   },
   weather: {
     defaultAreaId: process.env.FORECAST_AREA_ID ?? '13101',
-    notificationHour: 7,
+    notificationHour: 6,
     apiEndpoint: 'https://zutool.jp/api/getweatherstatus',
     naturesRemoApiEndpoint: 'https://api.nature.global/1/devices',
     naturesRemoToken: process.env.NATURE_REMO_TOKEN ?? '',
     forecast: {
       pressureLevelThreshold: 2,
-      hourInterval: 4,
+      hourInterval: 3,
     },
   },
   slack: {
