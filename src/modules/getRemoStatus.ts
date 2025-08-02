@@ -3,6 +3,20 @@ import logger from './logger';
 import { config } from './config';
 import { httpClient } from './httpClient';
 
+interface RemoEvent {
+  val: number;
+  created_at: string;
+}
+
+interface RemoNewestEvents {
+  te: RemoEvent;
+  hu: RemoEvent;
+}
+
+interface RemoDevice {
+  newest_events: RemoNewestEvents;
+}
+
 class RemoStatus {
   temperature: number;
   humidity: number;
@@ -20,7 +34,7 @@ export const getRemoStatus = async (): Promise<RemoStatus> => {
   const token = config.weather.naturesRemoToken;
 
   try {
-    const json = await httpClient.getWithAuth<any[]>(apiBase, token);
+    const json = await httpClient.getWithAuth<RemoDevice[]>(apiBase, token);
 
     const temperature = json[0].newest_events.te;
     const humidity = json[0].newest_events.hu;

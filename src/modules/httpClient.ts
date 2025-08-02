@@ -39,7 +39,7 @@ export class FetchHttpClient implements HttpClient {
       },
     };
 
-    const mergedOptions = {
+    const mergedOptions: RequestInit = {
       ...options,
       headers: {
         ...options?.headers,
