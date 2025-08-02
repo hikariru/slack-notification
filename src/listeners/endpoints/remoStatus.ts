@@ -1,7 +1,7 @@
-import { getRemoStatus } from '../../modules/getRemoStatus';
 import { bolt } from '../../modules/bolt';
-import { receiver } from '../../modules/receiver';
 import { config } from '../../modules/config';
+import { getRemoStatus } from '../../modules/getRemoStatus';
+import { receiver } from '../../modules/receiver';
 import { createTimeCheckMiddleware } from '../../modules/timeCheckMiddleware';
 
 module.exports = () => {
@@ -14,7 +14,7 @@ module.exports = () => {
 
   receiver.router.get(`/slack/remo_status`, async (_req, _res, _next) => {
     const remoStatus = await getRemoStatus();
-    let text = `${remoStatus.temperature}℃ / ${remoStatus.humidity}% :thermometer: (${remoStatus.createdAt})`;
+    let text = `:thermometer: ${remoStatus.temperature}℃ / ${remoStatus.humidity}% (${remoStatus.createdAt})`;
 
     // 事務所衛生基準規則5条3項
     if (

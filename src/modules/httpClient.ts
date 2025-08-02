@@ -26,28 +26,27 @@ export class FetchHttpClient implements HttpClient {
       maxRetries: 3,
       retryDelay: 1000, // 1秒
       retryMultiplier: 2,
-      ...config
+      ...config,
     };
   }
 
   private isRetryableError(error: unknown): boolean {
     if (error instanceof Error) {
       // ネットワークエラー、タイムアウト、5xx系エラーはリトライ対象
-      return error.name === 'AbortError' ||
-             error.message.includes('fetch') ||
-             (error as any).statusCode >= 500;
+      return (
+        error.name === 'AbortError' ||
+        error.message.includes('fetch') ||
+        ('statusCode' in error && typeof error.statusCode === 'number' && error.statusCode >= 500)
+      );
     }
     return false;
   }
 
   private async sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  private async executeWithRetry<T>(
-    operation: () => Promise<T>,
-    attempt: number = 1
-  ): Promise<T> {
+  private async executeWithRetry<T>(operation: () => Promise<T>, attempt: number = 1): Promise<T> {
     try {
       return await operation();
     } catch (error) {
@@ -55,8 +54,11 @@ export class FetchHttpClient implements HttpClient {
         throw error;
       }
 
-      const delay = this.config.retryDelay * Math.pow(this.config.retryMultiplier, attempt - 1);
-      logger.warn(`Request failed, retrying in ${delay}ms (attempt ${attempt}/${this.config.maxRetries})`, error);
+      const delay = this.config.retryDelay * this.config.retryMultiplier ** (attempt - 1);
+      logger.warn(
+        `Request failed, retrying in ${delay}ms (attempt ${attempt}/${this.config.maxRetries})`,
+        error
+      );
 
       await this.sleep(delay);
       return this.executeWithRetry(operation, attempt + 1);
@@ -94,7 +96,9 @@ export class FetchHttpClient implements HttpClient {
         clearTimeout(timeoutId);
 
         if (!response.ok) {
-          const error = new Error(`HTTP ${response.status}: ${response.statusText}`) as RetryableError;
+          const error = new Error(
+            `HTTP ${response.status}: ${response.statusText}`
+          ) as RetryableError;
           error.isRetryable = response.status >= 500;
           error.statusCode = response.status;
           throw error;
@@ -113,7 +117,12 @@ export class FetchHttpClient implements HttpClient {
     });
   }
 
-  async getWithAuth<T>(url: string, token: string, options?: RequestInit, timeoutMs?: number): Promise<T> {
+  async getWithAuth<T>(
+    url: string,
+    token: string,
+    options?: RequestInit,
+    timeoutMs?: number
+  ): Promise<T> {
     const authOptions: RequestInit = {
       headers: {
         Authorization: `Bearer ${token}`,

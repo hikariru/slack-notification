@@ -1,6 +1,21 @@
+import { LogLevel } from '@slack/logger';
 import { httpClient } from '../../modules/httpClient';
 import logger from '../../modules/logger';
-import { LogLevel } from '@slack/logger';
+
+// Define interfaces for test responses
+interface Todo {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+interface HttpBinResponse {
+  // This is a placeholder for httpbin.org response
+  // The actual structure doesn't matter for the timeout test
+  url: string;
+  [key: string]: unknown;
+}
 
 // Set logger to INFO level for testing
 logger.setLevel(LogLevel.INFO);
@@ -9,7 +24,7 @@ logger.setLevel(LogLevel.INFO);
 const testSuccessfulRequest = async () => {
   try {
     logger.info('Testing successful request...');
-    const response = await httpClient.get<any>('https://jsonplaceholder.typicode.com/todos/1');
+    const response = await httpClient.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
     logger.info('Successful response:', response);
     return true;
   } catch (error) {
@@ -23,7 +38,7 @@ const testTimeoutRequest = async () => {
   try {
     logger.info('Testing timeout request...');
     // Using a very short timeout to force a timeout error
-    const response = await httpClient.get<any>('https://httpbin.org/delay/5', {}, 1000);
+    const response = await httpClient.get<HttpBinResponse>('https://httpbin.org/delay/5', {}, 1000);
     logger.info('Timeout response (should not reach here):', response);
     return false;
   } catch (error) {
@@ -37,7 +52,7 @@ const testTimeoutRequest = async () => {
 const testNonRetryableRequest = async () => {
   try {
     logger.info('Testing non-retryable request (404)...');
-    const response = await httpClient.get<any>('https://jsonplaceholder.typicode.com/nonexistent');
+    const response = await httpClient.get<Todo>('https://jsonplaceholder.typicode.com/nonexistent');
     logger.info('Non-retryable response (should not reach here):', response);
     return false;
   } catch (error) {
@@ -64,6 +79,6 @@ const runTests = async () => {
   logger.info('All tests completed.');
 };
 
-runTests().catch(error => {
+runTests().catch((error) => {
   logger.error('Error running tests:', error);
 });

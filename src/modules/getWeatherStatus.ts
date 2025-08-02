@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
-import logger from './logger';
 import { config } from './config';
 import { httpClient } from './httpClient';
+import logger from './logger';
 
 export enum PressureLevel {
   Normal = '0',
@@ -114,9 +114,10 @@ export const filterImportantTimes = (forecast: WeatherItem[]): WeatherItem[] => 
     if (itemHour <= currentHour) return false;
 
     // Convert pressureLevel to number for comparison if it's a string
-    const pressureLevelValue = typeof item.pressureLevel === 'string'
-      ? parseInt(item.pressureLevel)
-      : parseInt(item.pressureLevel);
+    const pressureLevelValue =
+      typeof item.pressureLevel === 'string'
+        ? parseInt(item.pressureLevel)
+        : parseInt(item.pressureLevel);
 
     if (pressureLevelValue >= config.weather.forecast.pressureLevelThreshold) return true;
 
