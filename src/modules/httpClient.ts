@@ -1,10 +1,10 @@
 export interface HttpClient {
-  get<T>(url: string, options?: RequestInit): Promise<T>;
-  getWithAuth<T>(url: string, token: string, options?: RequestInit): Promise<T>;
+  get<T>(url: string, options?: RequestInit, timeoutMs?: number): Promise<T>;
+  getWithAuth<T>(url: string, token: string, options?: RequestInit, timeoutMs?: number): Promise<T>;
 }
 
 export class FetchHttpClient implements HttpClient {
-  async get<T>(url: string, options?: RequestInit): Promise<T> {
+  async get<T>(url: string, options?: RequestInit, timeoutMs: number = 30000): Promise<T> {
     const defaultOptions: RequestInit = {
       method: 'GET',
       headers: {
@@ -14,6 +14,9 @@ export class FetchHttpClient implements HttpClient {
       },
     };
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
     const mergedOptions = {
       ...defaultOptions,
       ...options,
@@ -21,18 +24,28 @@ export class FetchHttpClient implements HttpClient {
         ...defaultOptions.headers,
         ...options?.headers,
       },
+      signal: controller.signal,
     };
 
-    const response = await fetch(url, mergedOptions);
+    try {
+      const response = await fetch(url, mergedOptions);
+      clearTimeout(timeoutId);
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      return response.json() as Promise<T>;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error(`Request timeout after ${timeoutMs}ms`);
+      }
+      throw error;
     }
-
-    return response.json() as Promise<T>;
   }
 
-  async getWithAuth<T>(url: string, token: string, options?: RequestInit): Promise<T> {
+  async getWithAuth<T>(url: string, token: string, options?: RequestInit, timeoutMs?: number): Promise<T> {
     const authOptions: RequestInit = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -47,7 +60,7 @@ export class FetchHttpClient implements HttpClient {
       },
     };
 
-    return this.get<T>(url, mergedOptions);
+    return this.get<T>(url, mergedOptions, timeoutMs);
   }
 }
 
