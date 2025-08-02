@@ -1,3 +1,8 @@
+// 本番環境でない場合のみ.envファイルを読み込む
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 import fs from 'fs';
 import path from 'path';
 import { bolt } from './modules/bolt';
