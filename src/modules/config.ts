@@ -45,31 +45,31 @@ interface Config {
 export const config: Config = {
   app: {
     port: Number(process.env.PORT) || 3000,
-    nodeEnv: process.env.NODE_ENV ?? 'development',
-    isProduction: process.env.NODE_ENV === 'production',
+    nodeEnv: process.env.NODE_ENV ?? "development",
+    isProduction: process.env.NODE_ENV === "production",
   },
   weather: {
-    defaultAreaId: process.env.FORECAST_AREA_ID ?? '13101',
+    defaultAreaId: process.env.FORECAST_AREA_ID ?? "13101",
     notificationHour: 6,
-    zutoolApiEndpoint: 'https://zutool.jp/api/getweatherstatus',
+    zutoolApiEndpoint: "https://zutool.jp/api/getweatherstatus",
     forecast: {
       pressureLevelThreshold: 2,
       hourInterval: 3,
     },
   },
   slack: {
-    botToken: process.env.SLACK_BOT_TOKEN ?? '',
-    signingSecret: process.env.SLACK_SIGNING_SECRET ?? '',
-    generalChannelId: process.env.GENERAL_CHANNEL_ID ?? '',
-    weatherChannelId: process.env.WEATHER_CHANNEL_ID ?? '',
+    botToken: process.env.SLACK_BOT_TOKEN ?? "",
+    signingSecret: process.env.SLACK_SIGNING_SECRET ?? "",
+    generalChannelId: process.env.GENERAL_CHANNEL_ID ?? "",
+    weatherChannelId: process.env.WEATHER_CHANNEL_ID ?? "",
   },
   notification: {
-    timezone: process.env.TIMEZONE ?? 'Asia/Tokyo',
+    timezone: process.env.TIMEZONE ?? "Asia/Tokyo",
     utcOffset: Number(process.env.UTC_OFFSET) || 9,
   },
   remo: {
-    apiEndpoint: 'https://api.nature.global/1/devices',
-    token: process.env.NATURE_REMO_TOKEN ?? '',
+    apiEndpoint: "https://api.nature.global/1/devices",
+    token: process.env.NATURE_REMO_TOKEN ?? "",
     status: {
       hourInterval: 4,
     },

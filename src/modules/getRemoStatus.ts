@@ -1,7 +1,7 @@
-import { DateTime } from 'luxon';
-import logger from './logger';
-import { config } from './config';
-import { httpClient } from './httpClient';
+import { DateTime } from "luxon";
+import logger from "./logger";
+import { config } from "./config";
+import { httpClient } from "./httpClient";
 
 interface RemoEvent {
   val: number;
@@ -25,7 +25,7 @@ class RemoStatus {
   constructor(temperature?: number, humidity?: number, createdAt?: string) {
     this.temperature = temperature ?? 0;
     this.humidity = humidity ?? 0;
-    this.createdAt = createdAt ?? '';
+    this.createdAt = createdAt ?? "";
   }
 }
 
@@ -41,7 +41,7 @@ export const getRemoStatus = async (): Promise<RemoStatus> => {
     const timezone = config.notification.timezone;
     const createdAt = DateTime.fromISO(temperature.created_at)
       .setZone(timezone)
-      .toFormat('yyyy-MM-dd HH:mm');
+      .toFormat("yyyy-MM-dd HH:mm");
 
     return new RemoStatus(Math.round(temperature.val), Number(humidity.val), createdAt);
   } catch (error) {

@@ -1,8 +1,8 @@
-import { receiver } from '../../modules/receiver';
-import { bolt } from '../../modules/bolt';
-import logger from '../../modules/logger';
-import { config } from '../../modules/config';
-import { createTimeCheckMiddleware } from '../../modules/timeCheckMiddleware';
+import { receiver } from "../../modules/receiver";
+import { bolt } from "../../modules/bolt";
+import logger from "../../modules/logger";
+import { config } from "../../modules/config";
+import { createTimeCheckMiddleware } from "../../modules/timeCheckMiddleware";
 import {
   getWeatherStatus,
   getPressureText,
@@ -10,7 +10,7 @@ import {
   filterImportantTimes,
   type WeatherStatus,
   type WeatherItem,
-} from '../../modules/getWeatherStatus';
+} from "../../modules/getWeatherStatus";
 
 const formatWeatherMessage = (weather: WeatherStatus, forecast: WeatherItem[]): string => {
   const header = `📍 ${weather.placeName} (${weather.dateTime})`;
@@ -29,13 +29,13 @@ const formatWeatherMessage = (weather: WeatherStatus, forecast: WeatherItem[]): 
     return `${timeText}: ${tempText} ${weatherIcon} ${pressureText} ${pressureIcon}`;
   });
 
-  return [header, '', '今日の予報:', ...forecastLines].join('\n');
+  return [header, "", "今日の予報:", ...forecastLines].join("\n");
 };
 
 module.exports = () => {
-  receiver.router.get('/slack/weather_status', createTimeCheckMiddleware('specificHour'));
+  receiver.router.get("/slack/weather_status", createTimeCheckMiddleware("specificHour"));
 
-  receiver.router.get('/slack/weather_status', async (_req, _res, _next) => {
+  receiver.router.get("/slack/weather_status", async (_req, _res, _next) => {
     const weatherStatus = await getWeatherStatus();
 
     if (!weatherStatus.placeName) {
@@ -55,10 +55,10 @@ module.exports = () => {
       });
 
       if (!result.ok) {
-        logger.error('Slack API error:', result.error);
+        logger.error("Slack API error:", result.error);
       }
     } catch (error) {
-      logger.error('Failed to send weather status message:', error);
+      logger.error("Failed to send weather status message:", error);
     }
   });
 };

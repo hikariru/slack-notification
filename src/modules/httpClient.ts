@@ -15,7 +15,7 @@ export interface RetryableError extends Error {
   statusCode?: number;
 }
 
-import logger from './logger';
+import logger from "./logger";
 
 export class FetchHttpClient implements HttpClient {
   private config: HttpClientConfig;
@@ -34,9 +34,9 @@ export class FetchHttpClient implements HttpClient {
     if (error instanceof Error) {
       // ネットワークエラー、タイムアウト、5xx系エラーはリトライ対象
       return (
-        error.name === 'AbortError' ||
-        error.message.includes('fetch') ||
-        ('statusCode' in error && typeof error.statusCode === 'number' && error.statusCode >= 500)
+        error.name === "AbortError" ||
+        error.message.includes("fetch") ||
+        ("statusCode" in error && typeof error.statusCode === "number" && error.statusCode >= 500)
       );
     }
     return false;
@@ -73,11 +73,11 @@ export class FetchHttpClient implements HttpClient {
       const timeoutId = setTimeout(() => controller.abort(), timeout);
 
       const defaultOptions: RequestInit = {
-        method: 'GET',
+        method: "GET",
         headers: {
-          Accept: 'application/json',
-          'Cache-Control': 'no-cache',
-          'X-Requested-With': 'XMLHttpRequest',
+          Accept: "application/json",
+          "Cache-Control": "no-cache",
+          "X-Requested-With": "XMLHttpRequest",
         },
         signal: controller.signal,
       };
@@ -107,7 +107,7 @@ export class FetchHttpClient implements HttpClient {
         return response.json() as Promise<T>;
       } catch (error) {
         clearTimeout(timeoutId);
-        if (error instanceof Error && error.name === 'AbortError') {
+        if (error instanceof Error && error.name === "AbortError") {
           const timeoutError = new Error(`Request timeout after ${timeout}ms`) as RetryableError;
           timeoutError.isRetryable = true;
           throw timeoutError;

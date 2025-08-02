@@ -1,34 +1,34 @@
-import { DateTime } from 'luxon';
-import { config } from './config';
-import { httpClient } from './httpClient';
-import logger from './logger';
+import { DateTime } from "luxon";
+import { config } from "./config";
+import { httpClient } from "./httpClient";
+import logger from "./logger";
 
 export enum PressureLevel {
-  Normal = '0',
-  Stable = '1',
-  Decreasing = '2',
-  Warning = '3',
-  Alert = '4',
+  Normal = "0",
+  Stable = "1",
+  Decreasing = "2",
+  Warning = "3",
+  Alert = "4",
 }
 
 export enum WeatherType {
-  Sunny = '100',
-  Cloudy = '200',
-  Rainy = '300',
+  Sunny = "100",
+  Cloudy = "200",
+  Rainy = "300",
 }
 
 const PRESSURE_ICONS: Record<PressureLevel, string> = {
-  [PressureLevel.Normal]: ':ok:',
-  [PressureLevel.Stable]: ':ok:',
-  [PressureLevel.Decreasing]: ':arrow_heading_down:',
-  [PressureLevel.Warning]: ':warning:',
-  [PressureLevel.Alert]: ':bomb:',
+  [PressureLevel.Normal]: ":ok:",
+  [PressureLevel.Stable]: ":ok:",
+  [PressureLevel.Decreasing]: ":arrow_heading_down:",
+  [PressureLevel.Warning]: ":warning:",
+  [PressureLevel.Alert]: ":bomb:",
 };
 
 const WEATHER_ICONS: Record<WeatherType, string> = {
-  [WeatherType.Sunny]: ':sunny:',
-  [WeatherType.Cloudy]: ':cloud:',
-  [WeatherType.Rainy]: ':umbrella:',
+  [WeatherType.Sunny]: ":sunny:",
+  [WeatherType.Cloudy]: ":cloud:",
+  [WeatherType.Rainy]: ":umbrella:",
 };
 
 const getApiEndpoint = (): string => {
@@ -68,8 +68,8 @@ class WeatherStatus {
   todayForecast: WeatherItem[];
 
   constructor(placeName?: string, dateTime?: string, todayForecast?: WeatherItem[]) {
-    this.placeName = placeName ?? '';
-    this.dateTime = dateTime ?? '';
+    this.placeName = placeName ?? "";
+    this.dateTime = dateTime ?? "";
     this.todayForecast = todayForecast ?? [];
   }
 }
@@ -88,17 +88,17 @@ export const getWeatherStatus = async (): Promise<WeatherStatus> => {
 
     return new WeatherStatus(json.place_name, json.dateTime, todayForecast);
   } catch (error) {
-    logger.error('Failed to fetch weather status:', error);
+    logger.error("Failed to fetch weather status:", error);
     return new WeatherStatus();
   }
 };
 
 export const getPressureText = (type: PressureLevel | string): string => {
-  return PRESSURE_ICONS[type as PressureLevel] ?? ':innocent:';
+  return PRESSURE_ICONS[type as PressureLevel] ?? ":innocent:";
 };
 
 export const getWeatherText = (type: WeatherType | string): string => {
-  return WEATHER_ICONS[type as WeatherType] ?? ':innocent:';
+  return WEATHER_ICONS[type as WeatherType] ?? ":innocent:";
 };
 
 export const filterImportantTimes = (forecast: WeatherItem[]): WeatherItem[] => {
@@ -115,7 +115,7 @@ export const filterImportantTimes = (forecast: WeatherItem[]): WeatherItem[] => 
 
     // Convert pressureLevel to number for comparison if it's a string
     const pressureLevelValue =
-      typeof item.pressureLevel === 'string'
+      typeof item.pressureLevel === "string"
         ? parseInt(item.pressureLevel)
         : parseInt(item.pressureLevel);
 

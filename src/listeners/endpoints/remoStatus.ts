@@ -1,11 +1,11 @@
-import { bolt } from '../../modules/bolt';
-import { config } from '../../modules/config';
-import { getRemoStatus } from '../../modules/getRemoStatus';
-import { receiver } from '../../modules/receiver';
-import { createTimeCheckMiddleware } from '../../modules/timeCheckMiddleware';
+import { bolt } from "../../modules/bolt";
+import { config } from "../../modules/config";
+import { getRemoStatus } from "../../modules/getRemoStatus";
+import { receiver } from "../../modules/receiver";
+import { createTimeCheckMiddleware } from "../../modules/timeCheckMiddleware";
 
 module.exports = () => {
-  receiver.router.get('/slack/remo_status', createTimeCheckMiddleware('interval'));
+  receiver.router.get("/slack/remo_status", createTimeCheckMiddleware("interval"));
 
   const maxTemperature = config.remo.thresholds.temperature.max;
   const minTemperature = config.remo.thresholds.temperature.min;

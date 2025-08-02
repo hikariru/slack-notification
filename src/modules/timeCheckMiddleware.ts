@@ -1,6 +1,6 @@
-import type express from 'express';
-import { DateTime } from 'luxon';
-import { config } from './config';
+import type express from "express";
+import { DateTime } from "luxon";
+import { config } from "./config";
 
 /**
  * Creates a middleware that checks if the current hour meets specific time conditions
@@ -10,7 +10,7 @@ import { config } from './config';
  * @returns Express middleware function
  */
 export const createTimeCheckMiddleware = (
-  type: 'interval' | 'specificHour',
+  type: "interval" | "specificHour",
   options?: {
     hourInterval?: number;
     specificHour?: number;
@@ -27,10 +27,10 @@ export const createTimeCheckMiddleware = (
 
     let shouldContinue = false;
 
-    if (type === 'interval') {
+    if (type === "interval") {
       const hourInterval = options?.hourInterval || config.remo.status.hourInterval;
       shouldContinue = currentHour % hourInterval === 0;
-    } else if (type === 'specificHour') {
+    } else if (type === "specificHour") {
       const specificHour = options?.specificHour || config.weather.notificationHour;
       shouldContinue = currentHour === specificHour;
     }

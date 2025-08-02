@@ -1,13 +1,13 @@
 // 本番環境でない場合のみ.envファイルを読み込む
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
 }
 
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { config } from './modules/config';
-import { bolt } from './modules/bolt';
-import logger from './modules/logger';
+import fs from "node:fs/promises";
+import path from "node:path";
+import { config } from "./modules/config";
+import { bolt } from "./modules/bolt";
+import logger from "./modules/logger";
 
 interface LoadedScript {
   path: string;
@@ -18,23 +18,23 @@ interface LoadedScript {
 const loadScript = async (fullPath: string): Promise<LoadedScript> => {
   try {
     const script = await import(fullPath);
-    if (typeof script.default === 'function') {
+    if (typeof script.default === "function") {
       script.default();
       logger.debug(`Script has been loaded: ${fullPath}`);
       return { path: fullPath, success: true };
-    } else if (typeof script === 'function') {
+    } else if (typeof script === "function") {
       script();
       logger.debug(`Script has been loaded: ${fullPath}`);
       return { path: fullPath, success: true };
     }
-    return { path: fullPath, success: false, error: new Error('No executable function found') };
+    return { path: fullPath, success: false, error: new Error("No executable function found") };
   } catch (error) {
     return { path: fullPath, success: false, error: error as Error };
   }
 };
 
 const loadListeners = async (): Promise<void> => {
-  const listenersRoot = path.resolve('dist/', 'listeners');
+  const listenersRoot = path.resolve("dist/", "listeners");
 
   try {
     const directories = await fs.readdir(listenersRoot);
@@ -43,11 +43,11 @@ const loadListeners = async (): Promise<void> => {
 
       try {
         const files = await fs.readdir(directoryRoot);
-        const jsFiles = files.filter((file) => path.extname(file) === '.js');
+        const jsFiles = files.filter((file) => path.extname(file) === ".js");
 
         return Promise.all(
           jsFiles.map((file) => {
-            const fullPath = path.join(directoryRoot, path.basename(file, '.js'));
+            const fullPath = path.join(directoryRoot, path.basename(file, ".js"));
             return loadScript(fullPath);
           })
         );
@@ -70,7 +70,7 @@ const loadListeners = async (): Promise<void> => {
       throw new Error(`Failed to load ${failed.length} listeners`);
     }
   } catch (error) {
-    logger.error('Critical error loading listeners:', error);
+    logger.error("Critical error loading listeners:", error);
     throw error;
   }
 };
@@ -79,9 +79,9 @@ const startApplication = async (): Promise<void> => {
   try {
     await loadListeners();
     await bolt.start(config.app.port);
-    logger.info('App is running!');
+    logger.info("App is running!");
   } catch (error) {
-    logger.error('Failed to start application:', error);
+    logger.error("Failed to start application:", error);
     process.exit(1);
   }
 };

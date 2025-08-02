@@ -1,7 +1,7 @@
-import { App } from '@slack/bolt';
-import logger from './logger';
-import { receiver } from './receiver';
-import { config } from './config';
+import { App } from "@slack/bolt";
+import logger from "./logger";
+import { receiver } from "./receiver";
+import { config } from "./config";
 
 export const bolt = new App({
   token: config.slack.botToken,
@@ -12,5 +12,5 @@ export const bolt = new App({
 });
 
 bolt.error(async (error) => {
-  logger.error('Slack App Error:', error);
+  logger.error("Slack App Error:", error);
 });
