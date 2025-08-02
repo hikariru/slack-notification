@@ -3,18 +3,32 @@ import logger from './logger';
 import { config } from './config';
 import { httpClient } from './httpClient';
 
-const PRESSURE_ICONS: Record<string, string> = {
-  '0': ':ok:',
-  '1': ':ok:',
-  '2': ':arrow_heading_down:',
-  '3': ':warning:',
-  '4': ':bomb:',
+export enum PressureLevel {
+  Normal = '0',
+  Stable = '1',
+  Decreasing = '2',
+  Warning = '3',
+  Alert = '4',
+}
+
+export enum WeatherType {
+  Sunny = '100',
+  Cloudy = '200',
+  Rainy = '300',
+}
+
+const PRESSURE_ICONS: Record<PressureLevel, string> = {
+  [PressureLevel.Normal]: ':ok:',
+  [PressureLevel.Stable]: ':ok:',
+  [PressureLevel.Decreasing]: ':arrow_heading_down:',
+  [PressureLevel.Warning]: ':warning:',
+  [PressureLevel.Alert]: ':bomb:',
 };
 
-const WEATHER_ICONS: Record<string, string> = {
-  '100': ':sunny:',
-  '200': ':cloud:',
-  '300': ':umbrella:',
+const WEATHER_ICONS: Record<WeatherType, string> = {
+  [WeatherType.Sunny]: ':sunny:',
+  [WeatherType.Cloudy]: ':cloud:',
+  [WeatherType.Rainy]: ':umbrella:',
 };
 
 const getApiEndpoint = (): string => {
@@ -42,10 +56,10 @@ interface WeatherDataItem {
 
 interface WeatherItem {
   time: string;
-  weather: string;
+  weather: WeatherType | string;
   temp: string;
   pressure: string;
-  pressureLevel: string;
+  pressureLevel: PressureLevel | string;
 }
 
 class WeatherStatus {
@@ -79,12 +93,12 @@ export const getWeatherStatus = async (): Promise<WeatherStatus> => {
   }
 };
 
-export const getPressureText = (type: string): string => {
-  return PRESSURE_ICONS[type] ?? ':innocent:';
+export const getPressureText = (type: PressureLevel | string): string => {
+  return PRESSURE_ICONS[type as PressureLevel] ?? ':innocent:';
 };
 
-export const getWeatherText = (type: string): string => {
-  return WEATHER_ICONS[type] ?? ':innocent:';
+export const getWeatherText = (type: WeatherType | string): string => {
+  return WEATHER_ICONS[type as WeatherType] ?? ':innocent:';
 };
 
 export const filterImportantTimes = (forecast: WeatherItem[]): WeatherItem[] => {
@@ -99,7 +113,12 @@ export const filterImportantTimes = (forecast: WeatherItem[]): WeatherItem[] => 
 
     if (itemHour <= currentHour) return false;
 
-    if (parseInt(item.pressureLevel) >= config.weather.forecast.pressureLevelThreshold) return true;
+    // Convert pressureLevel to number for comparison if it's a string
+    const pressureLevelValue = typeof item.pressureLevel === 'string'
+      ? parseInt(item.pressureLevel)
+      : parseInt(item.pressureLevel);
+
+    if (pressureLevelValue >= config.weather.forecast.pressureLevelThreshold) return true;
 
     return (itemHour - currentHour) % config.weather.forecast.hourInterval === 0;
   });
