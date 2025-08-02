@@ -1,9 +1,24 @@
 import { DateTime } from 'luxon';
 import logger from './logger';
+import { config } from './config';
+import { httpClient } from './http_client';
+
+const PRESSURE_ICONS: Record<string, string> = {
+  '0': ':ok:',
+  '1': ':ok:',
+  '2': ':arrow_heading_down:',
+  '3': ':warning:',
+  '4': ':bomb:',
+};
+
+const WEATHER_ICONS: Record<string, string> = {
+  '100': ':sunny:',
+  '200': ':cloud:',
+  '300': ':umbrella:',
+};
 
 const getApiEndpoint = (): string => {
-  const areaId = process.env.FORECAST_AREA_ID ?? '13101';
-  return `https://zutool.jp/api/getweatherstatus/${areaId}`;
+  return `${config.weather.apiEndpoint}/${config.weather.defaultAreaId}`;
 };
 
 interface WeatherApiResponse {
@@ -50,26 +65,8 @@ class WeatherStatus {
 }
 
 export const getWeatherStatus = async (): Promise<WeatherStatus> => {
-  const fetchOptions = {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Cache-Control': 'no-cache',
-      'X-Requested-With': 'XMLHttpRequest',
-    },
-  };
-
   try {
-    const res = await fetch(getApiEndpoint(), fetchOptions);
-
-    if (!res.ok) {
-      logger.warn(
-        `Weather API returned an error: ${res.status}(${res.statusText})`,
-      );
-      return new WeatherStatus();
-    }
-
-    const json: WeatherApiResponse = await res.json();
+    const json = await httpClient.get<WeatherApiResponse>(getApiEndpoint());
 
     const todayForecast = json.today.map((item) => ({
       time: item.time,
@@ -87,32 +84,23 @@ export const getWeatherStatus = async (): Promise<WeatherStatus> => {
 };
 
 export const getPressureText = (type: string): string => {
-  if (type === '0') return ':ok:';
-  if (type === '1') return ':ok:';
-  if (type === '2') return ':arrow_heading_down:';
-  if (type === '3') return ':warning:';
-  if (type === '4') return ':bomb:';
-  return ':innocent:';
+  return PRESSURE_ICONS[type] ?? ':innocent:';
 };
 
 export const getWeatherText = (type: string): string => {
-  if (type === '100') return ':sunny:';
-  if (type === '200') return ':cloud:';
-  if (type === '300') return ':umbrella:';
-  return ':innocent:';
+  return WEATHER_ICONS[type] ?? ':innocent:';
 };
 
 export const filterImportantTimes = (
   forecast: WeatherItem[],
 ): WeatherItem[] => {
-  const timezone = process.env.TIMEZONE ?? 'Asia/Tokyo';
-  const currentHour = DateTime.now().setZone(timezone).hour;
+  const currentHour = DateTime.now().setZone(config.notification.timezone).hour;
 
   return forecast.filter((item) => {
     const itemHour = parseInt(item.time);
 
-    if (currentHour === 7) {
-      return itemHour >= 7;
+    if (currentHour === config.weather.notificationHour) {
+      return itemHour >= config.weather.notificationHour;
     }
 
     if (itemHour <= currentHour) return false;

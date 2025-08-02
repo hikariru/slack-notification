@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import { receiver } from '../../modules/receiver';
 import { bolt } from '../../modules/bolt';
 import logger from '../../modules/logger';
+import { config } from '../../modules/config';
 import {
   getWeatherStatus,
   getPressureText,
@@ -11,8 +12,6 @@ import {
   WeatherStatus,
   WeatherItem,
 } from '../../modules/get_weather_status';
-
-const NOTIFICATION_HOUR = 7;
 
 const formatWeatherMessage = (
   weather: WeatherStatus,
@@ -47,10 +46,11 @@ module.exports = () => {
     ) => {
       res.sendStatus(202);
 
-      const timezone = process.env.TIMEZONE ?? '';
-      const currentHour = Number(DateTime.now().setZone(timezone).hour);
+      const currentHour = Number(
+        DateTime.now().setZone(config.notification.timezone).hour,
+      );
 
-      if (currentHour !== NOTIFICATION_HOUR) {
+      if (currentHour !== config.weather.notificationHour) {
         return;
       }
 
@@ -69,11 +69,11 @@ module.exports = () => {
     const text = formatWeatherMessage(weatherStatus, importantTimes);
 
     const weatherChannelId =
-      process.env.WEATHER_CHANNEL_ID ?? process.env.GENERAL_CHANNEL_ID ?? '';
+      config.slack.weatherChannelId || config.slack.generalChannelId;
 
     try {
       const result = await bolt.client.chat.postMessage({
-        token: process.env.SLACK_BOT_TOKEN,
+        token: config.slack.botToken,
         channel: weatherChannelId,
         text: text,
       });
