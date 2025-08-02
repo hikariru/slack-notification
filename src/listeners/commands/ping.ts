@@ -1,6 +1,6 @@
 import { bolt } from "../../modules/bolt";
 
-module.exports = () => {
+export default () => {
   bolt.command("/ping", async ({ ack, say }) => {
     await ack();
     await say(`pong!`);

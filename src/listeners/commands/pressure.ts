@@ -65,7 +65,7 @@ const formatPressureMessage = (
   return [header, "", "現在の気圧:", `${timeText}: ${pressureText} ${pressureIcon}`].join("\n");
 };
 
-module.exports = () => {
+export default () => {
   bolt.command("/pressure", async ({ ack, respond }) => {
     try {
       await ack();

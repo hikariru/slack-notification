@@ -1,6 +1,6 @@
 import { bolt } from "../../modules/bolt";
 
-module.exports = () => {
+export default () => {
   bolt.event("app_mention", async ({ event, context }) => {
     const user = event.user ?? "";
     await bolt.client.chat.postMessage({

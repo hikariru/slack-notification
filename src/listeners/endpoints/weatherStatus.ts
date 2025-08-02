@@ -32,7 +32,7 @@ const formatWeatherMessage = (weather: WeatherStatus, forecast: WeatherItem[]): 
   return [header, "", "今日の予報:", ...forecastLines].join("\n");
 };
 
-module.exports = () => {
+export default () => {
   receiver.router.get("/slack/weather_status", createTimeCheckMiddleware("specificHour"));
 
   receiver.router.get("/slack/weather_status", async (_req, _res, _next) => {
