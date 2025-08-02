@@ -63,7 +63,7 @@ export class PressureService {
    * 気圧データをユーザー向けメッセージにフォーマット
    */
   formatPressureMessage(placeName: string, pressureData: PressureData): string {
-    const header = `📍 ${placeName} (${pressureData.time})時`;
+    const header = `📍 ${placeName} (${pressureData.time}時)`;
     const pressureText = `${pressureData.pressure}hPa`;
     const pressureIcon = getPressureText(pressureData.pressureLevel);
 
