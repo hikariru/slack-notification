@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import { getRemoStatus } from '../../modules/getRemoStatus';
 import { bolt } from '../../modules/bolt';
 import { receiver } from '../../modules/receiver';
+import { config } from "../../modules/config";
 
 module.exports = () => {
   receiver.router.get(
@@ -14,10 +15,10 @@ module.exports = () => {
     ) => {
       res.sendStatus(202);
 
-      const timezone = process.env.TIMEZONE ?? '';
+      const timezone = config.notification.timezone;
       const currentHour = Number(DateTime.now().setZone(timezone).hour);
 
-      if (currentHour % 4 !== 0) {
+      if (currentHour % config.notification.remoStatus.hourInterval !== 0) {
         return;
       }
 
@@ -25,10 +26,10 @@ module.exports = () => {
     },
   );
 
-  const maxTemperature = 28;
-  const minTemperature = 17;
-  const maxHumidity = 70;
-  const minHumidity = 40;
+  const maxTemperature = config.remo.thresholds.temperature.max;
+  const minTemperature = config.remo.thresholds.temperature.min;
+  const maxHumidity = config.remo.thresholds.humidity.max;
+  const minHumidity = config.remo.thresholds.humidity.min;
   // @ts-ignore
   receiver.router.get(`/slack/remo_status`, async (req, res, next) => {
     const remoStatus = await getRemoStatus();
@@ -44,9 +45,9 @@ module.exports = () => {
       text = '<!channel> ' + text;
     }
 
-    const weatherChannelId = process.env.WEATHER_CHANNEL_ID ?? '';
+    const weatherChannelId = config.slack.weatherChannelId;
     return bolt.client.chat.postMessage({
-      token: process.env.SLACK_BOT_TOKEN,
+      token: config.slack.botToken,
       channel: weatherChannelId,
       text: text,
     });

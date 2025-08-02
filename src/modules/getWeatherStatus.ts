@@ -105,9 +105,9 @@ export const filterImportantTimes = (
 
     if (itemHour <= currentHour) return false;
 
-    if (parseInt(item.pressureLevel) >= 2) return true;
+    if (parseInt(item.pressureLevel) >= config.weather.forecast.pressureLevelThreshold) return true;
 
-    return (itemHour - currentHour) % 6 === 0;
+    return (itemHour - currentHour) % config.weather.forecast.hourInterval === 0;
   });
 };
 

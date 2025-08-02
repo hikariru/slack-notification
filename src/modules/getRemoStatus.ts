@@ -24,7 +24,7 @@ export const getRemoStatus = async (): Promise<RemoStatus> => {
 
     const temperature = json[0].newest_events.te;
     const humidity = json[0].newest_events.hu;
-    const timezone = process.env.TIMEZONE ?? '';
+    const timezone = config.notification.timezone;
     const createdAt = DateTime.fromISO(temperature.created_at)
       .setZone(timezone)
       .toFormat('yyyy-MM-dd HH:mm');

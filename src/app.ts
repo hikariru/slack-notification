@@ -1,5 +1,7 @@
 // 本番環境でない場合のみ.envファイルを読み込む
-if (process.env.NODE_ENV !== 'production') {
+import { config } from './modules/config';
+
+if (!config.app.isProduction) {
   require('dotenv').config();
 }
 
@@ -30,6 +32,6 @@ fs.readdirSync(listenersRoot).forEach((directory: string) => {
   });
 });
 (async () => {
-  await bolt.start(Number(process.env.PORT) || 3000);
+  await bolt.start(config.app.port);
   logger.info('App is running!');
 })();

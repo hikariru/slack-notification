@@ -1,7 +1,8 @@
 import { ExpressReceiver } from '@slack/bolt';
 import logger from './logger';
+import { config } from './config';
 
 export const receiver = new ExpressReceiver({
-  signingSecret: process.env.SLACK_SIGNING_SECRET ?? '',
+  signingSecret: config.slack.signingSecret,
   logger: logger,
 });
