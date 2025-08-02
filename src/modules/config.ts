@@ -75,7 +75,7 @@ export const config: Config = {
   },
   remo: {
     token: process.env.NATURE_REMO_TOKEN ?? '',
-    thresholds: { // 事務所衛生基準規則
+    thresholds: {
       temperature: {
         max: 28,
         min: 17,
