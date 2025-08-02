@@ -3,6 +3,8 @@ export const config = {
     defaultAreaId: process.env.FORECAST_AREA_ID ?? '13101',
     notificationHour: 7,
     apiEndpoint: 'https://zutool.jp/api/getweatherstatus',
+    naturesRemoApiEndpoint: 'https://api.nature.global/1/devices',
+    naturesRemoToken: process.env.NATURE_REMO_TOKEN ?? '',
   },
   slack: {
     botToken: process.env.SLACK_BOT_TOKEN ?? '',

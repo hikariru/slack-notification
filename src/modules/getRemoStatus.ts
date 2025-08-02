@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon';
 import logger from './logger';
+import { config } from './config';
+import { httpClient } from './httpClient';
 
 class RemoStatus {
   temperature: number;
@@ -14,37 +16,26 @@ class RemoStatus {
 }
 
 export const getRemoStatus = async (): Promise<RemoStatus> => {
-  const remoToken = process.env.NATURE_REMO_TOKEN ?? '';
-  const apiBase = 'https://api.nature.global:443';
-  const fetchOptions = {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      Authorization: `Bearer ${remoToken}`,
-      'Cache-Control': 'no-cache',
-      'X-Requested-With': 'XMLHttpRequest',
-    },
-  };
+  const apiBase = config.weather.naturesRemoApiEndpoint;
+  const token = config.weather.naturesRemoToken;
 
-  const res = await fetch(apiBase + '/1/devices', fetchOptions);
+  try {
+    const json = await httpClient.getWithAuth<any[]>(apiBase, token);
 
-  if (!res.ok) {
-    logger.warn(
-      `Nature Remo Cloud API returned a error: ${res.status}(${res.statusText})`,
+    const temperature = json[0].newest_events.te;
+    const humidity = json[0].newest_events.hu;
+    const timezone = process.env.TIMEZONE ?? '';
+    const createdAt = DateTime.fromISO(temperature.created_at)
+      .setZone(timezone)
+      .toFormat('yyyy-MM-dd HH:mm');
+
+    return new RemoStatus(
+      Math.round(temperature.val),
+      Number(humidity.val),
+      createdAt,
     );
+  } catch (error) {
+    logger.warn(`Nature Remo Cloud API returned an error: ${error.message}`);
     return new RemoStatus();
   }
-
-  const json = await res.json();
-  const temperature = json[0].newest_events.te;
-  const humidity = json[0].newest_events.hu;
-  const timezone = process.env.TIMEZONE ?? '';
-  const createdAt = DateTime.fromISO(temperature.created_at)
-    .setZone(timezone)
-    .toFormat('yyyy-MM-dd HH:mm');
-  return new RemoStatus(
-    Math.round(temperature.val),
-    Number(humidity.val),
-    createdAt,
-  );
 };

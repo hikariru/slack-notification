@@ -1,5 +1,6 @@
 export interface HttpClient {
   get<T>(url: string, options?: RequestInit): Promise<T>;
+  getWithAuth<T>(url: string, token: string, options?: RequestInit): Promise<T>;
 }
 
 export class FetchHttpClient implements HttpClient {
@@ -29,6 +30,24 @@ export class FetchHttpClient implements HttpClient {
     }
 
     return response.json() as Promise<T>;
+  }
+
+  async getWithAuth<T>(url: string, token: string, options?: RequestInit): Promise<T> {
+    const authOptions: RequestInit = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const mergedOptions = {
+      ...options,
+      headers: {
+        ...options?.headers,
+        ...authOptions.headers,
+      },
+    };
+
+    return this.get<T>(url, mergedOptions);
   }
 }
 
