@@ -5,18 +5,18 @@ const envSchema = z.object({
   // Node.js環境設定
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   PORT: z.coerce.number().int().positive().default(3000),
-  
+
   // Slack設定（必須）
   SLACK_BOT_TOKEN: z.string().min(1, "SLACK_BOT_TOKEN is required"),
   SLACK_SIGNING_SECRET: z.string().min(1, "SLACK_SIGNING_SECRET is required"),
-  
+
   // チャンネルID（本番では必須、開発ではオプション）
   GENERAL_CHANNEL_ID: z.string().optional(),
   WEATHER_CHANNEL_ID: z.string().optional(),
-  
+
   // 外部API設定
   NATURE_REMO_TOKEN: z.string().optional(),
-  
+
   // 地域・時間設定
   FORECAST_AREA_ID: z.string().default("13101"),
   TIMEZONE: z.string().default("Asia/Tokyo"),
@@ -34,14 +34,12 @@ const productionEnvSchema = envSchema.extend({
 const validateEnvironment = () => {
   const isProduction = process.env.NODE_ENV === "production";
   const schema = isProduction ? productionEnvSchema : envSchema;
-  
+
   try {
     return schema.parse(process.env);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errorMessages = error.issues.map((err) => 
-        `- ${err.path.join(".")}: ${err.message}`
-      );
+      const errorMessages = error.issues.map((err) => `- ${err.path.join(".")}: ${err.message}`);
       throw new Error(`Environment validation failed:\n${errorMessages.join("\n")}`);
     }
     throw error;
