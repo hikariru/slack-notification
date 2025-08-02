@@ -53,11 +53,7 @@ class WeatherStatus {
   dateTime: string;
   todayForecast: WeatherItem[];
 
-  constructor(
-    placeName?: string,
-    dateTime?: string,
-    todayForecast?: WeatherItem[],
-  ) {
+  constructor(placeName?: string, dateTime?: string, todayForecast?: WeatherItem[]) {
     this.placeName = placeName ?? '';
     this.dateTime = dateTime ?? '';
     this.todayForecast = todayForecast ?? [];
@@ -91,9 +87,7 @@ export const getWeatherText = (type: string): string => {
   return WEATHER_ICONS[type] ?? ':innocent:';
 };
 
-export const filterImportantTimes = (
-  forecast: WeatherItem[],
-): WeatherItem[] => {
+export const filterImportantTimes = (forecast: WeatherItem[]): WeatherItem[] => {
   const currentHour = DateTime.now().setZone(config.notification.timezone).hour;
 
   return forecast.filter((item) => {

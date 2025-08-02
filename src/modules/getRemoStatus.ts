@@ -29,11 +29,7 @@ export const getRemoStatus = async (): Promise<RemoStatus> => {
       .setZone(timezone)
       .toFormat('yyyy-MM-dd HH:mm');
 
-    return new RemoStatus(
-      Math.round(temperature.val),
-      Number(humidity.val),
-      createdAt,
-    );
+    return new RemoStatus(Math.round(temperature.val), Number(humidity.val), createdAt);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     logger.warn(`Nature Remo Cloud API returned an error: ${errorMessage}`);

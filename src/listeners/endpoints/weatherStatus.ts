@@ -13,10 +13,7 @@ import {
   WeatherItem,
 } from '../../modules/getWeatherStatus';
 
-const formatWeatherMessage = (
-  weather: WeatherStatus,
-  forecast: WeatherItem[],
-): string => {
+const formatWeatherMessage = (weather: WeatherStatus, forecast: WeatherItem[]): string => {
   const header = `📍 ${weather.placeName} (${weather.dateTime})`;
 
   if (forecast.length === 0) {
@@ -39,23 +36,17 @@ const formatWeatherMessage = (
 module.exports = () => {
   receiver.router.get(
     '/slack/weather_status',
-    async (
-      req: express.Request,
-      res: express.Response,
-      next: express.NextFunction,
-    ) => {
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       res.sendStatus(202);
 
-      const currentHour = Number(
-        DateTime.now().setZone(config.notification.timezone).hour,
-      );
+      const currentHour = Number(DateTime.now().setZone(config.notification.timezone).hour);
 
       if (currentHour !== config.weather.notificationHour) {
         return;
       }
 
       await next();
-    },
+    }
   );
 
   receiver.router.get('/slack/weather_status', async (req, res, next) => {
@@ -68,8 +59,7 @@ module.exports = () => {
     const importantTimes = filterImportantTimes(weatherStatus.todayForecast);
     const text = formatWeatherMessage(weatherStatus, importantTimes);
 
-    const weatherChannelId =
-      config.slack.weatherChannelId || config.slack.generalChannelId;
+    const weatherChannelId = config.slack.weatherChannelId || config.slack.generalChannelId;
 
     try {
       const result = await bolt.client.chat.postMessage({

@@ -3,16 +3,12 @@ import { DateTime } from 'luxon';
 import { getRemoStatus } from '../../modules/getRemoStatus';
 import { bolt } from '../../modules/bolt';
 import { receiver } from '../../modules/receiver';
-import { config } from "../../modules/config";
+import { config } from '../../modules/config';
 
 module.exports = () => {
   receiver.router.get(
     '/slack/remo_status',
-    async (
-      req: express.Request,
-      res: express.Response,
-      next: express.NextFunction,
-    ) => {
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       res.sendStatus(202);
 
       const timezone = config.notification.timezone;
@@ -23,7 +19,7 @@ module.exports = () => {
       }
 
       await next();
-    },
+    }
   );
 
   const maxTemperature = config.remo.thresholds.temperature.max;

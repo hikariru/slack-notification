@@ -43,10 +43,10 @@ const loadListeners = async (): Promise<void> => {
 
       try {
         const files = await fs.readdir(directoryRoot);
-        const jsFiles = files.filter(file => path.extname(file) === '.js');
+        const jsFiles = files.filter((file) => path.extname(file) === '.js');
 
         return Promise.all(
-          jsFiles.map(file => {
+          jsFiles.map((file) => {
             const fullPath = path.join(directoryRoot, path.basename(file, '.js'));
             return loadScript(fullPath);
           })
@@ -61,15 +61,14 @@ const loadListeners = async (): Promise<void> => {
     const flatResults = results.flat();
 
     // ロード結果のログ出力
-    const successful = flatResults.filter(r => r.success);
-    const failed = flatResults.filter(r => !r.success);
+    const successful = flatResults.filter((r) => r.success);
+    const failed = flatResults.filter((r) => !r.success);
 
     logger.info(`Loaded ${successful.length} listeners successfully`);
     if (failed.length > 0) {
-      failed.forEach(f => logger.error(`Failed to load: ${f.path}`, f.error));
+      failed.forEach((f) => logger.error(`Failed to load: ${f.path}`, f.error));
       throw new Error(`Failed to load ${failed.length} listeners`);
     }
-
   } catch (error) {
     logger.error('Critical error loading listeners:', error);
     throw error;
