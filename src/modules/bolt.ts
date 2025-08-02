@@ -10,3 +10,7 @@ export const bolt = new App({
   logger: logger,
   receiver: receiver,
 });
+
+bolt.error(async (error) => {
+  logger.error('Slack App Error:', error);
+});

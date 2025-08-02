@@ -105,4 +105,4 @@ export const filterImportantTimes = (forecast: WeatherItem[]): WeatherItem[] => 
   });
 };
 
-export { WeatherStatus, WeatherItem };
+export { WeatherStatus, type WeatherItem };

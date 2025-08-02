@@ -1,4 +1,3 @@
-import express from 'express';
 import { receiver } from '../../modules/receiver';
 import { bolt } from '../../modules/bolt';
 import logger from '../../modules/logger';
@@ -9,15 +8,15 @@ import {
   getPressureText,
   getWeatherText,
   filterImportantTimes,
-  WeatherStatus,
-  WeatherItem,
+  type WeatherStatus,
+  type WeatherItem,
 } from '../../modules/getWeatherStatus';
 
 const formatWeatherMessage = (weather: WeatherStatus, forecast: WeatherItem[]): string => {
   const header = `📍 ${weather.placeName} (${weather.dateTime})`;
 
   if (forecast.length === 0) {
-    return header + '\n本日の特別な気圧変化はありません';
+    return `${header}\n本日の特別な気圧変化はありません`;
   }
 
   const forecastLines = forecast.map((item) => {
@@ -34,12 +33,9 @@ const formatWeatherMessage = (weather: WeatherStatus, forecast: WeatherItem[]): 
 };
 
 module.exports = () => {
-  receiver.router.get(
-    '/slack/weather_status',
-    createTimeCheckMiddleware('specificHour')
-  );
+  receiver.router.get('/slack/weather_status', createTimeCheckMiddleware('specificHour'));
 
-  receiver.router.get('/slack/weather_status', async (req, res, next) => {
+  receiver.router.get('/slack/weather_status', async (_req, _res, _next) => {
     const weatherStatus = await getWeatherStatus();
 
     if (!weatherStatus.placeName) {

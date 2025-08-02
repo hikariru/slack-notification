@@ -1,4 +1,4 @@
-import express from 'express';
+import type express from 'express';
 import { DateTime } from 'luxon';
 import { config } from './config';
 
@@ -17,11 +17,7 @@ export const createTimeCheckMiddleware = (
     timezone?: string;
   }
 ) => {
-  return async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+  return async (_req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Send 202 Accepted status immediately
     res.sendStatus(202);
 
@@ -32,12 +28,10 @@ export const createTimeCheckMiddleware = (
     let shouldContinue = false;
 
     if (type === 'interval') {
-      const hourInterval = options?.hourInterval ||
-        config.notification.remoStatus.hourInterval;
+      const hourInterval = options?.hourInterval || config.notification.remoStatus.hourInterval;
       shouldContinue = currentHour % hourInterval === 0;
     } else if (type === 'specificHour') {
-      const specificHour = options?.specificHour ||
-        config.weather.notificationHour;
+      const specificHour = options?.specificHour || config.weather.notificationHour;
       shouldContinue = currentHour === specificHour;
     }
 

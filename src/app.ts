@@ -3,8 +3,8 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-import fs from 'fs/promises';
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { config } from './modules/config';
 import { bolt } from './modules/bolt';
 import logger from './modules/logger';
