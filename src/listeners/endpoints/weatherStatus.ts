@@ -11,7 +11,7 @@ import {
   filterImportantTimes,
   WeatherStatus,
   WeatherItem,
-} from '../../modules/get_weather_status';
+} from '../../modules/getWeatherStatus';
 
 const formatWeatherMessage = (
   weather: WeatherStatus,

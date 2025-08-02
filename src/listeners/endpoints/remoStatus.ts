@@ -1,6 +1,6 @@
 import express from 'express';
 import { DateTime } from 'luxon';
-import { getRemoStatus } from '../../modules/get_remo_status';
+import { getRemoStatus } from '../../modules/getRemoStatus';
 import { bolt } from '../../modules/bolt';
 import { receiver } from '../../modules/receiver';
 

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import logger from './logger';
 import { config } from './config';
-import { httpClient } from './http_client';
+import { httpClient } from './httpClient';
 
 const PRESSURE_ICONS: Record<string, string> = {
   '0': ':ok:',
