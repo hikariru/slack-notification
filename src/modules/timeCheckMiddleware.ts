@@ -28,7 +28,7 @@ export const createTimeCheckMiddleware = (
     let shouldContinue = false;
 
     if (type === 'interval') {
-      const hourInterval = options?.hourInterval || config.notification.remoStatus.hourInterval;
+      const hourInterval = options?.hourInterval || config.remo.status.hourInterval;
       shouldContinue = currentHour % hourInterval === 0;
     } else if (type === 'specificHour') {
       const specificHour = options?.specificHour || config.weather.notificationHour;

@@ -30,8 +30,8 @@ class RemoStatus {
 }
 
 export const getRemoStatus = async (): Promise<RemoStatus> => {
-  const apiBase = config.weather.naturesRemoApiEndpoint;
-  const token = config.weather.naturesRemoToken;
+  const apiBase = config.remo.apiEndpoint;
+  const token = config.remo.token;
 
   try {
     const json = await httpClient.getWithAuth<RemoDevice[]>(apiBase, token);
