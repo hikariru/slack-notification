@@ -35,7 +35,8 @@ export const getRemoStatus = async (): Promise<RemoStatus> => {
       createdAt,
     );
   } catch (error) {
-    logger.warn(`Nature Remo Cloud API returned an error: ${error.message}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.warn(`Nature Remo Cloud API returned an error: ${errorMessage}`);
     return new RemoStatus();
   }
 };
