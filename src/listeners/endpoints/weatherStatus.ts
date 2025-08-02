@@ -1,9 +1,9 @@
 import express from 'express';
-import { DateTime } from 'luxon';
 import { receiver } from '../../modules/receiver';
 import { bolt } from '../../modules/bolt';
 import logger from '../../modules/logger';
 import { config } from '../../modules/config';
+import { createTimeCheckMiddleware } from '../../modules/timeCheckMiddleware';
 import {
   getWeatherStatus,
   getPressureText,
@@ -36,17 +36,7 @@ const formatWeatherMessage = (weather: WeatherStatus, forecast: WeatherItem[]): 
 module.exports = () => {
   receiver.router.get(
     '/slack/weather_status',
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      res.sendStatus(202);
-
-      const currentHour = Number(DateTime.now().setZone(config.notification.timezone).hour);
-
-      if (currentHour !== config.weather.notificationHour) {
-        return;
-      }
-
-      await next();
-    }
+    createTimeCheckMiddleware('specificHour')
   );
 
   receiver.router.get('/slack/weather_status', async (req, res, next) => {

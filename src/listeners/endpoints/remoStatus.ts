@@ -1,25 +1,14 @@
 import express from 'express';
-import { DateTime } from 'luxon';
 import { getRemoStatus } from '../../modules/getRemoStatus';
 import { bolt } from '../../modules/bolt';
 import { receiver } from '../../modules/receiver';
 import { config } from '../../modules/config';
+import { createTimeCheckMiddleware } from '../../modules/timeCheckMiddleware';
 
 module.exports = () => {
   receiver.router.get(
     '/slack/remo_status',
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      res.sendStatus(202);
-
-      const timezone = config.notification.timezone;
-      const currentHour = Number(DateTime.now().setZone(timezone).hour);
-
-      if (currentHour % config.notification.remoStatus.hourInterval !== 0) {
-        return;
-      }
-
-      await next();
-    }
+    createTimeCheckMiddleware('interval')
   );
 
   const maxTemperature = config.remo.thresholds.temperature.max;
