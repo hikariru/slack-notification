@@ -123,4 +123,4 @@ export const filterImportantTimes = (
   });
 };
 
-export { WeatherStatus };
+export { WeatherStatus, WeatherItem };

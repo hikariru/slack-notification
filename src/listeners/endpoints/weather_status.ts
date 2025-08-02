@@ -2,17 +2,21 @@ import express from 'express';
 import { DateTime } from 'luxon';
 import { receiver } from '../../modules/receiver';
 import { bolt } from '../../modules/bolt';
+import logger from '../../modules/logger';
 import {
   getWeatherStatus,
   getPressureText,
   getWeatherText,
   filterImportantTimes,
   WeatherStatus,
+  WeatherItem,
 } from '../../modules/get_weather_status';
+
+const NOTIFICATION_HOUR = 7;
 
 const formatWeatherMessage = (
   weather: WeatherStatus,
-  forecast: any[],
+  forecast: WeatherItem[],
 ): string => {
   const header = `📍 ${weather.placeName} (${weather.dateTime})`;
 
@@ -46,7 +50,7 @@ module.exports = () => {
       const timezone = process.env.TIMEZONE ?? '';
       const currentHour = Number(DateTime.now().setZone(timezone).hour);
 
-      if (currentHour !== 7) {
+      if (currentHour !== NOTIFICATION_HOUR) {
         return;
       }
 
@@ -67,10 +71,18 @@ module.exports = () => {
     const weatherChannelId =
       process.env.WEATHER_CHANNEL_ID ?? process.env.GENERAL_CHANNEL_ID ?? '';
 
-    return bolt.client.chat.postMessage({
-      token: process.env.SLACK_BOT_TOKEN,
-      channel: weatherChannelId,
-      text: text,
-    });
+    try {
+      const result = await bolt.client.chat.postMessage({
+        token: process.env.SLACK_BOT_TOKEN,
+        channel: weatherChannelId,
+        text: text,
+      });
+
+      if (!result.ok) {
+        logger.error('Slack API error:', result.error);
+      }
+    } catch (error) {
+      logger.error('Failed to send weather status message:', error);
+    }
   });
 };
