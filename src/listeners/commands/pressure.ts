@@ -19,11 +19,7 @@ export default () => {
         return;
       }
 
-      const message = pressureService.formatPressureMessage(
-        result.placeName,
-        result.dateTime,
-        result.pressureData
-      );
+      const message = pressureService.formatPressureMessage(result.placeName, result.pressureData);
 
       await respond({
         text: message,
