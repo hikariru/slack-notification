@@ -5,9 +5,9 @@ if (process.env.NODE_ENV !== "production") {
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { config } from "./modules/config";
-import { bolt } from "./modules/bolt";
-import logger from "./modules/logger";
+import { config } from "./lib/config";
+import { bolt } from "./lib/bolt";
+import logger from "./lib/logger";
 
 interface LoadedScript {
   path: string;

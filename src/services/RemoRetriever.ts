@@ -39,9 +39,8 @@ export class RemoRetriever {
 
       const temperature = remoDevices[0].newest_events.te;
       const humidity = remoDevices[0].newest_events.hu;
-      const timezone = config.notification.timezone;
       const createdAt = DateTime.fromISO(temperature.created_at)
-        .setZone(timezone)
+        .setZone(config.notification.timezone)
         .toFormat("yyyy-MM-dd HH:mm");
 
       return new RemoStatus(Math.round(temperature.val), Number(humidity.val), createdAt);
