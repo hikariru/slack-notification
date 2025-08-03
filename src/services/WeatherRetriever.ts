@@ -47,7 +47,7 @@ interface WeatherItem {
   pressureLevel: PressureLevel | string;
 }
 
-class WeatherStatus {
+class WeatherForecast {
   placeName: string;
   dateTime: string;
   todayForecast: WeatherItem[];
@@ -67,7 +67,7 @@ export class WeatherRetriever {
   /**
    * 天気予報データを取得
    */
-  async getWeatherStatus(): Promise<WeatherStatus> {
+  async getForecast(): Promise<WeatherForecast> {
     try {
       const json = await httpClient.get<WeatherApiResponse>(getApiEndpoint());
 
@@ -79,13 +79,13 @@ export class WeatherRetriever {
         pressureLevel: item.pressure_level,
       }));
 
-      return new WeatherStatus(json.place_name, json.dateTime, todayForecast);
+      return new WeatherForecast(json.place_name, json.dateTime, todayForecast);
     } catch (error) {
       logger.error("Failed to fetch weather status:", error);
-      return new WeatherStatus();
+      return new WeatherForecast();
     }
   }
 }
 
 export const weatherRetriever = new WeatherRetriever();
-export { WeatherStatus, type WeatherItem };
+export { WeatherForecast, type WeatherItem };

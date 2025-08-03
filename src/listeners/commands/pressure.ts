@@ -1,14 +1,14 @@
 import { bolt } from "../../lib/bolt";
 import logger from "../../lib/logger";
-import { weatherRetriever } from "../../services/WeatherRetriever";
 import { pressureMessageFormatter } from "../../services/PressureMessageFormatter";
+import { weatherRetriever } from "../../services/WeatherRetriever";
 
 export default () => {
   bolt.command("/pressure", async ({ ack, respond }) => {
     try {
       await ack();
 
-      const weatherStatus = await weatherRetriever.getWeatherStatus();
+      const weatherStatus = await weatherRetriever.getForecast();
       const result = await pressureMessageFormatter.processPressureRequest(weatherStatus);
 
       if (!result) {

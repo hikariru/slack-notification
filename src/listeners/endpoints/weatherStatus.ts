@@ -1,7 +1,7 @@
-import { receiver } from "../../lib/receiver";
 import { bolt } from "../../lib/bolt";
-import logger from "../../lib/logger";
 import { config } from "../../lib/config";
+import logger from "../../lib/logger";
+import { receiver } from "../../lib/receiver";
 import { createTimeCheckMiddleware } from "../../lib/timeCheckMiddleware";
 import { weatherMessageFormatter } from "../../services/WeatherMessageFormatter";
 

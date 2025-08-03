@@ -1,7 +1,7 @@
-import { weatherRetriever, type WeatherStatus, type WeatherItem } from "./WeatherRetriever";
-import { weatherIconFormatter } from "./WeatherIconFormatter";
 import { pressureIconFormatter } from "./PressureIconFormatter";
 import { timeFilterService } from "./TimeFilterService";
+import { weatherIconFormatter } from "./WeatherIconFormatter";
+import { type WeatherItem, type WeatherForecast, weatherRetriever } from "./WeatherRetriever";
 
 export interface WeatherNotificationData {
   placeName: string;
@@ -18,7 +18,7 @@ export class WeatherMessageFormatter {
   /**
    * 天気予報データを通知用メッセージにフォーマット
    */
-  formatWeatherMessage(weather: WeatherStatus, forecast: WeatherItem[]): string {
+  formatWeatherMessage(weather: WeatherForecast, forecast: WeatherItem[]): string {
     const header = `:round_pushpin: ${weather.placeName} (${weather.dateTime}時)`;
 
     if (forecast.length === 0) {
@@ -43,18 +43,18 @@ export class WeatherMessageFormatter {
    * データ取得、重要時間のフィルタリング、メッセージフォーマットを一括処理
    */
   async prepareWeatherNotification(): Promise<WeatherNotificationData | null> {
-    const weatherStatus = await weatherRetriever.getWeatherStatus();
+    const forecast = await weatherRetriever.getForecast();
 
-    if (!weatherStatus.placeName) {
+    if (!forecast.placeName) {
       return null;
     }
 
-    const importantTimes = timeFilterService.filterImportantTimes(weatherStatus.todayForecast);
-    const message = this.formatWeatherMessage(weatherStatus, importantTimes);
+    const importantTimes = timeFilterService.filterImportantTimes(forecast.todayForecast);
+    const message = this.formatWeatherMessage(forecast, importantTimes);
 
     return {
-      placeName: weatherStatus.placeName,
-      dateTime: weatherStatus.dateTime,
+      placeName: forecast.placeName,
+      dateTime: forecast.dateTime,
       forecast: importantTimes,
       message,
     };

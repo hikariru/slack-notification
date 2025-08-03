@@ -1,7 +1,7 @@
 import { App } from "@slack/bolt";
+import { config } from "./config";
 import logger from "./logger";
 import { receiver } from "./receiver";
-import { config } from "./config";
 
 export const bolt = new App({
   token: config.slack.botToken,

@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
-import logger from "../lib/logger";
 import { config } from "../lib/config";
 import { httpClient } from "../lib/httpClient";
+import logger from "../lib/logger";
 
 interface RemoEvent {
   val: number;
@@ -30,7 +30,7 @@ class RemoStatus {
 }
 
 export class RemoRetriever {
-  async getRemoStatus(): Promise<RemoStatus> {
+  async getCurrentStatus(): Promise<RemoStatus> {
     const apiBase = config.remo.apiEndpoint;
     const token = config.remo.token;
 

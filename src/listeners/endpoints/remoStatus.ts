@@ -1,8 +1,8 @@
 import { bolt } from "../../lib/bolt";
 import { config } from "../../lib/config";
-import { remoRetriever } from "../../services/RemoRetriever";
 import { receiver } from "../../lib/receiver";
 import { createTimeCheckMiddleware } from "../../lib/timeCheckMiddleware";
+import { remoRetriever } from "../../services/RemoRetriever";
 
 export default () => {
   receiver.router.get("/slack/remo_status", createTimeCheckMiddleware("interval"));
@@ -13,7 +13,7 @@ export default () => {
   const minHumidity = config.remo.thresholds.humidity.min;
 
   receiver.router.get(`/slack/remo_status`, async (_req, _res, _next) => {
-    const remoStatus = await remoRetriever.getRemoStatus();
+    const remoStatus = await remoRetriever.getCurrentStatus();
     let text = `:thermometer: ${remoStatus.temperature}℃ / ${remoStatus.humidity}% (${remoStatus.createdAt})`;
 
     // 事務所衛生基準規則5条3項

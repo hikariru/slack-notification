@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { config } from "../lib/config";
-import type { WeatherItem } from "./WeatherRetriever";
 import { pressureIconFormatter } from "./PressureIconFormatter";
+import type { WeatherItem } from "./WeatherRetriever";
 
 export interface PressureData {
   time: string;

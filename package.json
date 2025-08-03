@@ -9,7 +9,7 @@
     "build:watch": "tsc -w -p .",
     "format": "biome format --write src/",
     "lint": "biome lint src/",
-    "check": "biome check --apply src/",
+    "check": "biome check --write src/",
     "start": "node dist/app.js"
   },
   "repository": "git+https://github.com/hikariru/slack-notification.git",
