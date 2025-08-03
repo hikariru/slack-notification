@@ -1,5 +1,5 @@
 import type express from "express";
-import { receiver } from "../../modules/receiver";
+import { receiver } from "../../lib/receiver";
 
 export default () => {
   receiver.router.get("/", (_req: express.Request, res: express.Response) => {

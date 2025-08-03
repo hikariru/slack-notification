@@ -1,4 +1,4 @@
-import { bolt } from "../../modules/bolt";
+import { bolt } from "../../lib/bolt";
 
 export default () => {
   bolt.event("app_mention", async ({ event, context }) => {

@@ -1,11 +1,11 @@
 import {
-  getWeatherStatus,
-  getPressureText,
-  getWeatherText,
-  filterImportantTimes,
+  weatherRetriever,
   type WeatherStatus,
   type WeatherItem,
-} from "../modules/getWeatherStatus";
+} from "./WeatherRetriever";
+import { weatherIconFormatter } from "./WeatherIconFormatter";
+import { pressureIconFormatter } from "./PressureIconFormatter";
+import { timeFilterService } from "./TimeFilterService";
 
 export interface WeatherNotificationData {
   placeName: string;
@@ -18,12 +18,12 @@ export interface WeatherNotificationData {
  * 天気予報通知サービス
  * 天気データの処理とメッセージフォーマットを担当
  */
-export class WeatherService {
+export class WeatherMessageFormatter {
   /**
    * 天気予報データを通知用メッセージにフォーマット
    */
   formatWeatherMessage(weather: WeatherStatus, forecast: WeatherItem[]): string {
-    const header = `📍 ${weather.placeName} (${weather.dateTime})`;
+    const header = `:round_pushpin: ${weather.placeName} (${weather.dateTime}時)`;
 
     if (forecast.length === 0) {
       return `${header}\n本日の特別な気圧変化はありません`;
@@ -32,9 +32,9 @@ export class WeatherService {
     const forecastLines = forecast.map((item) => {
       const timeText = `${item.time}時`;
       const tempText = `${item.temp}°C`;
-      const weatherIcon = getWeatherText(item.weather);
+      const weatherIcon = weatherIconFormatter.getWeatherText(item.weather);
       const pressureText = `${item.pressure}hPa`;
-      const pressureIcon = getPressureText(item.pressureLevel);
+      const pressureIcon = pressureIconFormatter.getPressureText(item.pressureLevel);
 
       return `${timeText}: ${tempText} ${weatherIcon} ${pressureText} ${pressureIcon}`;
     });
@@ -47,13 +47,13 @@ export class WeatherService {
    * データ取得、重要時間のフィルタリング、メッセージフォーマットを一括処理
    */
   async prepareWeatherNotification(): Promise<WeatherNotificationData | null> {
-    const weatherStatus = await getWeatherStatus();
+    const weatherStatus = await weatherRetriever.getWeatherStatus();
 
     if (!weatherStatus.placeName) {
       return null;
     }
 
-    const importantTimes = filterImportantTimes(weatherStatus.todayForecast);
+    const importantTimes = timeFilterService.filterImportantTimes(weatherStatus.todayForecast);
     const message = this.formatWeatherMessage(weatherStatus, importantTimes);
 
     return {
@@ -65,4 +65,4 @@ export class WeatherService {
   }
 }
 
-export const weatherService = new WeatherService();
+export const weatherMessageFormatter = new WeatherMessageFormatter();

@@ -1,16 +1,16 @@
-import { receiver } from "../../modules/receiver";
-import { bolt } from "../../modules/bolt";
-import logger from "../../modules/logger";
-import { config } from "../../modules/config";
-import { createTimeCheckMiddleware } from "../../modules/timeCheckMiddleware";
-import { weatherService } from "../../services/WeatherService";
+import { receiver } from "../../lib/receiver";
+import { bolt } from "../../lib/bolt";
+import logger from "../../lib/logger";
+import { config } from "../../lib/config";
+import { createTimeCheckMiddleware } from "../../lib/timeCheckMiddleware";
+import { weatherMessageFormatter } from "../../services/WeatherMessageFormatter";
 
 export default () => {
   receiver.router.get("/slack/weather_status", createTimeCheckMiddleware("specificHour"));
 
   receiver.router.get("/slack/weather_status", async (_req, _res, _next) => {
     try {
-      const notificationData = await weatherService.prepareWeatherNotification();
+      const notificationData = await weatherMessageFormatter.prepareWeatherNotification();
 
       if (!notificationData) {
         logger.warn("Weather data not available, skipping notification");

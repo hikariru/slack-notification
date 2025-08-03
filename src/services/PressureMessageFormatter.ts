@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
-import { config } from "../modules/config";
-import { getPressureText, type WeatherItem } from "../modules/getWeatherStatus";
+import { config } from "../lib/config";
+import { type WeatherItem } from "./WeatherRetriever";
+import { pressureIconFormatter } from "./PressureIconFormatter";
 
 export interface PressureData {
   time: string;
@@ -15,13 +16,7 @@ export interface PressureResult {
   pressureData: PressureData;
 }
 
-/**
- * 気圧データ処理サービス
- */
-export class PressureService {
-  /**
-   * 現在時刻に最も近い気圧データを検索
-   */
+export class PressureMessageFormatter {
   findClosestPressureData(forecast: WeatherItem[]): PressureData | null {
     if (!forecast || forecast.length === 0) {
       return null;
@@ -59,20 +54,14 @@ export class PressureService {
     };
   }
 
-  /**
-   * 気圧データをユーザー向けメッセージにフォーマット
-   */
   formatPressureMessage(placeName: string, pressureData: PressureData): string {
-    const header = `📍 ${placeName} (${pressureData.time}時)`;
+    const header = `:round_pushpin: ${placeName} (${pressureData.time}時)`;
     const pressureText = `${pressureData.pressure}hPa`;
-    const pressureIcon = getPressureText(pressureData.pressureLevel);
+    const pressureIcon = pressureIconFormatter.getPressureText(pressureData.pressureLevel);
 
     return [header, "", `現在の気圧:${pressureText} ${pressureIcon}`].join("\n");
   }
 
-  /**
-   * 天気ステータスから最適な気圧情報を抽出してフォーマット
-   */
   async processPressureRequest(weatherStatus: {
     placeName: string;
     dateTime: string;
@@ -95,4 +84,4 @@ export class PressureService {
   }
 }
 
-export const pressureService = new PressureService();
+export const pressureMessageFormatter = new PressureMessageFormatter();

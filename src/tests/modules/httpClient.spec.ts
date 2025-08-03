@@ -1,6 +1,6 @@
 import { LogLevel } from "@slack/logger";
-import { httpClient } from "../../modules/httpClient";
-import logger from "../../modules/logger";
+import { httpClient } from "../../lib/httpClient";
+import logger from "../../lib/logger";
 
 // Define interfaces for test responses
 interface Todo {

@@ -1,15 +1,15 @@
-import { bolt } from "../../modules/bolt";
-import logger from "../../modules/logger";
-import { getWeatherStatus } from "../../modules/getWeatherStatus";
-import { pressureService } from "../../services/PressureService";
+import { bolt } from "../../lib/bolt";
+import logger from "../../lib/logger";
+import { weatherRetriever } from "../../services/WeatherRetriever";
+import { pressureMessageFormatter } from "../../services/PressureMessageFormatter";
 
 export default () => {
   bolt.command("/pressure", async ({ ack, respond }) => {
     try {
       await ack();
 
-      const weatherStatus = await getWeatherStatus();
-      const result = await pressureService.processPressureRequest(weatherStatus);
+      const weatherStatus = await weatherRetriever.getWeatherStatus();
+      const result = await pressureMessageFormatter.processPressureRequest(weatherStatus);
 
       if (!result) {
         await respond({
@@ -19,7 +19,7 @@ export default () => {
         return;
       }
 
-      const message = pressureService.formatPressureMessage(result.placeName, result.pressureData);
+      const message = pressureMessageFormatter.formatPressureMessage(result.placeName, result.pressureData);
 
       await respond({
         text: message,
