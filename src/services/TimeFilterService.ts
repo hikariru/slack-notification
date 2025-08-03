@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { config } from "../lib/config";
-import { type WeatherItem } from "./WeatherRetriever";
+import type { WeatherItem } from "./WeatherRetriever";
 
 /**
  * 時間フィルターサービス

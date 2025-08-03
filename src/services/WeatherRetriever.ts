@@ -85,7 +85,6 @@ export class WeatherRetriever {
       return new WeatherStatus();
     }
   }
-
 }
 
 export const weatherRetriever = new WeatherRetriever();

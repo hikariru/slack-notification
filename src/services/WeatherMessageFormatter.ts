@@ -1,8 +1,4 @@
-import {
-  weatherRetriever,
-  type WeatherStatus,
-  type WeatherItem,
-} from "./WeatherRetriever";
+import { weatherRetriever, type WeatherStatus, type WeatherItem } from "./WeatherRetriever";
 import { weatherIconFormatter } from "./WeatherIconFormatter";
 import { pressureIconFormatter } from "./PressureIconFormatter";
 import { timeFilterService } from "./TimeFilterService";

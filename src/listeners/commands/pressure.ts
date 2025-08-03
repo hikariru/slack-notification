@@ -19,7 +19,10 @@ export default () => {
         return;
       }
 
-      const message = pressureMessageFormatter.formatPressureMessage(result.placeName, result.pressureData);
+      const message = pressureMessageFormatter.formatPressureMessage(
+        result.placeName,
+        result.pressureData
+      );
 
       await respond({
         text: message,
