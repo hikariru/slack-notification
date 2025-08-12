@@ -1,8 +1,8 @@
 import { bolt } from "../../lib/bolt";
 
 export default () => {
-  bolt.command("/ping", async ({ ack, say }) => {
+  bolt.command("/ping", async ({ ack, respond }) => {
     await ack();
-    await say(`pong!`);
+    await respond(`pong!`);
   });
 };
