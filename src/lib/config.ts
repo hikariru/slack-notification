@@ -105,7 +105,7 @@ export const config: Config = {
     zutoolApiEndpoint: "https://zutool.jp/api/getweatherstatus",
     forecast: {
       pressureLevelThreshold: 2,
-      hourInterval: 4,
+      hourInterval: 3,
     },
   },
   slack: {
