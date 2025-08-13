@@ -1,7 +1,7 @@
 import { pressureIconFormatter } from "./PressureIconFormatter";
 import { timeFilterService } from "./TimeFilterService";
 import { weatherIconFormatter } from "./WeatherIconFormatter";
-import { type WeatherItem, type WeatherForecast, weatherRetriever } from "./WeatherRetriever";
+import { type WeatherForecast, type WeatherItem, weatherRetriever } from "./WeatherRetriever";
 
 export interface WeatherNotificationData {
   placeName: string;

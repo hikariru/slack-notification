@@ -122,7 +122,7 @@ export const config: Config = {
     apiEndpoint: "https://api.nature.global/1/devices",
     token: env.NATURE_REMO_TOKEN ?? "",
     status: {
-      hourInterval: 4,
+      hourInterval: 3,
     },
     thresholds: {
       temperature: {
