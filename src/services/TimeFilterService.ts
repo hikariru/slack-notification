@@ -20,7 +20,7 @@ export class TimeFilterService {
 
     // 現在時刻以降のデータのみ対象
     const futureItems = forecast.filter((item) => {
-      const itemHour = parseInt(item.time);
+      const itemHour = parseInt(item.time, 10);
 
       // 朝6時の通知時は6時以降全て対象
       if (currentHour === config.weather.notificationHour) {
@@ -46,12 +46,12 @@ export class TimeFilterService {
       // 気圧レベルの変化をチェック
       const prevPressureLevel =
         typeof previous.pressureLevel === "string"
-          ? parseInt(previous.pressureLevel)
-          : parseInt(previous.pressureLevel);
+          ? parseInt(previous.pressureLevel, 10)
+          : parseInt(previous.pressureLevel, 10);
       const currPressureLevel =
         typeof current.pressureLevel === "string"
-          ? parseInt(current.pressureLevel)
-          : parseInt(current.pressureLevel);
+          ? parseInt(current.pressureLevel, 10)
+          : parseInt(current.pressureLevel, 10);
       const pressureLevelChanged = prevPressureLevel !== currPressureLevel;
 
       // 気圧レベルが閾値以上（重要な変化）
