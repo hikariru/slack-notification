@@ -66,7 +66,9 @@ const loadListeners = async (): Promise<void> => {
 
     logger.info(`Loaded ${successful.length} listeners successfully`);
     if (failed.length > 0) {
-      failed.forEach((f) => logger.error(`Failed to load: ${f.path}`, f.error));
+      for (const f of failed) {
+        logger.error(`Failed to load: ${f.path}`, f.error);
+      }
       throw new Error(`Failed to load ${failed.length} listeners`);
     }
   } catch (error) {
