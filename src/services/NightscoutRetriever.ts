@@ -34,9 +34,10 @@ export class NightscoutRetriever {
   async getRecentStatus(): Promise<NightscoutStatus> {
     const { timezone } = config.notification;
     const now = DateTime.now().setZone(timezone);
-    const oneHourAgo = now.minus({ hours: 1 });
+    const periodStart = now.minus({ hours: 3 });
 
-    const url = `${config.nightscout.apiEndpoint}/api/v1/entries.json?find[date][$gte]=${oneHourAgo.toMillis()}&find[date][$lte]=${now.toMillis()}&count=1000&type=sgv`;
+    const baseUrl = config.nightscout.apiEndpoint.replace(/\/+$/, "");
+    const url = `${baseUrl}/api/v1/entries.json?find[date][$gte]=${periodStart.toMillis()}&find[date][$lte]=${now.toMillis()}&count=1000&type=sgv`;
 
     try {
       const entries = await httpClient.get<NightscoutEntry[]>(url);
@@ -55,7 +56,7 @@ export class NightscoutRetriever {
         latest: latestEntry.sgv,
         latestDirection: latestEntry.direction,
         readingCount: entries.length,
-        periodStart: oneHourAgo.toFormat("HH:mm"),
+        periodStart: periodStart.toFormat("HH:mm"),
         periodEnd: now.toFormat("HH:mm"),
       };
     } catch (error) {
