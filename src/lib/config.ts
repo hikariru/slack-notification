@@ -19,6 +19,7 @@ const envSchema = z.object({
 
   // Nightscout設定
   NIGHTSCOUT_API_ENDPOINT: z.string().optional(),
+  NIGHTSCOUT_API_TOKEN: z.string().optional(),
   NIGHTSCOUT_CHANNEL_ID: z.string().optional(),
 
   // 地域・時間設定
@@ -37,6 +38,7 @@ const productionEnvSchema = envSchema.extend({
   WEATHER_CHANNEL_ID: z.string().min(1, "WEATHER_CHANNEL_ID is required in production"),
   NATURE_REMO_TOKEN: z.string().min(1, "NATURE_REMO_TOKEN is required in production"),
   NIGHTSCOUT_API_ENDPOINT: z.string().min(1, "NIGHTSCOUT_API_ENDPOINT is required in production"),
+  NIGHTSCOUT_API_TOKEN: z.string().min(1, "NIGHTSCOUT_API_TOKEN is required in production"),
   NIGHTSCOUT_CHANNEL_ID: z.string().min(1, "NIGHTSCOUT_CHANNEL_ID is required in production"),
 });
 
@@ -110,6 +112,7 @@ interface Config {
   };
   nightscout: {
     apiEndpoint: string;
+    apiToken: string;
     status: {
       hourInterval: number;
     };
@@ -171,6 +174,7 @@ export const config: Config = {
   },
   nightscout: {
     apiEndpoint: env.NIGHTSCOUT_API_ENDPOINT ?? "",
+    apiToken: env.NIGHTSCOUT_API_TOKEN ?? "",
     status: {
       hourInterval: 1,
     },

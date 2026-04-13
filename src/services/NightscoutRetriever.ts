@@ -35,7 +35,7 @@ export class NightscoutRetriever {
     const periodStart = now.minus({ hours: 3 });
 
     const baseUrl = config.nightscout.apiEndpoint.replace(/\/+$/, "");
-    const url = `${baseUrl}/api/v1/entries.json?find[date][$gte]=${periodStart.toMillis()}&find[date][$lte]=${now.toMillis()}&count=1000&type=sgv`;
+    const url = `${baseUrl}/api/v1/entries.json?token=${config.nightscout.apiToken}&find[date][$gte]=${periodStart.toMillis()}&find[date][$lte]=${now.toMillis()}&count=1000&type=sgv`;
 
     try {
       const entries = await httpClient.get<NightscoutEntry[]>(url);
