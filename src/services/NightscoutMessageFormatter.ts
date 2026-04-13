@@ -2,29 +2,26 @@ import { config } from "../lib/config";
 import type { NightscoutStatus } from "./NightscoutRetriever";
 
 const directionMap: Record<string, string> = {
-  Flat: "→",
-  FortyFiveUp: "↗",
-  SingleUp: "↑",
-  DoubleUp: "⇈",
-  FortyFiveDown: "↘",
-  SingleDown: "↓",
-  DoubleDown: "⇊",
-  "NOT COMPUTABLE": "?",
-  "RATE OUT OF RANGE": "?",
+  Flat: "➡️",
+  FortyFiveUp: "↗️",
+  SingleUp: "⬆️",
+  DoubleUp: "⏫",
+  FortyFiveDown: "↘️",
+  SingleDown: "⬇️",
+  DoubleDown: "⏬",
+  "NOT COMPUTABLE": "❓",
+  "RATE OUT OF RANGE": "❓",
 };
 
 export class NightscoutMessageFormatter {
   formatMessage(status: NightscoutStatus): string {
-    const arrow = directionMap[status.latestDirection] ?? "?";
+    const arrow = directionMap[status.latestDirection] ?? "❓";
     const { high, low } = config.nightscout.thresholds;
 
-    const header = `:drop_of_blood: 血糖値レポート (${status.periodStart} - ${status.periodEnd})`;
-    const body = `平均: ${status.average} mg/dL | 最新: ${status.latest} mg/dL ${arrow}`;
-
-    const message = `${header}\n${body}`;
+    const message = `:drop_of_blood: ${status.latest} mg/dL ${arrow} (${status.periodStart} - ${status.periodEnd})`;
 
     if (status.latest < low || status.latest > high) {
-      return `<!channel> ${message}`;
+      return `<!channel> :rotating_light: ${message}`;
     }
 
     return message;

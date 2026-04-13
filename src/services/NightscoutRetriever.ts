@@ -13,7 +13,6 @@ interface NightscoutEntry {
 }
 
 interface NightscoutStatus {
-  average: number;
   latest: number;
   latestDirection: string;
   readingCount: number;
@@ -22,7 +21,6 @@ interface NightscoutStatus {
 }
 
 const defaultNightscoutStatus: NightscoutStatus = {
-  average: 0,
   latest: 0,
   latestDirection: "",
   readingCount: 0,
@@ -46,13 +44,9 @@ export class NightscoutRetriever {
         return defaultNightscoutStatus;
       }
 
-      const sgvValues = entries.map((e) => e.sgv);
-      const average = Math.round(sgvValues.reduce((sum, v) => sum + v, 0) / sgvValues.length);
-
       const latestEntry = entries.reduce((a, b) => (a.date > b.date ? a : b));
 
       return {
-        average,
         latest: latestEntry.sgv,
         latestDirection: latestEntry.direction,
         readingCount: entries.length,
