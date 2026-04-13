@@ -1,4 +1,5 @@
-// 本番環境でない場合のみ.envファイルを読み込む
+// dotenvはimport文より先に実行する必要がある
+// CommonJS出力ではソース順が保持されるため、この位置で正しく動作する
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }

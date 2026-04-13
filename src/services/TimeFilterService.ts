@@ -9,9 +9,6 @@ import type { WeatherItem } from "./WeatherRetriever";
 export class TimeFilterService {
   /**
    * 重要な時間帯の天気予報をフィルタリング
-   */
-  /**
-   * 重要な時間帯の天気予報をフィルタリング
    * 前の時間と比較して天気か気圧のステータスが変化した場合のみ表示
    */
   filterImportantTimes(forecast: WeatherItem[]): WeatherItem[] {
@@ -44,14 +41,8 @@ export class TimeFilterService {
       const weatherChanged = previous.weather !== current.weather;
 
       // 気圧レベルの変化をチェック
-      const prevPressureLevel =
-        typeof previous.pressureLevel === "string"
-          ? parseInt(previous.pressureLevel, 10)
-          : parseInt(previous.pressureLevel, 10);
-      const currPressureLevel =
-        typeof current.pressureLevel === "string"
-          ? parseInt(current.pressureLevel, 10)
-          : parseInt(current.pressureLevel, 10);
+      const prevPressureLevel = parseInt(previous.pressureLevel, 10);
+      const currPressureLevel = parseInt(current.pressureLevel, 10);
       const pressureLevelChanged = prevPressureLevel !== currPressureLevel;
 
       // 気圧レベルが閾値以上（重要な変化）

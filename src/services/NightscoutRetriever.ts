@@ -12,30 +12,23 @@ interface NightscoutEntry {
   type: string;
 }
 
-class NightscoutStatus {
+interface NightscoutStatus {
   average: number;
   latest: number;
   latestDirection: string;
   readingCount: number;
   periodStart: string;
   periodEnd: string;
-
-  constructor(
-    average?: number,
-    latest?: number,
-    latestDirection?: string,
-    readingCount?: number,
-    periodStart?: string,
-    periodEnd?: string
-  ) {
-    this.average = average ?? 0;
-    this.latest = latest ?? 0;
-    this.latestDirection = latestDirection ?? "";
-    this.readingCount = readingCount ?? 0;
-    this.periodStart = periodStart ?? "";
-    this.periodEnd = periodEnd ?? "";
-  }
 }
+
+const defaultNightscoutStatus: NightscoutStatus = {
+  average: 0,
+  latest: 0,
+  latestDirection: "",
+  readingCount: 0,
+  periodStart: "",
+  periodEnd: "",
+};
 
 export class NightscoutRetriever {
   async getRecentStatus(): Promise<NightscoutStatus> {
@@ -49,7 +42,7 @@ export class NightscoutRetriever {
       const entries = await httpClient.get<NightscoutEntry[]>(url);
 
       if (entries.length === 0) {
-        return new NightscoutStatus();
+        return defaultNightscoutStatus;
       }
 
       const sgvValues = entries.map((e) => e.sgv);
@@ -57,21 +50,21 @@ export class NightscoutRetriever {
 
       const latestEntry = entries.reduce((a, b) => (a.date > b.date ? a : b));
 
-      return new NightscoutStatus(
+      return {
         average,
-        latestEntry.sgv,
-        latestEntry.direction,
-        entries.length,
-        oneHourAgo.toFormat("HH:mm"),
-        now.toFormat("HH:mm")
-      );
+        latest: latestEntry.sgv,
+        latestDirection: latestEntry.direction,
+        readingCount: entries.length,
+        periodStart: oneHourAgo.toFormat("HH:mm"),
+        periodEnd: now.toFormat("HH:mm"),
+      };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       logger.warn(`Nightscout API returned an error: ${errorMessage}`);
-      return new NightscoutStatus();
+      return defaultNightscoutStatus;
     }
   }
 }
 
 export const nightscoutRetriever = new NightscoutRetriever();
-export { NightscoutStatus };
+export type { NightscoutStatus };

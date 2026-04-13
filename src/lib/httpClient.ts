@@ -1,3 +1,6 @@
+import { config } from "./config";
+import logger from "./logger";
+
 export interface HttpClient {
   get<T>(url: string, options?: RequestInit, timeoutMs?: number): Promise<T>;
   getWithAuth<T>(url: string, token: string, options?: RequestInit, timeoutMs?: number): Promise<T>;
@@ -14,8 +17,6 @@ export interface RetryableError extends Error {
   isRetryable: boolean;
   statusCode?: number;
 }
-
-import logger from "./logger";
 
 export class FetchHttpClient implements HttpClient {
   private config: HttpClientConfig;
@@ -141,7 +142,4 @@ export class FetchHttpClient implements HttpClient {
   }
 }
 
-export const httpClient = new FetchHttpClient({
-  timeout: Number(process.env.HTTP_TIMEOUT) || 10000,
-  maxRetries: Number(process.env.HTTP_MAX_RETRIES) || 3,
-});
+export const httpClient = new FetchHttpClient(config.http);

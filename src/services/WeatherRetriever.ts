@@ -47,17 +47,17 @@ interface WeatherItem {
   pressureLevel: PressureLevel | string;
 }
 
-class WeatherForecast {
+interface WeatherForecast {
   placeName: string;
   dateTime: string;
   todayForecast: WeatherItem[];
-
-  constructor(placeName?: string, dateTime?: string, todayForecast?: WeatherItem[]) {
-    this.placeName = placeName ?? "";
-    this.dateTime = dateTime ?? "";
-    this.todayForecast = todayForecast ?? [];
-  }
 }
+
+const defaultWeatherForecast: WeatherForecast = {
+  placeName: "",
+  dateTime: "",
+  todayForecast: [],
+};
 
 /**
  * 天気データ取得サービス
@@ -79,13 +79,13 @@ export class WeatherRetriever {
         pressureLevel: item.pressure_level,
       }));
 
-      return new WeatherForecast(json.place_name, json.dateTime, todayForecast);
+      return { placeName: json.place_name, dateTime: json.dateTime, todayForecast };
     } catch (error) {
       logger.error("Failed to fetch weather status:", error);
-      return new WeatherForecast();
+      return defaultWeatherForecast;
     }
   }
 }
 
 export const weatherRetriever = new WeatherRetriever();
-export { WeatherForecast, type WeatherItem };
+export type { WeatherForecast, WeatherItem };

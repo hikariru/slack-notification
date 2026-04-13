@@ -1,6 +1,6 @@
-import { pressureIconFormatter } from "./PressureIconFormatter";
+import { getPressureIcon } from "./PressureIconFormatter";
 import { timeFilterService } from "./TimeFilterService";
-import { weatherIconFormatter } from "./WeatherIconFormatter";
+import { getWeatherIcon } from "./WeatherIconFormatter";
 import { type WeatherForecast, type WeatherItem, weatherRetriever } from "./WeatherRetriever";
 
 export interface WeatherNotificationData {
@@ -28,9 +28,9 @@ export class WeatherMessageFormatter {
     const forecastLines = forecast.map((item) => {
       const timeText = `${item.time}時`;
       const tempText = `${item.temp}°C`;
-      const weatherIcon = weatherIconFormatter.getWeatherText(item.weather);
+      const weatherIcon = getWeatherIcon(item.weather);
       const pressureText = `${item.pressure}hPa`;
-      const pressureIcon = pressureIconFormatter.getPressureText(item.pressureLevel);
+      const pressureIcon = getPressureIcon(item.pressureLevel);
 
       return `${timeText}: ${tempText} ${weatherIcon} ${pressureText} ${pressureIcon}`;
     });

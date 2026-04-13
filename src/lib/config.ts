@@ -25,6 +25,10 @@ const envSchema = z.object({
   FORECAST_AREA_ID: z.string().default("13101"),
   TIMEZONE: z.string().default("Asia/Tokyo"),
   UTC_OFFSET: z.coerce.number().int().default(9),
+
+  // HTTPクライアント設定
+  HTTP_TIMEOUT: z.coerce.number().int().positive().default(10000),
+  HTTP_MAX_RETRIES: z.coerce.number().int().nonnegative().default(3),
 });
 
 // 本番環境用の厳格なスキーマ
@@ -60,6 +64,12 @@ interface Config {
     port: number;
     nodeEnv: string;
     isProduction: boolean;
+  };
+  http: {
+    timeout: number;
+    maxRetries: number;
+    retryDelay: number;
+    retryMultiplier: number;
   };
   weather: {
     defaultAreaId: string;
@@ -115,6 +125,12 @@ export const config: Config = {
     port: env.PORT,
     nodeEnv: env.NODE_ENV,
     isProduction: env.NODE_ENV === "production",
+  },
+  http: {
+    timeout: env.HTTP_TIMEOUT,
+    maxRetries: env.HTTP_MAX_RETRIES,
+    retryDelay: 1000,
+    retryMultiplier: 2,
   },
   weather: {
     defaultAreaId: env.FORECAST_AREA_ID,
