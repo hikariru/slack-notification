@@ -18,6 +18,7 @@ interface NightscoutStatus {
   readingCount: number;
   periodStart: string;
   periodEnd: string;
+  wasAlertOneHourAgo: boolean;
 }
 
 const defaultNightscoutStatus: NightscoutStatus = {
@@ -26,6 +27,7 @@ const defaultNightscoutStatus: NightscoutStatus = {
   readingCount: 0,
   periodStart: "",
   periodEnd: "",
+  wasAlertOneHourAgo: false,
 };
 
 export class NightscoutRetriever {
@@ -46,12 +48,23 @@ export class NightscoutRetriever {
 
       const latestEntry = entries.reduce((a, b) => (a.date > b.date ? a : b));
 
+      const oneHourAgo = now.minus({ minutes: 60 });
+      const windowStart = oneHourAgo.minus({ minutes: 10 }).toMillis();
+      const windowEnd = oneHourAgo.plus({ minutes: 10 }).toMillis();
+      const oneHourAgoEntry = entries.find((e) => e.date >= windowStart && e.date <= windowEnd);
+
+      const { high, low } = config.nightscout.thresholds;
+      const wasAlertOneHourAgo = oneHourAgoEntry
+        ? oneHourAgoEntry.sgv < low || oneHourAgoEntry.sgv > high
+        : false;
+
       return {
         latest: latestEntry.sgv,
         latestDirection: latestEntry.direction,
         readingCount: entries.length,
         periodStart: periodStart.toFormat("HH:mm"),
         periodEnd: now.toFormat("HH:mm"),
+        wasAlertOneHourAgo,
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
