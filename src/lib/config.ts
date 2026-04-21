@@ -17,11 +17,6 @@ const envSchema = z.object({
   // 外部API設定
   NATURE_REMO_TOKEN: z.string().optional(),
 
-  // Nightscout設定
-  NIGHTSCOUT_API_ENDPOINT: z.string().optional(),
-  NIGHTSCOUT_API_TOKEN: z.string().optional(),
-  NIGHTSCOUT_CHANNEL_ID: z.string().optional(),
-
   // 地域・時間設定
   FORECAST_AREA_ID: z.string().default("13101"),
   TIMEZONE: z.string().default("Asia/Tokyo"),
@@ -37,9 +32,6 @@ const productionEnvSchema = envSchema.extend({
   GENERAL_CHANNEL_ID: z.string().min(1, "GENERAL_CHANNEL_ID is required in production"),
   WEATHER_CHANNEL_ID: z.string().min(1, "WEATHER_CHANNEL_ID is required in production"),
   NATURE_REMO_TOKEN: z.string().min(1, "NATURE_REMO_TOKEN is required in production"),
-  NIGHTSCOUT_API_ENDPOINT: z.string().min(1, "NIGHTSCOUT_API_ENDPOINT is required in production"),
-  NIGHTSCOUT_API_TOKEN: z.string().min(1, "NIGHTSCOUT_API_TOKEN is required in production"),
-  NIGHTSCOUT_CHANNEL_ID: z.string().min(1, "NIGHTSCOUT_CHANNEL_ID is required in production"),
 });
 
 // 環境変数の検証と取得
@@ -87,7 +79,6 @@ interface Config {
     signingSecret: string;
     generalChannelId: string;
     weatherChannelId: string;
-    nightscoutChannelId: string;
   };
   notification: {
     timezone: string;
@@ -108,17 +99,6 @@ interface Config {
         max: number;
         min: number;
       };
-    };
-  };
-  nightscout: {
-    apiEndpoint: string;
-    apiToken: string;
-    status: {
-      hourInterval: number;
-    };
-    thresholds: {
-      high: number;
-      low: number;
     };
   };
 }
@@ -149,7 +129,6 @@ export const config: Config = {
     signingSecret: env.SLACK_SIGNING_SECRET,
     generalChannelId: env.GENERAL_CHANNEL_ID ?? "",
     weatherChannelId: env.WEATHER_CHANNEL_ID ?? "",
-    nightscoutChannelId: env.NIGHTSCOUT_CHANNEL_ID ?? "",
   },
   notification: {
     timezone: env.TIMEZONE,
@@ -170,17 +149,6 @@ export const config: Config = {
         max: 70,
         min: 40,
       },
-    },
-  },
-  nightscout: {
-    apiEndpoint: env.NIGHTSCOUT_API_ENDPOINT ?? "",
-    apiToken: env.NIGHTSCOUT_API_TOKEN ?? "",
-    status: {
-      hourInterval: 1,
-    },
-    thresholds: {
-      high: 180,
-      low: 70,
     },
   },
 };
