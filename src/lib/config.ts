@@ -1,122 +1,91 @@
-import { z } from "zod";
-
-// 環境変数のスキーマ定義（シンプル版）
-const envSchema = z.object({
-  // Node.js環境設定
-  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-  PORT: z.coerce.number().int().positive().default(3000),
-
-  // Slack設定（必須）
-  SLACK_BOT_TOKEN: z.string().min(1, "SLACK_BOT_TOKEN is required"),
-  SLACK_SIGNING_SECRET: z.string().min(1, "SLACK_SIGNING_SECRET is required"),
-
-  // チャンネルID（本番では必須、開発ではオプション）
-  GENERAL_CHANNEL_ID: z.string().optional(),
-  WEATHER_CHANNEL_ID: z.string().optional(),
-
-  // 外部API設定
-  NATURE_REMO_TOKEN: z.string().optional(),
-
-  // 地域・時間設定
-  FORECAST_AREA_ID: z.string().default("13101"),
-  TIMEZONE: z.string().default("Asia/Tokyo"),
-  UTC_OFFSET: z.coerce.number().int().default(9),
-
-  // HTTPクライアント設定
-  HTTP_TIMEOUT: z.coerce.number().int().positive().default(10000),
-  HTTP_MAX_RETRIES: z.coerce.number().int().nonnegative().default(3),
-});
-
-// 本番環境用の厳格なスキーマ
-const productionEnvSchema = envSchema.extend({
-  GENERAL_CHANNEL_ID: z.string().min(1, "GENERAL_CHANNEL_ID is required in production"),
-  WEATHER_CHANNEL_ID: z.string().min(1, "WEATHER_CHANNEL_ID is required in production"),
-  NATURE_REMO_TOKEN: z.string().min(1, "NATURE_REMO_TOKEN is required in production"),
-});
-
-// 環境変数の検証と取得
-const validateEnvironment = () => {
-  const isProduction = process.env.NODE_ENV === "production";
-  const schema = isProduction ? productionEnvSchema : envSchema;
-
-  try {
-    return schema.parse(process.env);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      const errorMessages = error.issues.map((err) => `- ${err.path.join(".")}: ${err.message}`);
-      throw new Error(`Environment validation failed:\n${errorMessages.join("\n")}`);
-    }
-    throw error;
+const requireString = (key: string): string => {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`- ${key}: is required`);
   }
+  return value;
 };
 
-// 検証済み環境変数
+const toInt = (key: string, defaultValue: number): number => {
+  const value = process.env[key];
+  if (value === undefined || value === "") return defaultValue;
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) {
+    throw new Error(`- ${key}: must be an integer`);
+  }
+  return parsed;
+};
+
+const validateEnvironment = () => {
+  const errors: string[] = [];
+  const collect = <T>(fn: () => T, fallback: T): T => {
+    try {
+      return fn();
+    } catch (e) {
+      if (e instanceof Error) errors.push(e.message);
+      return fallback;
+    }
+  };
+
+  const nodeEnv = process.env.NODE_ENV ?? "development";
+  if (!["development", "production", "test"].includes(nodeEnv)) {
+    errors.push(`- NODE_ENV: must be "development", "production", or "test"`);
+  }
+  const isProduction = nodeEnv === "production";
+
+  const slackBotToken = collect(() => requireString("SLACK_BOT_TOKEN"), "");
+  const slackSigningSecret = collect(() => requireString("SLACK_SIGNING_SECRET"), "");
+  const port = collect(() => toInt("PORT", 3000), 3000);
+  const httpTimeout = collect(() => toInt("HTTP_TIMEOUT", 10000), 10000);
+  const httpMaxRetries = collect(() => toInt("HTTP_MAX_RETRIES", 3), 3);
+  const utcOffset = collect(() => toInt("UTC_OFFSET", 9), 9);
+
+  const generalChannelId = process.env.GENERAL_CHANNEL_ID ?? "";
+  const weatherChannelId = process.env.WEATHER_CHANNEL_ID ?? "";
+  const natureRemoToken = process.env.NATURE_REMO_TOKEN ?? "";
+
+  if (isProduction) {
+    if (!generalChannelId) errors.push("- GENERAL_CHANNEL_ID: is required in production");
+    if (!weatherChannelId) errors.push("- WEATHER_CHANNEL_ID: is required in production");
+    if (!natureRemoToken) errors.push("- NATURE_REMO_TOKEN: is required in production");
+  }
+
+  if (errors.length > 0) {
+    throw new Error(`Environment validation failed:\n${errors.join("\n")}`);
+  }
+
+  return {
+    nodeEnv: nodeEnv as "development" | "production" | "test",
+    port,
+    slackBotToken,
+    slackSigningSecret,
+    generalChannelId,
+    weatherChannelId,
+    natureRemoToken,
+    forecastAreaId: process.env.FORECAST_AREA_ID || "13101",
+    timezone: process.env.TIMEZONE || "Asia/Tokyo",
+    utcOffset,
+    httpTimeout,
+    httpMaxRetries,
+  };
+};
+
 const env = validateEnvironment();
 
-interface Config {
+export const config = {
   app: {
-    port: number;
-    nodeEnv: string;
-    isProduction: boolean;
-  };
-  http: {
-    timeout: number;
-    maxRetries: number;
-    retryDelay: number;
-    retryMultiplier: number;
-  };
-  weather: {
-    defaultAreaId: string;
-    notificationHour: number;
-    zutoolApiEndpoint: string;
-    forecast: {
-      pressureLevelThreshold: number;
-      hourInterval: number;
-    };
-  };
-  slack: {
-    botToken: string;
-    signingSecret: string;
-    generalChannelId: string;
-    weatherChannelId: string;
-  };
-  notification: {
-    timezone: string;
-    utcOffset: number;
-  };
-  remo: {
-    apiEndpoint: string;
-    token: string;
-    status: {
-      hourInterval: number;
-    };
-    thresholds: {
-      temperature: {
-        max: number;
-        min: number;
-      };
-      humidity: {
-        max: number;
-        min: number;
-      };
-    };
-  };
-}
-
-export const config: Config = {
-  app: {
-    port: env.PORT,
-    nodeEnv: env.NODE_ENV,
-    isProduction: env.NODE_ENV === "production",
+    port: env.port,
+    nodeEnv: env.nodeEnv,
+    isProduction: env.nodeEnv === "production",
   },
   http: {
-    timeout: env.HTTP_TIMEOUT,
-    maxRetries: env.HTTP_MAX_RETRIES,
+    timeout: env.httpTimeout,
+    maxRetries: env.httpMaxRetries,
     retryDelay: 1000,
     retryMultiplier: 2,
   },
   weather: {
-    defaultAreaId: env.FORECAST_AREA_ID,
+    defaultAreaId: env.forecastAreaId,
     notificationHour: 6,
     zutoolApiEndpoint: "https://zutool.jp/api/getweatherstatus",
     forecast: {
@@ -125,18 +94,18 @@ export const config: Config = {
     },
   },
   slack: {
-    botToken: env.SLACK_BOT_TOKEN,
-    signingSecret: env.SLACK_SIGNING_SECRET,
-    generalChannelId: env.GENERAL_CHANNEL_ID ?? "",
-    weatherChannelId: env.WEATHER_CHANNEL_ID ?? "",
+    botToken: env.slackBotToken,
+    signingSecret: env.slackSigningSecret,
+    generalChannelId: env.generalChannelId,
+    weatherChannelId: env.weatherChannelId,
   },
   notification: {
-    timezone: env.TIMEZONE,
-    utcOffset: env.UTC_OFFSET,
+    timezone: env.timezone,
+    utcOffset: env.utcOffset,
   },
   remo: {
     apiEndpoint: "https://api.nature.global/1/devices",
-    token: env.NATURE_REMO_TOKEN ?? "",
+    token: env.natureRemoToken,
     status: {
       hourInterval: 3,
     },
@@ -151,4 +120,4 @@ export const config: Config = {
       },
     },
   },
-};
+} as const satisfies Record<string, unknown>;
