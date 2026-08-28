@@ -3,6 +3,13 @@ import { timeFilterService } from "./TimeFilterService";
 import { getWeatherIcon } from "./WeatherIconFormatter";
 import { type WeatherForecast, type WeatherItem, weatherRetriever } from "./WeatherRetriever";
 
+export interface WeatherNotificationConfig {
+  apiEndpoint: string;
+  timezone: string;
+  notificationHour: number;
+  pressureLevelThreshold: number;
+}
+
 export interface WeatherNotificationData {
   placeName: string;
   dateTime: string;
@@ -42,14 +49,20 @@ export class WeatherMessageFormatter {
    * 天気予報通知の準備処理
    * データ取得、重要時間のフィルタリング、メッセージフォーマットを一括処理
    */
-  async prepareWeatherNotification(): Promise<WeatherNotificationData | null> {
-    const forecast = await weatherRetriever.getForecast();
+  async prepareWeatherNotification(
+    config: WeatherNotificationConfig
+  ): Promise<WeatherNotificationData | null> {
+    const forecast = await weatherRetriever.getForecast(config.apiEndpoint);
 
     if (!forecast.placeName) {
       return null;
     }
 
-    const importantTimes = timeFilterService.filterImportantTimes(forecast.todayForecast);
+    const importantTimes = timeFilterService.filterImportantTimes(forecast.todayForecast, {
+      timezone: config.timezone,
+      notificationHour: config.notificationHour,
+      pressureLevelThreshold: config.pressureLevelThreshold,
+    });
     const message = this.formatWeatherMessage(forecast, importantTimes);
 
     return {

@@ -1,4 +1,3 @@
-import { config } from "../lib/config";
 import { httpClient } from "../lib/httpClient";
 import logger from "../lib/logger";
 
@@ -15,10 +14,6 @@ export enum WeatherType {
   Cloudy = "200",
   Rainy = "300",
 }
-
-const getApiEndpoint = (): string => {
-  return `${config.weather.zutoolApiEndpoint}/${config.weather.defaultAreaId}`;
-};
 
 interface WeatherApiResponse {
   place_name: string;
@@ -67,9 +62,9 @@ export class WeatherRetriever {
   /**
    * 天気予報データを取得
    */
-  async getForecast(): Promise<WeatherForecast> {
+  async getForecast(apiEndpoint: string): Promise<WeatherForecast> {
     try {
-      const json = await httpClient.get<WeatherApiResponse>(getApiEndpoint());
+      const json = await httpClient.get<WeatherApiResponse>(apiEndpoint);
 
       const todayForecast = json.today.map((item) => ({
         time: item.time,

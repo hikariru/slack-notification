@@ -1,12 +1,8 @@
-import { bolt } from "../../lib/bolt";
+import type { SlackApp, SlackEdgeAppEnv } from "slack-cloudflare-workers";
 
-export default () => {
-  bolt.event("app_mention", async ({ event, context }) => {
-    const user = event.user ?? "";
-    await bolt.client.chat.postMessage({
-      token: context.botToken,
-      channel: event.channel,
-      text: `<@${user}> はーい`,
-    });
+export default (app: SlackApp<SlackEdgeAppEnv>) => {
+  app.event("app_mention", async ({ context, payload }) => {
+    const user = payload.user ?? "";
+    await context.say({ text: `<@${user}> はーい` });
   });
 };

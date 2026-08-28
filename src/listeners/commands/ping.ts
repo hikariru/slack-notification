@@ -1,8 +1,5 @@
-import { bolt } from "../../lib/bolt";
+import type { SlackApp, SlackEdgeAppEnv } from "slack-cloudflare-workers";
 
-export default () => {
-  bolt.command("/ping", async ({ ack, respond }) => {
-    await ack();
-    await respond(`pong!`);
-  });
+export default (app: SlackApp<SlackEdgeAppEnv>) => {
+  app.command("/ping", async () => "pong!");
 };
