@@ -2,16 +2,17 @@
   "name": "slack-notification",
   "version": "1.0.0",
   "description": "notification sender for my private slack ;)",
-  "main": "src/app.js",
+  "type": "module",
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "tsc -p .",
-    "build:watch": "tsc -w -p .",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "cf-typegen": "wrangler types",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
     "format": "oxfmt src/",
     "format:check": "oxfmt --check src/",
     "lint": "oxlint src/",
-    "check": "oxfmt src/ && oxlint --fix src/",
-    "start": "node dist/app.js"
+    "check": "oxfmt src/ && oxlint --fix src/"
   },
   "repository": "git+https://github.com/hikariru/slack-notification.git",
   "author": " ",
@@ -20,23 +21,20 @@
     "url": "https://github.com/hikariru/slack-notification/issues"
   },
   "homepage": "https://github.com/hikariru/slack-notification#readme",
-  "engines": {
-    "node": "24.x"
-  },
   "dependencies": {
-    "@slack/bolt": "^4.4.0",
-    "dotenv": "^17.2.1",
-    "luxon": "^3.7.1"
+    "@slack/logger": "^5.0.0",
+    "luxon": "^3.7.1",
+    "slack-cloudflare-workers": "^1.3.10",
+    "slack-web-api-client": "^1.1.14"
   },
   "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/express-serve-static-core": "^5.0.7",
+    "@cloudflare/vitest-plugin": "^1.1.1",
+    "@cloudflare/workers-types": "^5.20260828.1",
     "@types/luxon": "^3.7.1",
-    "@types/node": "^24.1.0",
     "oxfmt": "^0.6.0",
     "oxlint": "^1.30.0",
-    "rimraf": "^6.0.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.127.0"
   }
 }

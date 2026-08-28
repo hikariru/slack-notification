@@ -1,123 +1,63 @@
-const requireString = (key: string): string => {
-  const value = process.env[key];
+export interface Env {
+  SLACK_BOT_TOKEN?: string;
+  SLACK_SIGNING_SECRET?: string;
+  NATURE_REMO_TOKEN?: string;
+  GENERAL_CHANNEL_ID?: string;
+  WEATHER_CHANNEL_ID?: string;
+  FORECAST_AREA_ID?: string;
+  TIMEZONE?: string;
+}
+
+const requireString = (env: Env, key: keyof Env): string => {
+  const value = env[key];
   if (!value) {
-    throw new Error(`- ${key}: is required`);
+    throw new Error(`${key} is required`);
   }
   return value;
 };
 
-const toInt = (key: string, defaultValue: number): number => {
-  const value = process.env[key];
-  if (value === undefined || value === "") return defaultValue;
-  const parsed = Number.parseInt(value, 10);
-  if (Number.isNaN(parsed)) {
-    throw new Error(`- ${key}: must be an integer`);
-  }
-  return parsed;
-};
+export interface RemoJobConfig {
+  apiEndpoint: string;
+  token: string;
+  timezone: string;
+  slackBotToken: string;
+  slackChannelId: string;
+  temperatureThreshold: { max: number; min: number };
+  humidityThreshold: { max: number; min: number };
+}
 
-const validateEnvironment = () => {
-  const errors: string[] = [];
-  const collect = <T>(fn: () => T, fallback: T): T => {
-    try {
-      return fn();
-    } catch (e) {
-      if (e instanceof Error) errors.push(e.message);
-      return fallback;
-    }
-  };
+export const getRemoJobConfig = (env: Env): RemoJobConfig => ({
+  apiEndpoint: "https://api.nature.global/1/devices",
+  token: requireString(env, "NATURE_REMO_TOKEN"),
+  timezone: env.TIMEZONE || "Asia/Tokyo",
+  slackBotToken: requireString(env, "SLACK_BOT_TOKEN"),
+  slackChannelId: requireString(env, "WEATHER_CHANNEL_ID"),
+  temperatureThreshold: { max: 28, min: 17 },
+  humidityThreshold: { max: 70, min: 40 },
+});
 
-  const nodeEnv = process.env.NODE_ENV ?? "development";
-  if (!["development", "production", "test"].includes(nodeEnv)) {
-    errors.push(`- NODE_ENV: must be "development", "production", or "test"`);
-  }
-  const isProduction = nodeEnv === "production";
+export interface WeatherJobConfig {
+  apiEndpoint: string;
+  notificationHour: number;
+  pressureLevelThreshold: number;
+  timezone: string;
+  slackBotToken: string;
+  slackChannelId: string;
+}
 
-  const slackBotToken = collect(() => requireString("SLACK_BOT_TOKEN"), "");
-  const slackSigningSecret = collect(() => requireString("SLACK_SIGNING_SECRET"), "");
-  const port = collect(() => toInt("PORT", 3000), 3000);
-  const httpTimeout = collect(() => toInt("HTTP_TIMEOUT", 10000), 10000);
-  const httpMaxRetries = collect(() => toInt("HTTP_MAX_RETRIES", 3), 3);
-  const utcOffset = collect(() => toInt("UTC_OFFSET", 9), 9);
-
-  const generalChannelId = process.env.GENERAL_CHANNEL_ID ?? "";
-  const weatherChannelId = process.env.WEATHER_CHANNEL_ID ?? "";
-  const natureRemoToken = process.env.NATURE_REMO_TOKEN ?? "";
-
-  if (isProduction) {
-    if (!generalChannelId) errors.push("- GENERAL_CHANNEL_ID: is required in production");
-    if (!weatherChannelId) errors.push("- WEATHER_CHANNEL_ID: is required in production");
-    if (!natureRemoToken) errors.push("- NATURE_REMO_TOKEN: is required in production");
-  }
-
-  if (errors.length > 0) {
-    throw new Error(`Environment validation failed:\n${errors.join("\n")}`);
+export const getWeatherJobConfig = (env: Env): WeatherJobConfig => {
+  const areaId = env.FORECAST_AREA_ID || "13101";
+  const slackChannelId = env.WEATHER_CHANNEL_ID || env.GENERAL_CHANNEL_ID;
+  if (!slackChannelId) {
+    throw new Error("WEATHER_CHANNEL_ID or GENERAL_CHANNEL_ID is required");
   }
 
   return {
-    nodeEnv: nodeEnv as "development" | "production" | "test",
-    port,
-    slackBotToken,
-    slackSigningSecret,
-    generalChannelId,
-    weatherChannelId,
-    natureRemoToken,
-    forecastAreaId: process.env.FORECAST_AREA_ID || "13101",
-    timezone: process.env.TIMEZONE || "Asia/Tokyo",
-    utcOffset,
-    httpTimeout,
-    httpMaxRetries,
+    apiEndpoint: `https://zutool.jp/api/getweatherstatus/${areaId}`,
+    notificationHour: 6,
+    pressureLevelThreshold: 2,
+    timezone: env.TIMEZONE || "Asia/Tokyo",
+    slackBotToken: requireString(env, "SLACK_BOT_TOKEN"),
+    slackChannelId,
   };
 };
-
-const env = validateEnvironment();
-
-export const config = {
-  app: {
-    port: env.port,
-    nodeEnv: env.nodeEnv,
-    isProduction: env.nodeEnv === "production",
-  },
-  http: {
-    timeout: env.httpTimeout,
-    maxRetries: env.httpMaxRetries,
-    retryDelay: 1000,
-    retryMultiplier: 2,
-  },
-  weather: {
-    defaultAreaId: env.forecastAreaId,
-    notificationHour: 6,
-    zutoolApiEndpoint: "https://zutool.jp/api/getweatherstatus",
-    forecast: {
-      pressureLevelThreshold: 2,
-      hourInterval: 3,
-    },
-  },
-  slack: {
-    botToken: env.slackBotToken,
-    signingSecret: env.slackSigningSecret,
-    generalChannelId: env.generalChannelId,
-    weatherChannelId: env.weatherChannelId,
-  },
-  notification: {
-    timezone: env.timezone,
-    utcOffset: env.utcOffset,
-  },
-  remo: {
-    apiEndpoint: "https://api.nature.global/1/devices",
-    token: env.natureRemoToken,
-    status: {
-      hourInterval: 3,
-    },
-    thresholds: {
-      temperature: {
-        max: 28,
-        min: 17,
-      },
-      humidity: {
-        max: 70,
-        min: 40,
-      },
-    },
-  },
-} as const satisfies Record<string, unknown>;

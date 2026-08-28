@@ -1,4 +1,3 @@
-import { config } from "./config";
 import logger from "./logger";
 
 export interface HttpClient {
@@ -142,4 +141,4 @@ export class FetchHttpClient implements HttpClient {
   }
 }
 
-export const httpClient = new FetchHttpClient(config.http);
+export const httpClient = new FetchHttpClient();

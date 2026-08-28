@@ -1,6 +1,11 @@
 import { DateTime } from "luxon";
-import { config } from "../lib/config";
 import type { WeatherItem } from "./WeatherRetriever";
+
+interface TimeFilterOptions {
+  timezone: string;
+  notificationHour: number;
+  pressureLevelThreshold: number;
+}
 
 /**
  * 時間フィルターサービス
@@ -11,8 +16,8 @@ export class TimeFilterService {
    * 重要な時間帯の天気予報をフィルタリング
    * 前の時間と比較して天気か気圧のステータスが変化した場合のみ表示
    */
-  filterImportantTimes(forecast: WeatherItem[]): WeatherItem[] {
-    const currentHour = DateTime.now().setZone(config.notification.timezone).hour;
+  filterImportantTimes(forecast: WeatherItem[], options: TimeFilterOptions): WeatherItem[] {
+    const currentHour = DateTime.now().setZone(options.timezone).hour;
     const result: WeatherItem[] = [];
 
     // 現在時刻以降のデータのみ対象
@@ -20,8 +25,8 @@ export class TimeFilterService {
       const itemHour = parseInt(item.time, 10);
 
       // 朝6時の通知時は6時以降全て対象
-      if (currentHour === config.weather.notificationHour) {
-        return itemHour >= config.weather.notificationHour;
+      if (currentHour === options.notificationHour) {
+        return itemHour >= options.notificationHour;
       }
 
       return itemHour > currentHour;
@@ -46,8 +51,7 @@ export class TimeFilterService {
       const pressureLevelChanged = prevPressureLevel !== currPressureLevel;
 
       // 気圧レベルが閾値以上（重要な変化）
-      const isImportantPressure =
-        currPressureLevel >= config.weather.forecast.pressureLevelThreshold;
+      const isImportantPressure = currPressureLevel >= options.pressureLevelThreshold;
 
       // 変化があった場合、または重要な気圧レベルの場合に含める
       if (weatherChanged || pressureLevelChanged || isImportantPressure) {

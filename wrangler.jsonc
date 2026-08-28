@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "slack-notification",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-28",
+  // hikariruプロファイルのaccount_id（wrangler whoamiで確認済み）
+  // 設定しておくと誤ったアカウント（例: phantoml4rdプロファイル）でのデプロイがエラーになる
+  "account_id": "e84e07db89a7d1a750abb1d82c2e824a",
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "triggers": {
+    // "0 */3 * * *" = JST 0,3,6,9,12,15,18,21時 (室温・湿度通知)
+    // "0 21 * * *"  = JST 6:00 (天気通知)
+    "crons": ["0 */3 * * *", "0 21 * * *"]
+  },
+  "vars": {
+    "FORECAST_AREA_ID": "13101",
+    "TIMEZONE": "Asia/Tokyo"
+  }
+}

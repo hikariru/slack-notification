@@ -7,4 +7,7 @@ jspm_packages
 .node_repl_history
 /node_modules/
 .env
-/dist/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+/.wrangler/

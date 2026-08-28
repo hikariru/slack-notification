@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { config } from "../lib/config";
 import { httpClient } from "../lib/httpClient";
 import logger from "../lib/logger";
 
@@ -23,20 +22,27 @@ interface RemoStatus {
   createdAt: string;
 }
 
-const defaultRemoStatus: RemoStatus = { temperature: 0, humidity: 0, createdAt: "" };
+interface RemoConfig {
+  apiEndpoint: string;
+  token: string;
+  timezone: string;
+}
 
 export class RemoRetriever {
-  async getCurrentStatus(): Promise<RemoStatus> {
-    const apiBase = config.remo.apiEndpoint;
-    const token = config.remo.token;
-
+  /**
+   * 取得失敗時はnullを返す。0を実測値として扱うと閾値判定で誤警報を送るため区別する
+   */
+  async getCurrentStatus(remoConfig: RemoConfig): Promise<RemoStatus | null> {
     try {
-      const remoDevices = await httpClient.getWithAuth<RemoDevice[]>(apiBase, token);
+      const remoDevices = await httpClient.getWithAuth<RemoDevice[]>(
+        remoConfig.apiEndpoint,
+        remoConfig.token
+      );
 
       const temperature = remoDevices[0].newest_events.te;
       const humidity = remoDevices[0].newest_events.hu;
       const createdAt = DateTime.fromISO(temperature.created_at)
-        .setZone(config.notification.timezone)
+        .setZone(remoConfig.timezone)
         .toFormat("yyyy-MM-dd HH:mm");
 
       return {
@@ -47,7 +53,7 @@ export class RemoRetriever {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       logger.warn(`Nature Remo Cloud API returned an error: ${errorMessage}`);
-      return defaultRemoStatus;
+      return null;
     }
   }
 }
