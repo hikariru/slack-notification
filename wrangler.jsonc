@@ -15,7 +15,7 @@
     "crons": ["0 */3 * * *", "0 21 * * *"]
   },
   "vars": {
-    "FORECAST_AREA_ID": "13101",
+    "FORECAST_AREA_ID": "09201",
     "TIMEZONE": "Asia/Tokyo"
   }
 }
