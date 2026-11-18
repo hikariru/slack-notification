@@ -38,6 +38,7 @@
     "wrangler": "^4.143.0"
   },
   "overrides": {
+    "vite": "^8.2.5",
     "undici": "^7.29.1"
   }
 }
